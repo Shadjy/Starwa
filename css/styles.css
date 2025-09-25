@@ -1,0 +1,17 @@
+h1{
+
+}
+
+button{
+    background-color:var(--second-color);
+    color: black;
+    border-radius: 6px;
+}
+
+button:hover{
+    background-color: var(--third-color);
+}
+
+body{
+    background: var(--background-color);
+}
