@@ -1,0 +1,20 @@
+
+button{
+    background-color:var(--second-color);
+    color: black;
+    border-radius: 6px;
+}
+
+button:hover{
+    background-color: var(--third-color);
+}
+
+body{
+    background: var(--background-color);
+}
+
+.container{max-width:960px;margin:6rem auto;padding:2rem}
+.card{background:#fff;border-radius:12px;padding:3rem;box-shadow:0 6px 24px rgba(0,0,0,.08)}
+.btn{display:block;width:260px;margin:1rem auto;padding:1rem 1.25rem; border-radius:10px;border:none;font-weight:700;cursor:pointer}
+.btn-green{background:var(--second-color);color:var(--text-color)}
+.btn-blue{background:var(--third-color);color:var(--text-color)}
