@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="logo">Starwa</div>
+    <a href="inlog-aanmeld.html" class="logout">
+      <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+      <span class="logout-text">Log uit</span>
+    </a>
+  </header>
+
+  <main class="dashboard">
+
+    
+    <section class="profile-section">
+      <div class="profile-card" id="profileCard">
+        <div class="profile-avatar" id="profileAvatar"></div>
+        <div class="profile-info">
+          <h2 id="profileName">Leo</h2>
+          <p>Bekijk je profiel of pas je profiel aan</p>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="cards-container">
+
+      <!-- Matches-->
+      <div class="card matches">
+        <div class="card-header">
+          <h2>Matches</h2>
+          <button class="view-all">Bekijk alle matches</button>
+        </div>
+        <div class="card-content">
+          <div class="job" data-id="1">
+            <h3>Frontend Developer</h3>
+            <p>Locatie: Amsterdam</p>
+            <p>Salaris: €3.000 - €4.000</p>
+            <span class="match-score">87%</span>
+          </div>
+          <div class="job" data-id="2">
+            <h3>UX Designer</h3>
+            <p>Locatie: Utrecht</p>
+            <p>Salaris: €2.800 - €3.500</p>
+            <span class="match-score">75%</span>
+          </div>
+          <div class="job" data-id="3">
+            <h3>Backend Developer</h3>
+            <p>Locatie: Rotterdam</p>
+            <p>Salaris: €3.500 - €4.500</p>
+            <span class="match-score">92%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Berichten-->
+      <div class="card messages">
+        <div class="card-header">
+          <h2>Berichten</h2>
+          <button class="view-all">Bekijk alle berichten</button>
+        </div>
+        <div class="card-content">
+          <div class="message">
+            <h3>Je hebt een match!</h3>
+            <p>Hallo Leo, ik zag je profiel en denk dat je goed past bij ons team..</p>
+            <span class="time">Verstuurd: 3 uur geleden</span>
+          </div>
+          <div class="message">
+            <h3>HR Manager</h3>
+            <p>We hebben je sollicitatie ontvangen en willen je uitnodigen voor een gesprek...</p>
+            <span class="time">Verstuurd: gisteren</span>
+          </div>
+          <div class="message">
+            <h3>Teamleider</h3>
+            <p>Je profiel spreekt ons aan. Kunnen we een kennismakingsgesprek plannen?</p>
+            <span class="time">Verstuurd: 2 dagen geleden</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>
