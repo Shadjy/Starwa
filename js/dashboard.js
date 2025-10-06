@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Bekijk alle matches ga naar matches page
   document.querySelector(".matches .view-all").addEventListener("click", () => {
-    window.location.href = "matches.html";
+    window.location.href = "../login/login.html";
   });
 
   // Bekijk alle berichten ga naar berichten page
