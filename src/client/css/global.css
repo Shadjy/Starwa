@@ -1,0 +1,26 @@
+:root{
+/*colors */
+    --main-color: #f2e4c6;
+    --second-color: #9c6e36;
+    --third-color: #c2916c;
+
+    --text-color: #000000;
+    --background-color: var(--main-color);
+
+/* fonts */
+    --font-base: arial;
+}
+
+button{
+    background-color:var(--third-color);
+    color: var(--text-color);
+    border-radius: 6px;
+}
+
+button:hover{
+    background-color: var(--second-color);
+}
+
+body{
+    background: var(--background-color);
+}
