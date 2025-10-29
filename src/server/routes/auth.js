@@ -3,99 +3,97 @@ import bcrypt from 'bcrypt'
 import { query } from '../db.js'
 
 const router = Router()
-
 const SALT_ROUNDS = Number(process.env.BCRYPT_SALT_ROUNDS) || 12
-const VALID_ROLES = ['seeker', 'employer']
 
-function validateRequiredFields(body) {
-  const { role } = body
-  if (!VALID_ROLES.includes(role)) {
-    return { ok: false, message: 'Ongeldige rol geselecteerd.' }
-  }
-
-  const seekerFields = ['naam', 'email', 'password']
-  const employerFields = ['contactpersoon', 'bedrijfsnaam', 'bedrijfsGrootte', 'email', 'password']
-  const required = role === 'seeker' ? seekerFields : employerFields
-
-  const missing = required.filter(field => !body[field])
-  if (missing.length > 0) {
-    return {
-      ok: false,
-      message: `Ontbrekende velden: ${missing.join(', ')}`,
-    }
-  }
-
-  return { ok: true }
+function wantsJson(req) {
+  const accept = (req.headers.accept || '').toLowerCase()
+  const xhr = (req.headers['x-requested-with'] || '').toLowerCase()
+  const ct = (req.headers['content-type'] || '').toLowerCase()
+  return accept.includes('application/json') || xhr.includes('xmlhttprequest') || ct.includes('application/json')
 }
 
-router.post('/register', async (req, res, next) => {
+//login to dashbaord
+router.post('/login', async (req, res, next) => {
   try {
-    const { role = 'seeker' } = req.body
-    const validation = validateRequiredFields({ ...req.body, role })
-    if (!validation.ok) {
-      return res.status(400).json({ error: validation.message })
+    const { email, password } = req.body || {}
+    if (!email || !password) {
+      return wantsJson(req)
+        ? res.status(400).json({ error: 'Ontbrekende velden.' })
+        : res.status(400).send('Ontbrekende velden.')
     }
 
-    const { email } = req.body
-    const existingUsers = await query('SELECT id FROM users WHERE email = ?', [email])
-    if (existingUsers.length > 0) {
-      return res.status(409).json({ error: 'E-mailadres is al in gebruik.' })
+    const rows = await query('SELECT * FROM users WHERE email = ?', [email])
+    const user = rows[0]
+    if (!user) {
+      return wantsJson(req)
+        ? res.status(401).json({ error: 'Onjuiste inloggegevens.' })
+        : res.status(401).send('Onjuiste inloggegevens.')
     }
 
-    const passwordHash = await bcrypt.hash(req.body.password, SALT_ROUNDS)
+    const ok = await bcrypt.compare(password, user.password_hash)
+    if (!ok) {
+      return wantsJson(req)
+        ? res.status(401).json({ error: 'Onjuiste inloggegevens.' })
+        : res.status(401).send('Onjuiste inloggegevens.')
+    }
 
-    await query(
-      `INSERT INTO users (role, naam, contactpersoon, bedrijfsnaam, bedrijfsGrootte, email, password_hash)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [
-        role,
-        role === 'seeker' ? req.body.naam : null,
-        role === 'employer' ? req.body.contactpersoon : null,
-        role === 'employer' ? req.body.bedrijfsnaam : null,
-        role === 'employer' ? req.body.bedrijfsGrootte : null,
-        email,
-        passwordHash,
-      ]
-    )
-
-    res.status(201).json({ message: 'Account succesvol aangemaakt.' })
-  } catch (error) {
-    next(error)
+    // Succes
+    const safeUser = { id: user.id, email: user.email, role: user.role, naam: user.naam }
+    if (wantsJson(req)) {
+      return res.json({ message: 'Succesvol ingelogd.', user: safeUser })
+    }
+    return res.redirect(303, '/dashboard')
+  } catch (err) {
+    next(err)
   }
 })
 
-router.post('/login', async (req, res, next) => {
+//register
+router.post('/register', async (req, res, next) => {
   try {
-    const { email, password, role } = req.body
-    if (!email || !password || !VALID_ROLES.includes(role)) {
-      return res
-        .status(400)
-        .json({ error: 'E-mailadres, wachtwoord en geldige rol zijn verplicht.' })
+    const role = req.body.role || 'seeker' 
+    const body = { ...req.body, role }
+
+  l
+    const seekerRequired = ['naam', 'email', 'password']
+    const employerRequired = ['contactpersoon', 'bedrijfsnaam', 'bedrijfsGrootte', 'email', 'password']
+    const required = role === 'employer' ? employerRequired : seekerRequired
+    const missing = required.filter(f => !body[f])
+    if (missing.length) {
+      const msg = `Ontbrekende velden: ${missing.join(', ')}`
+      return wantsJson(req) ? res.status(400).json({ error: msg }) : res.status(400).send(msg)
     }
 
-    const users = await query(
-      'SELECT id, role, naam, contactpersoon, bedrijfsnaam, password_hash FROM users WHERE email = ?',
-      [email]
-    )
-
-    if (users.length === 0) {
-      return res.status(401).json({ error: 'Onjuiste inloggegevens.' })
+   
+    const exists = await query('SELECT id FROM users WHERE email = ?', [body.email])
+    if (exists.length) {
+      return wantsJson(req)
+        ? res.status(409).json({ error: 'E-mailadres bestaat al.' })
+        : res.status(409).send('E-mailadres bestaat al.')
     }
 
-    const user = users[0]
-    if (user.role !== role) {
-      return res.status(403).json({ error: 'Deze rol hoort niet bij dit account.' })
+    const hash = await bcrypt.hash(body.password, SALT_ROUNDS)
+
+    if (role === 'employer') {
+      await query(
+        `INSERT INTO users (role, contactpersoon, bedrijfsnaam, bedrijfsGrootte, email, password_hash)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [role, body.contactpersoon, body.bedrijfsnaam, body.bedrijfsGrootte, body.email, hash]
+      )
+    } else {
+      await query(
+        `INSERT INTO users (role, naam, email, password_hash)
+         VALUES (?, ?, ?, ?)`,
+        [role, body.naam, body.email, hash]
+      )
     }
 
-    const passwordOk = await bcrypt.compare(password, user.password_hash)
-    if (!passwordOk) {
-      return res.status(401).json({ error: 'Onjuiste inloggegevens.' })
+    if (wantsJson(req)) {
+      return res.status(201).json({ message: 'Geregistreerd.' })
     }
-
-    delete user.password_hash
-    res.json({ message: 'Succesvol ingelogd.', user })
-  } catch (error) {
-    next(error)
+    return res.redirect(303, '/vragenlijst')
+  } catch (err) {
+    next(err)
   }
 })
 

@@ -1,52 +1,66 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const profileCard = document.getElementById("profileCard");
-  profileCard.addEventListener("click", () => {
-    window.location.href = "profiel.html";
-  });
+  const go = (path) => { window.location.href = path }
 
-  const profileAvatar = document.getElementById("profileAvatar");
-  const profileName = document.getElementById("profileName").innerText;
-  const profileImageUrl = "";
-  if (profileImageUrl) {
-    const img = document.createElement("img");
-    img.src = profileImageUrl;
-    img.alt = profileName;
-    img.style.width = "100%";
-    img.style.height = "100%";
-    img.style.borderRadius = "50%";
-    profileAvatar.appendChild(img);
-  } else {
-    profileAvatar.innerText = profileName.charAt(0).toUpperCase();
+  // Profiel
+  const profileAnchors = [
+    ...document.querySelectorAll('a[href$="profiel.html"]'),
+    ...document.querySelectorAll('[data-link="profiel"]'),
+    ...document.querySelectorAll('#goProfile'),
+  ]
+  profileAnchors.forEach(el => {
+    if (el.tagName.toLowerCase() === 'a') el.setAttribute('href', '/profiel')
+    el.addEventListener('click', (e) => {
+      if (el.tagName.toLowerCase() !== 'a') e.preventDefault()
+      go('/profiel')
+    })
+  })
+
+  const profileCard = document.getElementById("profileCard")
+  if (profileCard) profileCard.addEventListener("click", () => go('/profiel'))
+
+  
+  const matchAnchors = [
+    ...document.querySelectorAll('a[href$="match.html"]'),
+    ...document.querySelectorAll('[data-link="match"]'),
+    ...document.querySelectorAll('#goMatch'),
+  ]
+  matchAnchors.forEach(el => {
+    if (el.tagName.toLowerCase() === 'a') el.setAttribute('href', '/match')
+    el.addEventListener('click', (e) => {
+      if (el.tagName.toLowerCase() !== 'a') e.preventDefault()
+      go('/match')
+    })
+  })
+
+  const matchViewAll = document.querySelector(".matches .view-all")
+  if (matchViewAll) {
+    if (matchViewAll.tagName.toLowerCase() === 'a') matchViewAll.setAttribute('href', '/match')
+    matchViewAll.addEventListener('click', (e) => {
+      if (matchViewAll.tagName.toLowerCase() !== 'a') e.preventDefault()
+      go('/match')
+    })
   }
 
-  // Klik op job open vacature info
-  const jobs = document.querySelectorAll(".job");
-  jobs.forEach(job => {
-    job.addEventListener("click", () => {
-      const title = job.querySelector("h3").innerText;
-      const location = job.querySelector("p:nth-of-type(1)").innerText;
-      const salary = job.querySelector("p:nth-of-type(2)").innerText;
-      alert(`Vacature details:\n\n${title}\n${location}\n${salary}`);
-    });
-  });
+  // Berichten
+  const messagesAnchors = [
+    ...document.querySelectorAll('a[href$="berichten.html"]'),
+    ...document.querySelectorAll('[data-link="berichten"]'),
+    ...document.querySelectorAll('#goBerichten'),
+  ]
+  messagesAnchors.forEach(el => {
+    if (el.tagName.toLowerCase() === 'a') el.setAttribute('href', '/berichten')
+    el.addEventListener('click', (e) => {
+      if (el.tagName.toLowerCase() !== 'a') e.preventDefault()
+      go('/berichten')
+    })
+  })
 
-  // Klik op berichten open bericht
-  const messages = document.querySelectorAll(".message");
-  messages.forEach(msg => {
-    msg.addEventListener("click", () => {
-      const title = msg.querySelector("h3").innerText;
-      const firstLine = msg.querySelector("p").innerText;
-      alert(`Bericht:\n\n${title}\n${firstLine}`);
-    });
-  });
-
-  // Bekijk alle matches ga naar matches page
-  document.querySelector(".matches .view-all").addEventListener("click", () => {
-    window.location.href = "match.html";
-  });
-
-  // Bekijk alle berichten ga naar berichten page
-  document.querySelector(".messages .view-all").addEventListener("click", () => {
-    window.location.href = "berichten.html";
-  });
-});
+  const messagesViewAll = document.querySelector(".messages .view-all")
+  if (messagesViewAll) {
+    if (messagesViewAll.tagName.toLowerCase() === 'a') messagesViewAll.setAttribute('href', '/berichten')
+    messagesViewAll.addEventListener('click', (e) => {
+      if (messagesViewAll.tagName.toLowerCase() !== 'a') e.preventDefault()
+      go('/berichten')
+    })
+  }
+})
