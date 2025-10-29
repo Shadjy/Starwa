@@ -1,0 +1,127 @@
+:root {
+  --main-bg: #f8e7d1;
+  --card-bg: #d49b6a;
+  --button-bg: #b87540;
+  --button-hover: #a15e2b;
+  --text-dark: #3a2b20;
+  --white: #ffffff;
+  --progress-bg: #b87540;
+  --progress-fill: #7c4a2b;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: var(--main-bg);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  color: var(--text-dark);
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: var(--white);
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.page label {
+  display: block;
+  margin: 8px 0;
+  padding: 12px;
+  background: var(--white);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-dark);
+  text-align: left;
+}
+
+.page label:hover {
+  background: #f1e3d5;
+  border-color: var(--button-bg);
+}
+
+.page input[type="radio"] {
+  display: none;
+}
+
+.page input[type="radio"]:checked + span {
+  font-weight: bold;
+  color: var(--button-bg);
+}
+
+.buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+button {
+  background: var(--button-bg);
+  color: var(--white);
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-weight: bold;
+  flex: 1;
+}
+
+button:hover {
+  background: var(--button-hover);
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.progress-container {
+  width: 100%;
+  background-color: #f1e3d5;
+  border-radius: 10px;
+  height: 15px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0;
+  background-color: var(--progress-fill);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  button {
+    padding: 12px;
+  }
+}
