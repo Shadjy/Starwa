@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Starwa
 Project Starwa
 
@@ -14,3 +15,4 @@ Project Starwa
 - Python voor de algoritme/ai
 - postgressql/mysql
 - Figma
+=======
