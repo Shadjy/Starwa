@@ -1,257 +1,235 @@
+@import "./theme.css";
 
 .main-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #fff;
-  padding: 1rem 2rem;
-  border-bottom: 2px solid #eee;
+  border-bottom: none;
+  border-radius: 0 0 32px 32px;
+  padding: 28px 40px;
 }
 
-.logo {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: var(--second-color);
+.main-header .logo {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--textColor);
+  letter-spacing: 0.04em;
 }
 
 .logout {
-  position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   text-decoration: none;
+  color: var(--textColor);
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.24);
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.logout:hover {
+  background: rgba(255, 255, 255, 0.38);
+  transform: translateY(-1px);
 }
 
 .logout-logo {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
+  width: 26px;
+  height: 26px;
 }
 
 .logout-text {
-  position: absolute;
-  left: 50%;
-  top: 110%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  opacity: 0;
-  white-space: nowrap;
-  pointer-events: none;
-  transition: opacity 0.3s, top 0.3s;
+  font-size: 14px;
 }
-
-.logout:hover .logout-text {
-  opacity: 1;
-  top: 120%;
-}
-
 
 .dashboard {
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
+  flex: 1;
+  max-width: 1100px;
+  width: 100%;
+  margin: -48px auto 48px;
+  padding: 0 24px;
+  display: grid;
+  gap: 32px;
 }
 
 .profile-section {
   display: flex;
   justify-content: center;
-  padding: 2rem 1rem;
 }
 
 .profile-card {
   display: flex;
   align-items: center;
-  background: var(--third-color);
-  color: var(--text-color);
-  padding: 2rem 2.5rem;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 700px;
+  gap: 18px;
+  background: var(--cardBg);
+  padding: 28px 32px;
+  border-radius: 20px;
+  border: 1px solid var(--borderColor);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+  width: min(100%, 720px);
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.1);
 }
 
 .profile-avatar {
-  background: var(--second-color);
-  color: var(--text-color);
-  font-weight: bold;
+  background: linear-gradient(135deg, var(--gradientStart), var(--primaryColor));
+  color: #fff;
+  font-weight: 700;
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
+  width: 72px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 1.5rem;
-  font-size: 1.4rem;
+  font-size: 24px;
 }
 
-/* ===== Matches & Berichten ===== */
+.profile-info h2 {
+  margin: 0 0 4px;
+  font-size: 24px;
+  color: var(--textColor);
+}
+
+.profile-info p {
+  margin: 0;
+  color: var(--mutedColor);
+}
+
 .cards-container {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: nowrap; /* naast elkaar houden */
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
 }
 
-/* Matches card */
-.card.matches {
-  flex: 0 0 70%;
-  min-height: 550px;
-  background: var(--second-color);
-  border-radius: 16px;
-  box-shadow: 0 6px 30px rgba(0,0,0,0.25);
+.card {
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease;
-  padding: 1rem 1.5rem;
+  padding: 20px 24px;
+  gap: 16px;
 }
 
-/* Berichten card */
+.card.matches,
 .card.messages {
-  flex: 0 0 28%;
-  min-height: 550px;
-  background: var(--second-color);
-  border-radius: 16px;
-  box-shadow: 0 6px 30px rgba(0,0,0,0.25);
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease;
-  padding: 1rem 1.5rem;
-}
-
-.card:hover {
-  transform: translateY(-3px);
+  min-height: 520px;
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.4);
-  color: var(--text-color);
-  font-weight: bold;
-  font-size: 1.2rem;
+  gap: 16px;
+  border-bottom: 1px solid var(--borderColor);
+  padding-bottom: 12px;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--textColor);
 }
 
 .card-content {
-  padding-top: 1rem;
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: grid;
+  gap: 14px;
   overflow-y: auto;
+  padding-right: 4px;
 }
 
-/* ===== Job styling ===== */
-.job {
+.card-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card-content::-webkit-scrollbar-thumb {
+  background: var(--borderColor);
+  border-radius: 999px;
+}
+
+.job,
+.message {
   border-radius: 14px;
-  padding: 1.2rem;
-  cursor: pointer;
-  background: var(--third-color);
-  color: var(--text-color);
-  transition: all 0.3s ease;
+  padding: 16px 18px;
+  background: var(--secondaryColor);
+  border: 1px solid var(--borderColor);
+  color: var(--textColor);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   position: relative;
 }
 
-.job:hover {
-  background: var(--main-color);
-  color: var(--second-color);
+.job:hover,
+.message:hover {
   transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
 }
 
-.job h3 {
-  margin-bottom: 0.3rem;
-  font-size: 1.2rem;
+.job h3,
+.message h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
 }
 
-.job p {
-  margin: 0.2rem 0;
-  font-size: 0.95rem;
+.job p,
+.message p {
+  margin: 4px 0;
+  color: var(--mutedColor);
+  font-size: 14px;
 }
-
 
 .match-score {
   position: absolute;
-  right: 1rem;
-  top: 1rem;
-  background: var(--third-color);
-  color: var(--text-color);
-  padding: 0.4rem 0.7rem;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: bold;
+  right: 16px;
+  top: 16px;
+  background: var(--highlightColor);
+  color: var(--textColor);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 13px;
+  border: 1px solid var(--borderColor);
 }
 
-
-.message {
-  border-radius: 14px;
-  padding: 1.2rem;
-  cursor: pointer;
-  background: var(--third-color);
-  color: var(--text-color);
-  transition: all 0.3s ease;
-}
-
-.message:hover {
-  background: var(--main-color);
-  color: var(--second-color);
-  transform: translateY(-2px);
-}
-
-.message h3 {
-  margin-bottom: 0.3rem;
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-
-.message p {
-  margin: 0.2rem 0;
-  font-size: 0.95rem;
-}
-
-.message .time {
+.time {
   display: block;
-  font-size: 0.85rem;
-  color: rgba(255,255,255,0.8);
-  margin-top: 0.3rem;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--mutedColor);
 }
 
-/* Buttons */
-button, .view-all {
-  background: var(--third-color);
-  color: var(--text-color);
-  padding: 0.7rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-
-button:hover, .view-all:hover {
-  background-color: var(--second-color);
-}
-
-/* Responsief: onder elkaar op smaller scherm */
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
   .cards-container {
-    flex-direction: column;
-    flex-wrap: wrap;
+    grid-template-columns: 1fr;
   }
 
-  .card.matches, .card.messages {
-    flex: 1 1 100%;
-    min-width: 100%;
+  .card.matches,
+  .card.messages {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .main-header {
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 0 0 24px 24px;
+    padding: 24px;
+  }
+
+  .dashboard {
+    margin-top: -24px;
+    padding: 0 16px;
+  }
+
+  .profile-card {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .profile-info h2 {
+    font-size: 20px;
   }
 }
