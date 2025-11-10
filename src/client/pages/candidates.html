@@ -8,13 +8,13 @@
   <link rel="stylesheet" href="../css/candidates.css" />
 </head>
 <body>
-  <main class="wrap">
+  <main class="wrap container">
     <h1>Matching algoritme – kandidaten</h1>
 
-    <div class="grid">
+    <div class="grid layout">
       <!-- Filters (sticky) -->
       <aside class="panel sidebar">
-        <form id="matchForm">
+        <form id="matchForm" class="filters">
           <!-- Gezochte functie -->
           <label class="label-row">
             <span>Gezochte functie</span>
@@ -137,8 +137,8 @@
           </select>
 
           <div class="btn-row">
-            <button type="submit">Zoek kandidaten</button>
-            <button type="button" id="btnReset" class="button">Reset</button>
+            <button type="submit" class="btn btn--primary">Zoek kandidaten</button>
+            <button type="button" id="btnReset" class="btn btn--secondary">Reset</button>
           </div>
         </form>
 
@@ -171,8 +171,12 @@
   </div>
 
   <!-- Data & gedrag -->
-  <script src="candidates.data.js" defer></script>
+  <script src="../data/candidates.data.js" defer></script>
   <script defer>
+    // API base: same origin on :3000; else backend on :3000
+    const API_BASE = (typeof window !== 'undefined' && window.STARWA_API_BASE)
+      ? window.STARWA_API_BASE
+      : (location.port === '3000' ? '' : `${location.protocol}//${location.hostname}:3000`)
     const resultsEl = document.getElementById("results");
     const form = document.getElementById("matchForm");
     const btnReset = document.getElementById("btnReset");
@@ -180,6 +184,27 @@
     const modalBody = document.getElementById("modalBody");
     const favCountEl = document.getElementById("favCountCands");
     const fmt = s => String(s||"").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    // Live kandidaten opslag
+    let LIVE_CANDIDATES = [];
+    const mapSeekerToCandidate = (u) => ({
+      id: u.id,
+      name: u.name || u.email,
+      currentTitle: '-', desiredRole: '-',
+      locatie: '-', uren: '-', sector: '-', contractType: '-', beschikbaarheid: '-',
+      skills: [], details: { email: u.email }, score: 0, why: []
+    })
+    async function loadLiveCandidates(){
+      try {
+        const res = await fetch(`${API_BASE}/api/candidates?limit=100`, { credentials: 'include' })
+        if (!res.ok) throw new Error('Kon kandidaten niet laden')
+        const data = await res.json()
+        LIVE_CANDIDATES = (data.items||[]).map(r => ({ id:r.id, name:r.name, email:r.email }))
+        // Initieel render zonder filters
+        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
+      } catch (err) {
+        console.warn('Live kandidaten laden mislukt:', err)
+      }
+    }
 
     function openModal(html){ modalBody.innerHTML = html; modal.hidden = false; document.body.classList.add("no-scroll"); }
     function closeModal(){ modal.hidden = true; modalBody.innerHTML = ""; document.body.classList.remove("no-scroll"); }
@@ -295,6 +320,31 @@
             </div>
           </div>
         </div>`}).join("");
+      
+      // Post-format titles/meta for live candidates so content is visible
+      try {
+        const cards = resultsEl.querySelectorAll('.card')
+        cards.forEach((card, idx) => {
+          const m = matches[idx] || {}
+          const titleEl = card.querySelector('.job-title')
+          if (titleEl && m && m.name) {
+            const extra = (m.currentTitle || m.desiredRole) ? (' - ' + String(m.currentTitle || m.desiredRole)) : ''
+            titleEl.textContent = String(m.name) + extra
+          }
+          const metaEl = card.querySelector('.meta')
+          if (metaEl) {
+            const parts = []
+            const email = (m && m.details && m.details.email) || m.email
+            if (email) parts.push(String(email))
+            if (m.locatie && m.locatie !== '-') parts.push(String(m.locatie))
+            if (m.beschikbaarheid && m.beschikbaarheid !== '-') parts.push(String(m.beschikbaarheid))
+            if (m.uren && m.uren !== '-') parts.push(String(m.uren) + 'u')
+            if (m.sector && m.sector !== '-') parts.push(String(m.sector))
+            if (m.contractType && m.contractType !== '-') parts.push(String(m.contractType))
+            metaEl.textContent = parts.join(' • ')
+          }
+        })
+      } catch {}
 
       /* binds */
       resultsEl.querySelectorAll('[data-action="info"]').forEach(btn=>{
@@ -362,6 +412,12 @@
     }
 
     function computeAndRenderFromForm(){
+      if (LIVE_CANDIDATES && LIVE_CANDIDATES.length){
+        // Voor nu: toon live kandidaten zonder complexe scoring (komt later)
+        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
+        return
+      }
+      // Fallback: statische dataset met scoring
       const data = computeMatchesForCandidates({
         functie: document.getElementById("functie").value,
         locatie: document.getElementById("locatie").value,
@@ -370,11 +426,11 @@
         contract: document.getElementById("contract").value,
         beschikbaarheid: document.getElementById("beschikbaarheid").value,
         skill: document.getElementById("skill").value
-      });
-      render(data);
+      })
+      render(data)
     }
 
-    function init(){ updateFavCount(); computeAndRenderFromForm(); }
+    function init(){ updateFavCount(); loadLiveCandidates(); }
     form.addEventListener("submit", e=>{ e.preventDefault(); computeAndRenderFromForm(); });
     btnReset.addEventListener("click", ()=> render([]));
     window.addEventListener("DOMContentLoaded", init);

@@ -24,3 +24,4 @@ button:hover{
 body{
     background: var(--background-color);
 }
+@import "./theme.css";

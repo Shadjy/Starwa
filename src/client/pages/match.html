@@ -172,8 +172,12 @@
 
   <!-- Data & gedrag -->
   <script src="../data/match.data.js" defer></script>
-  <!-- gedrag (render + favorieten + modals) -->
+  <!-- gedrag (render + favorieten + modals) + live vacatures -->
   <script defer>
+    // API base: same origin on :3000; else point to backend on :3000 (e.g. Live Server)
+    const API_BASE = (typeof window !== 'undefined' && window.STARWA_API_BASE)
+      ? window.STARWA_API_BASE
+      : (location.port === '3000' ? '' : `${location.protocol}//${location.hostname}:3000`)
     const resultsEl = document.getElementById("results");
     const form = document.getElementById("matchForm");
     const btnReset = document.getElementById("btnReset");
@@ -278,15 +282,12 @@
           <div class="title">
             <div>
               <div class="job-title">${fmt(m.title)}</div>
-              <div class="meta">${fmt(m.company)} • ${fmt(m.locatie)} • ${fmt(m.uren)}u • ${fmt(m.functie)} • ${fmt(m.sector)} • ${fmt(m.contractType)}</div>
+              <div class="meta">${fmt(m.company||'-')} • ${fmt(m.locatie||'-')} • ${fmt(m.uren||'-')}u • ${fmt(m.functie||'-')} • ${fmt(m.sector||'-')} • ${fmt(m.contractType||'-')}</div>
             </div>
-            <div class="badge">${m.score}% match</div>
+            <div class="badge">${m.score ?? 0}% match</div>
           </div>
-          <div class="why">
-            <strong>Waarom deze score:</strong>
-            <ul>${m.why.map(liWithIcon).join("")}</ul>
-          </div>
-          <div class="progress"><div class="bar" style="width:${m.score}%"></div></div>
+          ${Array.isArray(m.why) ? `<div class="why"><strong>Waarom deze score:</strong><ul>${m.why.map(liWithIcon).join("")}</ul></div>` : ''}
+          <div class="progress"><div class="bar" style="width:${m.score ?? 0}%"></div></div>
           <div class="actions">
             <div class="left">
               <button class="secondary" data-id="${m.id}" data-action="info" type="button">Meer info</button>
@@ -346,8 +347,56 @@
       });
     }
 
-    function computeAndRenderFromForm(){
-      const data = computeMatchesForJobs({
+    // Live vacatures ophalen en optionele, simpele scoring toepassen op basis van filters
+    let LIVE_VACATURES = [];
+    function mapVacancyToMatch(v, filters){
+      // Simpele score: +20 voor functie match, +20 locatie match, +20 uren match, +10 dienstverband match
+      const f = filters || {};
+      let score = 0;
+      const why = [];
+      const fun = (v.functietitel || '').trim();
+      const cat = (v.categorie || '').trim();
+      const role = fun || cat;
+      const loc = (v.locatie || '').trim();
+      const uren = (v.uren_per_week != null) ? String(v.uren_per_week) : '';
+      const dienst = (v.dienstverband || '').trim();
+      if (f.functie && role && f.functie === role) { score += 20; why.push(`Functie matcht: ${role}`) } else if (f.functie) { why.push(`Functie anders: gezocht '${f.functie}', vacature '${role||"-"}'`) }
+      if (f.locatie && loc && f.locatie === loc) { score += 20; why.push(`Locatie matcht: ${loc}`) } else if (f.locatie) { why.push(`Locatie anders: gezocht '${f.locatie}', vacature '${loc||"-"}'`) }
+      if (f.uren && uren && f.uren === uren) { score += 20; why.push(`Uren matcht: ${uren}`) } else if (f.uren) { why.push(`Uren anders: gezocht '${f.uren}', vacature '${uren||"-"}'`) }
+      if (f.contract && f.contract !== 'Alle' && dienst) { if (f.contract === dienst) { score += 10; why.push(`Contract matcht: ${dienst}`) } else { why.push(`Contract anders: gezocht '${f.contract}', vacature '${dienst}'`) } }
+      score = Math.max(0, Math.min(100, score))
+      return {
+        id: v.id,
+        title: v.functietitel || 'Vacature',
+        company: v.company_name || '-',
+        functie: role || '-',
+        locatie: loc || '-',
+        uren: uren || '-',
+        sector: v.categorie || '-',
+        contractType: dienst || '-',
+        score,
+        why,
+        details: { salary: (v.salaris_min || v.salaris_max) ? `${v.salaris_min||''} - ${v.salaris_max||''}` : '-', contractType: dienst }
+      }
+    }
+    async function loadLiveVacancies(){
+      try {
+        const res = await fetch(`${API_BASE}/api/vacatures?active=1&limit=100`, { credentials: 'include' })
+        if (!res.ok) throw new Error('Kon vacatures niet laden')
+        const data = await res.json()
+        LIVE_VACATURES = Array.isArray(data.items) ? data.items : []
+        // Toon initieel alle actieve vacatures zonder filters (neutrale score 0)
+        const items = LIVE_VACATURES.map(v => mapVacancyToMatch(v, {}))
+        render(items)
+      } catch (err) {
+        console.warn('Live vacatures laden mislukt:', err)
+        // fallback naar mock dataset
+        computeAndRenderFromForm()
+      }
+    }
+
+    function getFilters(){
+      return {
         functie: document.getElementById("functie").value,
         locatie: document.getElementById("locatie").value,
         uren: document.getElementById("uren").value,
@@ -355,11 +404,21 @@
         contract: document.getElementById("contract").value,
         urgentie: document.getElementById("urgentie").value,
         reiskosten: document.getElementById("reiskosten").value
-      });
+      }
+    }
+    function computeAndRenderFromForm(){
+      if (LIVE_VACATURES && LIVE_VACATURES.length){
+        const f = getFilters()
+        const data = LIVE_VACATURES.map(v => mapVacancyToMatch(v, f)).sort((a,b)=>b.score-a.score)
+        render(data)
+        return
+      }
+      // fallback op mock dataset
+      const data = computeMatchesForJobs(getFilters());
       render(data);
     }
 
-    function init(){ updateFavCount(); computeAndRenderFromForm(); }
+    function init(){ updateFavCount(); loadLiveVacancies(); }
     form.addEventListener("submit", e=>{ e.preventDefault(); computeAndRenderFromForm(); });
     btnReset.addEventListener("click", ()=> render([]));
     window.addEventListener("DOMContentLoaded", init);

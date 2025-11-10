@@ -15,7 +15,7 @@ function wantsJson(req) {
 //login to dashbaord
 router.post('/login', async (req, res, next) => {
   try {
-    const { email, password } = req.body || {}
+    const { email, password, role: requestedRole } = req.body || {}
     if (!email || !password) {
       return wantsJson(req)
         ? res.status(400).json({ error: 'Ontbrekende velden.' })
@@ -37,15 +37,32 @@ router.post('/login', async (req, res, next) => {
         : res.status(401).send('Onjuiste inloggegevens.')
     }
 
+    // Als via UI een rol is gekozen, moet die overeenkomen met het account
+    if (requestedRole && user.role && requestedRole !== user.role) {
+      if (wantsJson(req)) {
+        return res.status(403).json({ error: 'Rol komt niet overeen met dit account.' })
+      }
+      const qs = new URLSearchParams({ error: 'role_mismatch', role: requestedRole }).toString()
+      return res.redirect(303, `/inlog-aanmeld.html?${qs}`)
+    }
+
     // Succes
     const safeUser = { id: user.id, email: user.email, role: user.role, naam: user.naam }
+    // Zet eenvoudige cookies voor backend-koppeling (geen sessie nodig)
+    res.cookie('uid', String(user.id), { httpOnly: true, sameSite: 'lax' })
+    res.cookie('role', String(user.role), { httpOnly: true, sameSite: 'lax' })
     if (wantsJson(req)) {
       return res.json({ message: 'Succesvol ingelogd.', user: safeUser })
     }
-    return res.redirect(303, '/dashboard')
+    const redirectTo = user.role === 'employer' ? '/dashboard-werkgever' : '/dashboard'
+    return res.redirect(303, redirectTo)
   } catch (err) {
     next(err)
   }
+})
+
+router.get('/login', (_req, res) => {
+  return res.status(405).json({ error: 'Method Not Allowed' })
 })
 
 //register
@@ -54,7 +71,7 @@ router.post('/register', async (req, res, next) => {
     const role = req.body.role || 'seeker' 
     const body = { ...req.body, role }
 
-  l
+  
     const seekerRequired = ['naam', 'email', 'password']
     const employerRequired = ['contactpersoon', 'bedrijfsnaam', 'bedrijfsGrootte', 'email', 'password']
     const required = role === 'employer' ? employerRequired : seekerRequired
@@ -88,13 +105,45 @@ router.post('/register', async (req, res, next) => {
       )
     }
 
+    // Haal nieuw aangemaakte gebruiker op om cookie te zetten
+    const [newUser] = await query('SELECT id, role, email, naam FROM users WHERE email = ? LIMIT 1', [body.email])
+    if (newUser) {
+      res.cookie('uid', String(newUser.id), { httpOnly: true, sameSite: 'lax' })
+      res.cookie('role', String(newUser.role), { httpOnly: true, sameSite: 'lax' })
+    }
     if (wantsJson(req)) {
       return res.status(201).json({ message: 'Geregistreerd.' })
     }
-    return res.redirect(303, '/vragenlijst')
+    const redirectAfterRegister = role === 'employer' ? '/dashboard-werkgever' : '/vragenlijst'
+    return res.redirect(303, redirectAfterRegister)
   } catch (err) {
     next(err)
   }
+})
+
+router.get('/register', (_req, res) => {
+  return res.status(405).json({ error: 'Method Not Allowed' })
+})
+
+// Huidige gebruiker (afgeleid van cookies)
+router.get('/me', async (req, res, next) => {
+  try {
+    const uid = req.signedCookies?.uid || req.cookies?.uid
+    if (!uid) return res.status(401).json({ error: 'Niet ingelogd' })
+    const rows = await query('SELECT id, role, email, naam, contactpersoon, bedrijfsnaam, bedrijfsGrootte FROM users WHERE id = ? LIMIT 1', [uid])
+    const user = rows[0]
+    if (!user) return res.status(401).json({ error: 'Niet ingelogd' })
+    return res.json({ user })
+  } catch (err) {
+    next(err)
+  }
+})
+
+// Eenvoudige logout
+router.post('/logout', (req, res) => {
+  res.clearCookie('uid')
+  res.clearCookie('role')
+  return res.json({ message: 'Uitgelogd' })
 })
 
 export default router

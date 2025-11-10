@@ -55,7 +55,9 @@ const fieldConfig = {
 }
 fieldConfig.login.employer = [...fieldConfig.login.seeker]
 
-const apiBaseUrl = window.location.origin
+const apiBaseUrl = (location.port === '3000')
+  ? window.location.origin
+  : `${location.protocol}//${location.hostname}:3000`
 
 function getSubmitLabel() {
   return state.auth === 'login' ? 'Inloggen' : 'Account aanmaken'
@@ -199,6 +201,26 @@ if (form) {
 }
 
 function init() {
+  // Read URL parameters to preselect role and show errors
+  try {
+    const params = new URLSearchParams(window.location.search || '')
+    const roleParam = params.get('role')
+    const errorParam = params.get('error')
+    if (roleParam === 'employer' || roleParam === 'seeker') {
+      state.role = roleParam
+    }
+    if (errorParam && feedbackMessage) {
+      if (errorParam === 'role_mismatch') {
+        feedbackMessage.textContent = state.role === 'employer'
+          ? 'Dit account is geen werkgever. Kies Werkzoeker of gebruik een werkgeversaccount.'
+          : 'Dit account is geen werkzoeker. Kies Werkgever of gebruik een werkzoekeraccount.'
+      } else {
+        feedbackMessage.textContent = 'Er is iets misgegaan. Probeer opnieuw.'
+      }
+      feedbackMessage.dataset.type = 'error'
+    }
+  } catch {}
+
   if (roleField) roleField.value = state.role
   updateRoleButtons()
   updateAuthTabs()
