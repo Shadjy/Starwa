@@ -1,11 +1,275 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>berichten</h1>
-</body>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Meldingen Â· Vacature Match Webapp</title>
+
+    <!-- Laat global staan voor app-brede tokens -->
+    <link rel="stylesheet" href="../css/global.css" />
+    <!-- Berichten-specifieke styling (bevat .hidden/.sr-only + theme-bridge) -->
+    <link rel="stylesheet" href="../css/berichten.css" />
+  </head>
+  <body>
+    <div class="messages-page">
+      <header class="mp-header">
+        <div class="mp-header__inner">
+          <button
+            class="ghost-button ghost-button--back"
+            type="button"
+            id="backButton"
+            aria-label="Terug"
+          >
+            <i aria-hidden="true" class="icon icon-back">
+              <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+                <path
+                  d="M11.5 4.5 6 10l5.5 5.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                />
+              </svg>
+            </i>
+            <span aria-hidden="true">Terug</span>
+          </button>
+
+          <div class="mp-header__title">
+            <i aria-hidden="true" class="icon icon-bell">
+              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                <path
+                  d="M12 2a5 5 0 0 0-5 5v1.25c0 .5-.16.99-.45 1.39l-.88 1.22a2 2 0 0 0 1.63 3.14h11.41a2 2 0 0 0 1.63-3.14l-.88-1.22a2.5 2.5 0 0 1-.45-1.39V7a5 5 0 0 0-5-5Zm0 19a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 21Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </i>
+            <div>
+              <h1>Meldingen</h1>
+              <span class="mp-header__subtitle">Vacature Match Webapp</span>
+            </div>
+          </div>
+
+          <span class="badge badge--primary" id="newCounter">0 nieuw</span>
+        </div>
+      </header>
+
+      <main class="mp-main" id="mainContent">
+        <section class="filters-card" aria-label="Meldingen filters">
+          <div class="filters-grid">
+            <label class="search-field" for="searchInput">
+              <i aria-hidden="true" class="icon icon-search">
+                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                  <path
+                    d="m20 20-4.35-4.35m1.1-3.15a6.25 6.25 0 1 1-12.5 0 6.25 6.25 0 0 1 12.5 0Z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-width="1.8"
+                  />
+                </svg>
+              </i>
+              <input
+                id="searchInput"
+                class="search-input"
+                type="search"
+                placeholder="Zoek bedrijven..."
+                autocomplete="off"
+              />
+            </label>
+
+            <div class="select-field">
+              <i aria-hidden="true" class="icon icon-list">
+                <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+                  <path
+                    d="M3 5h14M3 10h14M3 15h14"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-width="1.6"
+                  />
+                </svg>
+              </i>
+              <select
+                id="typeFilter"
+                class="select-input"
+                aria-label="Type filter"
+              >
+                <option value="all">Alle meldingen</option>
+              </select>
+            </div>
+
+            <button
+              class="outlined-button"
+              type="button"
+              id="moreFiltersToggle"
+              aria-expanded="false"
+              aria-controls="extraFilters"
+            >
+              <i aria-hidden="true" class="icon icon-filter">
+                <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+                  <path
+                    d="M3.5 5h13m-10 5h7m-4 5h1"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-width="1.8"
+                  />
+                </svg>
+              </i>
+              Meer filters
+            </button>
+          </div>
+
+          <div class="extra-filters hidden" id="extraFilters">
+            <label class="filter-toggle">
+              <input type="checkbox" id="unreadOnly" />
+              <span class="filter-toggle__pill">
+                <i aria-hidden="true" class="icon icon-bolt">
+                  <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+                    <path
+                      d="M11.5 2 5 11.2h3.9L8.5 18l6.5-9.2H11.2Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </i>
+                Alleen ongelezen
+              </span>
+            </label>
+
+            <label class="filter-toggle">
+              <input type="checkbox" id="savedOnly" />
+              <span class="filter-toggle__pill">
+                <i aria-hidden="true" class="icon icon-heart">
+                  <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+                    <path
+                      d="M10 17s-6-3.7-6-8A3.5 3.5 0 0 1 7.5 5c1.05 0 1.95.45 2.5 1.2A3.2 3.2 0 0 1 12.5 5 3.5 3.5 0 0 1 16 9c0 4.3-6 8-6 8Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </i>
+                Favorieten
+              </span>
+            </label>
+
+            <button
+              class="ghost-button ghost-button--reset"
+              type="button"
+              id="resetFilters"
+            >
+              Reset filters
+            </button>
+          </div>
+        </section>
+
+        <section
+          class="notifications-section"
+          id="notificationsSection"
+          aria-live="polite"
+        ></section>
+      </main>
+
+      <button class="fab" type="button" id="markAllButton">
+        <i aria-hidden="true" class="icon icon-check">
+          <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+            <path
+              d="m6 13 4 4 8-10"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
+          </svg>
+        </i>
+        Alles als gelezen markeren
+      </button>
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="modal-backdrop hidden"
+      id="detailModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+    >
+      <div class="modal-card" role="document">
+        <button
+          class="ghost-button modal-close"
+          type="button"
+          id="modalClose"
+          aria-label="Sluiten"
+        >
+          <i aria-hidden="true" class="icon icon-close">
+            <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+              <path
+                d="m5 5 10 10m0-10L5 15"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="1.8"
+              />
+            </svg>
+          </i>
+          <span class="sr-only">Sluiten</span>
+        </button>
+
+        <header class="modal-header">
+          <!-- H2 met id wordt in JS gebruikt; aria-labelledby hierboven linkt hiernaar -->
+          <h2 class="modal-title" id="modalTitle"></h2>
+        </header>
+
+        <div class="modal-content">
+          <div class="modal-summary">
+            <div class="modal-avatar" id="modalAvatar" aria-hidden="true"></div>
+            <div class="modal-details">
+              <span id="modalCompany"></span>
+              <span id="modalTime"></span>
+            </div>
+          </div>
+
+          <div class="modal-type">
+            <div class="modal-badges">
+              <span class="badge" id="modalTypeBadge"></span>
+              <span class="badge hidden" id="modalStatusBadge"></span>
+            </div>
+
+            <!-- Deze knop + span id's komen exact overeen met berichten.js -->
+            <button
+              class="ghost-button"
+              type="button"
+              id="modalSaveToggle"
+              aria-pressed="false"
+            >
+              <i aria-hidden="true" class="icon icon-heart">
+                <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+                  <path
+                    d="M10 17s-6-3.7-6-8A3.5 3.5 0 0 1 7.5 5c1.05 0 1.95.45 2.5 1.2A3.2 3.2 0 0 1 12.5 5 3.5 3.5 0 0 1 16 9c0 4.3-6 8-6 8Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </i>
+              <span id="modalSaveText"></span>
+            </button>
+          </div>
+        </div>
+
+        <p class="modal-message" id="modalMessage"></p>
+
+        <div class="modal-actions">
+          <button class="button-primary" type="button" id="modalMarkRead">
+            Markeer als gelezen
+          </button>
+          <button class="danger-button" type="button" id="modalDelete">
+            Verwijder melding
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="../js/berichten.js"></script>
+  </body>
 </html>
+  

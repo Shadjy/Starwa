@@ -52,6 +52,10 @@ app.get('/', (_req, res) => {
   sendHtml(res, path.join(PAGES_DIR, 'inlog-aanmeld.html'))
 })
 
+app.get('/inlog-aanmeld', (_req, res) => {
+  sendHtml(res, path.join(PAGES_DIR, 'inlog-aanmeld.html'))
+})
+
 
 app.get('/dashboard', (_req, res) => {
   sendHtml(res, path.join(PAGES_DIR, 'dashboard.html'))
