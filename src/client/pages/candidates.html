@@ -181,8 +181,18 @@
     const favCountEl = document.getElementById("favCountCands");
     const fmt = s => String(s||"").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
-    function openModal(html){ modalBody.innerHTML = html; modal.hidden = false; document.body.classList.add("no-scroll"); }
-    function closeModal(){ modal.hidden = true; modalBody.innerHTML = ""; document.body.classList.remove("no-scroll"); }
+    function openModal(html){
+      modalBody.innerHTML = html;
+      modal.hidden = false;
+      modal.classList.add("active");
+      document.body.classList.add("no-scroll");
+    }
+    function closeModal(){
+      modal.classList.remove("active");
+      modal.hidden = true;
+      modalBody.innerHTML = "";
+      document.body.classList.remove("no-scroll");
+    }
     modal.addEventListener("click",(e)=>{ if (e.target.dataset.close !== undefined || e.target.classList.contains("modal__backdrop")) closeModal(); });
     window.addEventListener("keydown",(e)=>{ if(e.key === "Escape" && !modal.hidden) closeModal(); });
 

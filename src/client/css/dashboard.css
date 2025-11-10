@@ -4,6 +4,7 @@
   border-bottom: none;
   border-radius: 0 0 32px 32px;
   padding: 28px 40px;
+  background: transparent;
 }
 
 .main-header .logo {

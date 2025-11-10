@@ -29,12 +29,8 @@ body {
   margin: 0;
   font-family: var(--fontFamily);
   color: var(--textColor);
-  background: linear-gradient(
-    180deg,
-    var(--gradientStart) 0%,
-    var(--gradientEnd) 200px,
-    var(--backgroundColor) 200px
-  );
+  background: linear-gradient(180deg, var(--gradientStart) 0%, var(--gradientEnd) 100%) no-repeat fixed;
+  background-color: var(--gradientEnd);
   line-height: 1.6;
 }
 
@@ -76,6 +72,22 @@ a {
 .page-header p {
   margin: 4px 0 0;
   color: var(--mutedColor);
+}
+
+.back-button {
+  text-decoration: none;
+  color: var(--textColor);
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.45);
+  transform: translateY(-1px);
 }
 
 .card {
@@ -258,6 +270,10 @@ tbody tr:hover {
   place-items: center;
   z-index: 999;
   pointer-events: none;
+}
+
+.modal[hidden] {
+  display: none !important;
 }
 
 .modal .panel {

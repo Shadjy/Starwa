@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="../css/match.css" />
 </head>
 <body>
+  <header class="main-header">
+    <div class="logo">Starwa</div>
+    <a href="/dashboard" class="back-button">Terug naar Dashboard</a>
+  </header>
+
   <main class="wrap">
     <h1>Matching algoritme – vacatures</h1>
 
@@ -182,8 +187,18 @@
     const favCountEl = document.getElementById("favCountJobs");
     const fmt = s => String(s||"").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
-    function openModal(html){ modalBody.innerHTML = html; modal.hidden = false; document.body.classList.add("no-scroll"); }
-    function closeModal(){ modal.hidden = true; modalBody.innerHTML = ""; document.body.classList.remove("no-scroll"); }
+    function openModal(html){
+      modalBody.innerHTML = html;
+      modal.hidden = false;
+      modal.classList.add("active");
+      document.body.classList.add("no-scroll");
+    }
+    function closeModal(){
+      modal.classList.remove("active");
+      modal.hidden = true;
+      modalBody.innerHTML = "";
+      document.body.classList.remove("no-scroll");
+    }
     modal.addEventListener("click",(e)=>{ if (e.target.dataset.close !== undefined || e.target.classList.contains("modal__backdrop")) closeModal(); });
     window.addEventListener("keydown",(e)=>{ if(e.key === "Escape" && !modal.hidden) closeModal(); });
 
@@ -287,6 +302,7 @@
             <ul>${m.why.map(liWithIcon).join("")}</ul>
           </div>
           <div class="progress"><div class="bar" style="width:${m.score}%"></div></div>
+          <div class="detail-panel" data-detail hidden></div>
           <div class="actions">
             <div class="left">
               <button class="secondary" data-id="${m.id}" data-action="info" type="button">Meer info</button>
@@ -305,21 +321,34 @@
           const v = matches.find(x => x.id === id);
           const d = v.details || {};
           const contacts = (d.contacts||[]).map(c=>`<li>${fmt(c.name)} — <a href="mailto:${fmt(c.email)}">${fmt(c.email)}</a></li>`).join("");
-          openModal(`
-            <div class="detail-grid">
-              <div><h3>Vacature</h3>
-                <p><strong>${fmt(v.title)}</strong> bij <strong>${fmt(v.company)}</strong></p>
-                <p>${fmt(v.functie)} • ${fmt(v.locatie)} • ${fmt(v.uren)} uur • ${fmt(v.sector)}</p>
-                <p><strong>Contract:</strong> ${fmt(d.contractType||"-")}</p>
-                <p><strong>Salaris:</strong> ${fmt(d.salary||"-")}</p>
-                <p><strong>Urgentie:</strong> ${fmt(d.urgency||"-")}</p>
-              </div>
-              <div><h3>Bedrijfsfilosofie</h3><p>${fmt(d.philosophy||"—")}</p></div>
-              <div><h3>Primaire arbeidsvoorwaarden</h3><ul>${(d.primaryBenefits||[]).map(b=>`<li>${fmt(b)}</li>`).join("") || "<li>—</li>"}</ul></div>
-              <div><h3>Secundaire arbeidsvoorwaarden</h3><ul>${(d.secondaryBenefits||[]).map(b=>`<li>${fmt(b)}</li>`).join("") || "<li>—</li>"}</ul></div>
-              <div><h3>Reiskostenvergoeding</h3><p>${fmt(d.travelAllowance||"—")}</p></div>
-              <div><h3>Contactpersonen</h3><ul>${contacts || "<li>—</li>"}</ul></div>
-            </div>`);
+          const card = btn.closest(".card");
+          const panel = card.querySelector("[data-detail]");
+          const isHidden = panel.hasAttribute("hidden");
+          if (isHidden) {
+            panel.innerHTML = `
+              <div class="detail-grid">
+                <div><h3>Vacature</h3>
+                  <p><strong>${fmt(v.title)}</strong> bij <strong>${fmt(v.company)}</strong></p>
+                  <p>${fmt(v.functie)} • ${fmt(v.locatie)} • ${fmt(v.uren)} uur • ${fmt(v.sector)}</p>
+                  <p><strong>Contract:</strong> ${fmt(d.contractType||"-")}</p>
+                  <p><strong>Salaris:</strong> ${fmt(d.salary||"-")}</p>
+                  <p><strong>Urgentie:</strong> ${fmt(d.urgency||"-")}</p>
+                </div>
+                <div><h3>Bedrijfsfilosofie</h3><p>${fmt(d.philosophy||"—")}</p></div>
+                <div><h3>Primaire arbeidsvoorwaarden</h3><ul>${(d.primaryBenefits||[]).map(b=>`<li>${fmt(b)}</li>`).join("") || "<li>—</li>"}</ul></div>
+                <div><h3>Secundaire arbeidsvoorwaarden</h3><ul>${(d.secondaryBenefits||[]).map(b=>`<li>${fmt(b)}</li>`).join("") || "<li>—</li>"}</ul></div>
+                <div><h3>Reiskostenvergoeding</h3><p>${fmt(d.travelAllowance||"—")}</p></div>
+                <div><h3>Contactpersonen</h3><ul>${contacts || "<li>—</li>"}</ul></div>
+              </div>`;
+            panel.removeAttribute("hidden");
+            card.classList.add("detail-open");
+            btn.textContent = "Minder info";
+          } else {
+            panel.setAttribute("hidden", "");
+            panel.innerHTML = "";
+            card.classList.remove("detail-open");
+            btn.textContent = "Meer info";
+          }
         });
       });
 

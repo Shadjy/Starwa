@@ -1,10 +1,21 @@
 @import "./theme.css";
 
+html,
+body {
+  min-height: 100%;
+}
+
+html {
+  background: linear-gradient(180deg, var(--gradientStart) 0%, var(--gradientEnd) 100%) no-repeat fixed;
+}
+
 body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: 100%;
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--gradientStart) 0%, var(--gradientEnd) 100%) no-repeat fixed;
+  background-color: var(--gradientEnd);
 }
 
 main.container {
@@ -13,6 +24,25 @@ main.container {
   display: flex;
   flex-direction: column;
   gap: 28px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+#auth-form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
 }
 
 .page-head {

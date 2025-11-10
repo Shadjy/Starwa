@@ -86,13 +86,15 @@ body {
 }
 
 .buttons {
+  margin-top: 25px;
   display: flex;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .buttons button {
   flex: 1;
-  font-weight: 600;
+  font-weight: bold;
 }
 
 .buttons button:disabled {
@@ -119,16 +121,12 @@ body {
   transition: width 0.3s ease;
 }
 
-@media (max-width: 640px) {
-  body {
-    padding: 60px 12px 80px;
-  }
-
+@media (max-width: 600px) {
   .container {
-    padding: 28px 24px;
+    padding: 20px;
   }
 
-  .buttons {
-    flex-direction: column;
+  button {
+    padding: 12px;
   }
 }
