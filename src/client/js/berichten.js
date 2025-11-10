@@ -186,7 +186,7 @@ const computeInitials = (source) =>
 
 const formatRoleLine = (notification) =>
   notification.role
-    ? `${notification.role} Â· ${notification.company}`
+    ? `${notification.role} · ${notification.company}`
     : notification.company;
 
 const applyFilters = () => {
