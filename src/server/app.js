@@ -1,4 +1,4 @@
-import express from 'express'
+﻿import express from 'express'
 import cors from 'cors'
 import path from 'path'
 import fs from 'fs'
@@ -112,7 +112,7 @@ app.listen(PORT, () => {
   console.log(`Server draait op http://localhost:${PORT}`)
   console.log(`CLIENT_DIR: ${CLIENT_DIR}`)
   console.log(`PAGES_DIR : ${PAGES_DIR}`)
-  console.log('Home: / → src/client/pages/inlog-aanmeld.html')
+  console.log('Home: / -> ' + path.join(PAGES_DIR, 'inlog-aanmeld.html'))
 })
 // Debug: DB ping (dev only)
 import { query as dbQuery } from './db.js'
