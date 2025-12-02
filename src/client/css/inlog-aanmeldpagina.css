@@ -26,6 +26,27 @@ main.container {
   gap: 28px;
 }
 
+.auth-minimal {
+  display: flex;
+  justify-content: flex-end;
+  padding: 14px 20px 0;
+}
+
+.mini-home-link {
+  text-decoration: none;
+  color: var(--mutedColor);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mini-home-link:hover {
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--textColor);
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

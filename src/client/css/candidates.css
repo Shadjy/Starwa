@@ -9,7 +9,8 @@ body {
   flex: 1;
   width: 100%;
   max-width: 1100px;
-  margin: -140px auto 56px;
+  /* Positieve marge zodat content niet onder de header/viewport schuift */
+  margin: 24px auto 56px;
   padding: 0 24px 48px;
   display: flex;
   flex-direction: column;
@@ -47,6 +48,8 @@ h1 {
   position: sticky;
   top: 24px;
   align-self: start;
+  /* Zorg dat de sidebar niet boven het resultatenpaneel komt te liggen */
+  z-index: 1;
 }
 
 .label-row {
@@ -139,6 +142,9 @@ h1 {
   box-shadow: none;
   border: none;
   background: transparent;
+  /* Laat resultaten visueel boven de sticky sidebar renderen */
+  position: relative;
+  z-index: 2;
 }
 
 #results.list {
@@ -324,7 +330,8 @@ h1 {
 
 @media (max-width: 720px) {
   .wrap {
-    margin-top: -100px;
+    /* Houd mobiele layout luchtig en volledig zichtbaar */
+    margin-top: 12px;
     padding: 0 16px 32px;
   }
 

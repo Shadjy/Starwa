@@ -1,47 +1,16 @@
-:root {
-  --primaryColor: #b37c3f;
-  --secondaryColor: #f0dbc2;
-  --backgroundColor: #fff8ef;
-  --textColor: #3d2f1f;
-  --accentColor: #c7963b;
-  --successColor: #6ca877;
-  --errorColor: #d26a59;
-  --warningColor: #d7a23c;
-  --borderColor: #e0c6a2;
-  --mutedColor: #6b5332;
-  --highlightColor: #f7d87b;
-  --cardBg: #ffffff;
-  --gradientStart: #f7d87b;
-  --gradientEnd: #f0dbc2;
-}
+@import "./theme.css";
 
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 body.employer-dashboard {
   margin: 0;
   color: var(--textColor);
-  background: var(--backgroundColor);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: var(--fontFamily);
+  background: linear-gradient(180deg, var(--gradientStart) 0%, var(--gradientEnd) 100%) no-repeat fixed;
+  background-color: var(--gradientEnd);
 }
 
-.container { max-width: 1440px; margin: 0 auto; padding: clamp(16px, 2vw, 28px); }
-
-/* Header */
-.main-header {
-  background: linear-gradient(180deg, var(--gradientStart), var(--gradientEnd));
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--borderColor);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.logo { font-weight: 800; font-size: 22px; color: var(--textColor); }
-.logout { position: relative; display: inline-block; text-decoration: none; }
-.logout-logo { width: 30px; height: 30px; cursor: pointer; }
-.logout-text {
-  position: absolute; left: 50%; top: 110%; transform: translateX(-50%);
-  background: #333; color: #fff; padding: 4px 8px; border-radius: 4px;
-  opacity: 0; white-space: nowrap; pointer-events: none; transition: opacity .2s, top .2s;
-}
-.logout:hover .logout-text { opacity: 1; top: 120%; }
+.container { max-width: 1100px; margin: 0 auto; padding: clamp(16px, 2vw, 28px); }
 
 /* Dashboard layout */
 .dashboard { display: flex; flex-direction: column; gap: 24px; }

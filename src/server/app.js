@@ -49,7 +49,11 @@ app.use('/api/candidates', candidatesRoutes)
 
 
 app.get('/', (_req, res) => {
-  sendHtml(res, path.join(PAGES_DIR, 'inlog-aanmeld.html'))
+  sendHtml(res, path.join(PAGES_DIR, 'home.html'))
+})
+
+app.get('/home', (_req, res) => {
+  sendHtml(res, path.join(PAGES_DIR, 'home.html'))
 })
 
 app.get('/inlog-aanmeld', (_req, res) => {
@@ -112,7 +116,7 @@ app.listen(PORT, () => {
   console.log(`Server draait op http://localhost:${PORT}`)
   console.log(`CLIENT_DIR: ${CLIENT_DIR}`)
   console.log(`PAGES_DIR : ${PAGES_DIR}`)
-  console.log('Home: / -> ' + path.join(PAGES_DIR, 'inlog-aanmeld.html'))
+  console.log('Home: / -> ' + path.join(PAGES_DIR, 'home.html'))
 })
 // Debug: DB ping (dev only)
 import { query as dbQuery } from './db.js'

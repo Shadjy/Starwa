@@ -1,17 +1,17 @@
+@import "./theme.css";
+
 /* ===== Thema-bridge: hergebruik global.css variabelen ===== */
 :root {
-  --color-background: var(--background-color);
-  --color-primary: var(--second-color);
-  --color-accent: var(--third-color);
-  --color-text: var(--text-color);
-
-  /* Component defaults */
+  --color-background: var(--backgroundColor);
+  --color-primary: var(--primaryColor);
+  --color-accent: var(--accentColor);
+  --color-text: var(--textColor);
   --color-white: #ffffff;
-  --color-card: #ffffff;
-  --color-border: rgba(156, 110, 54, 0.25);
-  --color-info: #427ad7;
-  --color-danger: #c43a3a;
-  --color-text-muted: #6b5a45;
+  --color-card: var(--cardBg);
+  --color-border: var(--borderColor);
+  --color-info: var(--accentColor);
+  --color-danger: var(--errorColor);
+  --color-text-muted: var(--mutedColor);
 }
 
 /* ===== Utilities ===== */
@@ -36,18 +36,23 @@
 
 /* ===== Pagina layout ===== */
 .messages-page {
-  min-height: 100vh; display:flex; flex-direction:column;
-  background-color: var(--color-background);
-  font-family: var(--font-base, Arial, sans-serif);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--gradientStart) 0%, var(--gradientEnd) 100%) no-repeat fixed;
   color: var(--color-text);
+  font-family: var(--fontFamily);
 }
 
 /* ===== Header ===== */
 .mp-header {
-  position: sticky; top: 0; z-index: 10;
-  background-color: var(--color-white);
-  border-bottom: 1px solid rgba(163,108,45,0.18);
-  box-shadow: 0 6px 20px rgba(163,108,45,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(180deg, var(--gradientStart), var(--gradientEnd));
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  border-radius: 0 0 24px 24px;
 }
 .mp-header__inner {
   max-width:1100px;margin:0 auto;padding:1.2rem 2.4rem;
