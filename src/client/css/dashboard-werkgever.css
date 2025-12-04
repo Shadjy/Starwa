@@ -10,7 +10,7 @@ body.employer-dashboard {
   background-color: var(--gradientEnd);
 }
 
-.container { max-width: 1100px; margin: 0 auto; padding: clamp(16px, 2vw, 28px); }
+.container { width: 90%; max-width: none; margin: 0 5%; padding: clamp(16px, 2vw, 28px) 0 clamp(16px, 2vw, 28px); }
 
 /* Dashboard layout */
 .dashboard { display: flex; flex-direction: column; gap: 24px; }
@@ -23,9 +23,13 @@ body.employer-dashboard {
 .card-header .badge { margin-left: auto; margin-right: 8px; }
 .card-body { padding: 16px; }
 
-.profile-card { display: flex; align-items: center; gap: 16px; padding: 16px; width: 100%; max-width: 1200px; cursor: pointer; }
+.profile-card { display: flex; align-items: center; gap: 16px; padding: 16px; width: 100%; max-width: 1200px; cursor: pointer; justify-content: space-between; }
 .profile-card:hover { filter: brightness(1.02); }
 .profile-avatar { background: var(--secondaryColor); color: var(--textColor); font-weight: 700; border-radius: 50%; width: 70px; height: 70px; display: grid; place-items: center; }
+.profile-info { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 16px; }
+.profile-header { display: flex; flex-direction: column; gap: 4px; }
+.profile-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.profile-card .btn { min-width: 160px; }
 
 .cards-container { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 20px; align-items: stretch; }
 .card.candidates { min-height: 62vh; display: flex; flex-direction: column; }
@@ -136,4 +140,3 @@ body.modal-open { overflow: hidden; }
 .card.candidates .card-content { padding-right: 6px; }
 .card.candidates .candidate { border-radius: 12px; }
 .card.candidates .candidate .badge { float: right; }
-
