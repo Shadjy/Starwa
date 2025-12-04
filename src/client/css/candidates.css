@@ -47,6 +47,7 @@ h1 {
   grid-template-columns: 320px 1fr;
   gap: 24px;
   align-items: start;
+  min-height: 0;
 }
 
 .panel {
@@ -62,10 +63,9 @@ h1 {
 
 .sidebar {
   position: sticky;
-  top: 24px;
+  top: 120px;
   align-self: start;
-  /* Zorg dat de sidebar niet boven het resultatenpaneel komt te liggen */
-  z-index: 1;
+  z-index: 15;
 }
 
 .label-row {
@@ -534,8 +534,8 @@ h1 {
   }
 
   .sidebar {
-    position: relative;
-    top: 0;
+    position: sticky;
+    top: 82px;
   }
 }
 
