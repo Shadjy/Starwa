@@ -5,18 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profiel - Starwa</title>
   <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/berichten.css">
   <link rel="stylesheet" href="../css/profiel.css">
 </head>
 <body>
 
-  <header class="main-header">
-    <div class="logo">Starwa</div>
-    <div class="header-actions">
-      <a href="/dashboard" class="back-button">Terug naar Dashboard</a>
-      <a href="/home" class="logout">
-        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
-        <span class="logout-text">Log uit</span>
-      </a>
+  <header class="mp-header">
+    <div class="mp-header__inner">
+      <a class="ghost-button ghost-button--back" href="/dashboard">Terug naar Dashboard</a>
+
+      <div class="mp-header__title">
+        <div>
+          <h1>Profiel</h1>
+          <span class="mp-header__subtitle">Beheer je gegevens</span>
+        </div>
+      </div>
+
+      <div class="mp-header__actions">
+        <button class="profile-chip" id="headerProfileBtn" type="button" aria-label="Open profiel">
+          <span class="profile-chip__avatar" aria-hidden="true">L</span>
+          <span class="profile-chip__name">Leo</span>
+        </button>
+        <a href="/home" class="logout">
+          <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+          <span class="logout-text">Log uit</span>
+        </a>
+      </div>
     </div>
   </header>
 

@@ -113,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const companyModal = document.getElementById('companyModal')
   const companyBackdrop = document.getElementById('companyModalBackdrop')
   const openCompanyBtn = document.getElementById('openCompanyModal')
+  const headerProfileBtn = document.getElementById('headerProfileBtn')
   const closeCompanyBtn = document.getElementById('closeCompanyModal')
   const cancelCompanyBtn = document.getElementById('cancelCompany')
   const companyForm = document.getElementById('companyForm')
@@ -333,10 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   openCompanyBtn?.addEventListener('click', () => loadCompany())
-
-  // Open bedrijfsprofiel door op de profielkaart te klikken
-  const profileCardEl = document.getElementById('profileCard')
-  profileCardEl?.addEventListener('click', (e) => {
+  headerProfileBtn?.addEventListener('click', (e) => {
     e.preventDefault()
     loadCompany().finally(() => openCompany())
   })
@@ -564,5 +562,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 })
-
 

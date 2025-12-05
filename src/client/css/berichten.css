@@ -58,6 +58,13 @@
   max-width:1100px;margin:0 auto;padding:1.2rem 2.4rem;
   display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
 }
+.mp-header__actions{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:0.65rem;
+  flex-wrap:wrap;
+}
 .mp-header__title { display:flex;align-items:center;gap:0.7rem;font-weight:600;color:var(--color-primary); }
 .mp-header__title > i { color:var(--color-primary); font-size:1.4rem; }
 .mp-header__title h1 { margin:0; font-size:1.4rem; letter-spacing:.01em; }
@@ -112,10 +119,13 @@
 
 .ghost-button{
   border-radius:999px; background:transparent; color:var(--color-primary);
-  display:inline-flex; align-items:center; gap:.45rem; padding:.5rem .85rem;
-  transition:background .2s ease; border:none;
+  display:inline-flex; align-items:center; gap:.6rem; padding:.55rem 1rem;
+  min-height:44px;
+  border:1px solid rgba(163,108,45,0.25);
+  transition:background .2s ease, border .2s ease, box-shadow .2s ease;
+  text-decoration:none;
 }
-.ghost-button:hover{ background:rgba(163,108,45,.12); }
+.ghost-button:hover{ background:rgba(163,108,45,.12); border-color:rgba(163,108,45,0.35); box-shadow:0 8px 16px rgba(0,0,0,0.05); }
 .ghost-button--back{ color:var(--color-text); font-weight:500; }
 .ghost-button--reset{ margin-left:auto; color:var(--color-primary); font-weight:500; }
 
