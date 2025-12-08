@@ -6,18 +6,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- jouw globale thema -->
   <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/berichten.css" />
   <!-- pagina-specifieke stijl -->
   <link rel="stylesheet" href="../css/match.css" />
 </head>
 <body>
-  <header class="main-header">
-    <div class="logo">Starwa</div>
-    <div class="header-actions">
-      <a href="/dashboard" class="back-button">Terug naar Dashboard</a>
-      <a href="/home" class="logout">
-        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
-        <span class="logout-text">Log uit</span>
-      </a>
+  <header class="mp-header">
+    <div class="mp-header__inner">
+      <a class="ghost-button ghost-button--back" href="/dashboard">Terug naar Dashboard</a>
+
+      <div class="mp-header__title">
+        <div>
+          <h1>Vacature Matches</h1>
+          <span class="mp-header__subtitle">Overzicht</span>
+        </div>
+      </div>
+
+      <div class="mp-header__actions">
+        <a class="ghost-button" href="/profiel.html">Profiel</a>
+        <a href="/home" class="logout">
+          <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+          <span class="logout-text">Log uit</span>
+        </a>
+      </div>
     </div>
   </header>
 

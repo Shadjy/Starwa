@@ -21,8 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   const profileCard = document.getElementById("profileCard")
-  if (profileCard) profileCard.addEventListener("click", () => go('/profiel'))
-
+  // Profiel openen alleen via de header; kaart nav verwijderd
+  const headerProfileBtn = document.getElementById("headerProfileBtn")
+  headerProfileBtn?.addEventListener("click", () => go('/profiel'))
   
   const matchAnchors = [
     ...document.querySelectorAll('a[href$="match.html"]'),
