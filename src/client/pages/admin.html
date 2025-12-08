@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - TalentMatch</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-page">
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <div class="logo">Starwa Admin</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-section="overview">
+          <span class="icon">📊</span>
+          <span>Overzicht</span>
+        </a>
+        <a href="#" class="nav-item" data-section="users">
+          <span class="icon">👥</span>
+          <span>Gebruikers</span>
+        </a>
+        <a href="#" class="nav-item" data-section="pages">
+          <span class="icon">📄</span>
+          <span>Pagina's</span>
+        </a>
+        <a href="#" class="nav-item" data-section="design">
+          <span class="icon">🎨</span>
+          <span>Design & Branding</span>
+        </a>
+        <a href="#" class="nav-item" data-section="chats">
+          <span class="icon">💬</span>
+          <span>Chat Monitoring</span>
+        </a>
+        <a href="#" class="nav-item" data-section="moderation">
+          <span class="icon">⚠️</span>
+          <span>Moderatie</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logout-btn" class="btn-secondary full">Uitloggen</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <h1 id="section-title">Admin Dashboard</h1>
+        <div class="header-actions">
+          <button class="btn-icon">🔔</button>
+          <button class="btn-icon">⚙️</button>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <!-- Overview Section -->
+        <section id="overview" class="section active">
+          <div class="section-grid">
+            <div class="stat-card">
+              <div class="stat-number" id="total-users">-</div>
+              <div class="stat-label">Totaal gebruikers</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="total-chats">-</div>
+              <div class="stat-label">Actieve chats</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="banned-users">-</div>
+              <div class="stat-label">Verbannen users</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="recent-warnings">-</div>
+              <div class="stat-label">Recente waarschuwingen</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Users Section -->
+        <section id="users" class="section">
+          <div class="section-header">
+            <h2>Gebruikersbeheer</h2>
+            <input type="text" id="user-search" placeholder="Zoek gebruiker..." class="input-search">
+          </div>
+          <div class="table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>Naam</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Acties</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body">
+                <tr><td colspan="5">Laden...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Pages Section -->
+        <section id="pages" class="section">
+          <div class="section-header">
+            <h2>Pagina's Beheren</h2>
+            <button class="btn-primary" id="new-page-btn">Nieuwe pagina</button>
+          </div>
+          <div id="pages-list" class="pages-list">
+            <!-- Pages populate here -->
+          </div>
+          <div id="page-editor" class="page-editor" style="display: none;">
+            <input type="text" id="page-slug" placeholder="Page slug (bijv. about)">
+            <input type="text" id="page-title" placeholder="Paginatitel">
+            <textarea id="page-content" placeholder="Pagina inhoud (HTML/Text)"></textarea>
+            <label>
+              <input type="checkbox" id="page-published"> Publiceren
+            </label>
+            <button class="btn-primary" id="save-page-btn">Opslaan</button>
+            <button class="btn-secondary" id="cancel-page-btn">Annuleren</button>
+          </div>
+        </section>
+
+        <!-- Design Section -->
+        <section id="design" class="section">
+          <div class="section-header">
+            <h2>Design & Branding</h2>
+          </div>
+          <div class="design-grid">
+            <div class="design-item">
+              <label>Primaire kleur</label>
+              <input type="color" id="primary-color" value="#c4956f">
+            </div>
+            <div class="design-item">
+              <label>Achtergrond kleur</label>
+              <input type="color" id="bg-color" value="#f5e6d3">
+            </div>
+            <div class="design-item">
+              <label>Logo tekst</label>
+              <input type="text" id="logo-text" value="Starwa">
+            </div>
+            <div class="design-item">
+              <label>Website titel</label>
+              <input type="text" id="site-title" value="TalentMatch">
+            </div>
+          </div>
+          <button class="btn-primary" id="save-design-btn">Design opslaan</button>
+        </section>
+
+        <!-- Chat Monitoring Section -->
+        <section id="chats" class="section">
+          <div class="section-header">
+            <h2>Chat Monitoring</h2>
+          </div>
+          <div id="chats-list" class="chats-list">
+            <!-- Chats populate here -->
+          </div>
+        </section>
+
+        <!-- Moderation Section -->
+        <section id="moderation" class="section">
+          <div class="section-header">
+            <h2>Moderatie & Waarschuwingen</h2>
+          </div>
+          <div id="moderation-log" class="moderation-log">
+            <!-- Moderation log populates here -->
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/admin.js"></script>
+</body>
+</html>

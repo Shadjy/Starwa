@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="logo">Starwa</div>
+    <!-- CHANGE: Dynamic logout link -->
+    <button id="logout-btn" class="logout" style="background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; color: inherit; font-size: inherit;">
+      <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+      <span class="logout-text">Log uit</span>
+    </button>
+  </header>
+
+  <main class="dashboard">
+
+    <!-- CHANGE: Dynamic welcome section -->
+    <section class="profile-section">
+      <div class="profile-card" id="profileCard">
+        <div class="profile-avatar" id="profileAvatar"></div>
+        <div class="profile-info">
+          <h2 id="profileName">Laden...</h2>
+          <p id="profileSubtitle">Bekijk je profiel of pas je profiel aan</p>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="cards-container">
+
+      <!-- Matches-->
+      <div class="card matches">
+        <div class="card-header">
+          <h2>Jouw Matches</h2>
+          <button class="view-all">Bekijk alle matches</button>
+        </div>
+        <div class="card-content">
+          <div class="job">
+            <p>Matches worden geladen...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Berichten-->
+      <div class="card messages">
+        <div class="card-header">
+          <h2>Berichten</h2>
+          <button class="view-all">Bekijk alle berichten</button>
+        </div>
+        <div class="card-content">
+          <div class="message">
+            <h3>Je hebt een match!</h3>
+            <p>Hallo, ik zag je profiel en denk dat je goed past bij ons team..</p>
+            <span class="time">Verstuurd: 3 uur geleden</span>
+          </div>
+          <div class="message">
+            <h3>HR Manager</h3>
+            <p>We hebben je sollicitatie ontvangen en willen je uitnodigen voor een gesprek...</p>
+            <span class="time">Verstuurd: gisteren</span>
+          </div>
+          <div class="message">
+            <h3>Teamleider</h3>
+            <p>Je profiel spreekt ons aan. Kunnen we een kennismakingsgesprek plannen?</p>
+            <span class="time">Verstuurd: 2 dagen geleden</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=yes" />
+  <title>Berichten - TalentMatch</title>
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/chat.css" />
+</head>
+<body>
+  <!-- Added top navigation bar with back to dashboard button -->
+  <div class="chat-top-nav">
+    <button id="back-to-dashboard" class="nav-back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Terug naar dashboard
+    </button>
+    <h2 class="nav-title">Berichten</h2>
+  </div>
+
+  <div class="chat-container">
+    <!-- Sidebar with chat list -->
+    <div class="chat-sidebar">
+      <div class="sidebar-header">
+        <h1>Chats</h1>
+      </div>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Zoek op naam..."
+          autocomplete="off"
+        />
+        <button id="search-btn" class="search-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div id="chats-list" class="chats-list">
+        <!-- Chats populate here -->
+      </div>
+
+      <div id="search-results" class="search-results" style="display: none;">
+        <!-- Search results populate here -->
+      </div>
+    </div>
+
+    <!-- Main chat area -->
+    <div class="chat-main">
+      <div id="no-chat-selected" class="no-chat-selected">
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <h2>Selecteer een chat</h2>
+          <p>Klik op een contact om te chatten</p>
+        </div>
+      </div>
+
+      <div id="chat-view" class="chat-view" style="display: none;">
+        <div class="chat-header">
+          <h2 id="chat-user-name"></h2>
+          <button id="close-chat-btn" class="close-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div id="messages-container" class="messages-container">
+          <!-- Messages populate here -->
+        </div>
+
+        <div class="typing-indicator" id="typing-indicator" style="display: none;">
+          <span>aan het typen...</span>
+        </div>
+
+        <div class="message-input-area">
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Typ je bericht..."
+            autocomplete="off"
+          />
+          <button id="send-btn" class="send-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="../js/chat.js"></script>
+</body>
+</html>

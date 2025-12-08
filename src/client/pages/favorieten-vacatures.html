@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Favorieten — Vacatures</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/favorieten-vacatures.css" />
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo">Starwa</div>
+    <div class="header-actions">
+      <a href="/dashboard" class="back-button">Terug naar Dashboard</a>
+      <a href="/home" class="logout">
+        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+        <span class="logout-text">Log uit</span>
+      </a>
+    </div>
+  </header>
+  <main class="wrap">
+    <h1>Favorieten — vergelijken</h1>
+
+    <div class="toolbar">
+      <button id="backBtn" class="secondary" onclick="history.back()">Terug</button>
+      <div class="spacer"></div>
+      <button id="clearAll" class="danger">Leeg vacatures</button>
+    </div>
+
+    <section class="compare sticky" id="compare">
+      <h2>Vergelijking</h2>
+      <div id="compareGrid" class="compare-grid"></div>
+    </section>
+
+    <section class="grid-list" id="list"></section>
+  </main>
+
+  <script src="../data/favorieten-vacatures.data.js"></script>
+</body>
+</html>

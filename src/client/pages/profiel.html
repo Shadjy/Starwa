@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profiel - Starwa</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/profiel.css">
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="logo">Starwa</div>
+    <div class="header-actions">
+      <a href="/dashboard" class="back-button">Terug naar Dashboard</a>
+      <a href="/home" class="logout">
+        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+        <span class="logout-text">Log uit</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="profile-page">
+    <!-- Personal info -->
+    <section class="profile-section">
+      <h2>Persoonlijke Informatie</h2>
+      <div class="profile-card">
+        <div class="profile-info">
+          <label for="fullName">Volledige naam:</label>
+          <input type="text" id="fullName" value="Leo" disabled>
+
+          <label for="email">E-mailadres:</label>
+          <input type="email" id="email" value="leo@outlook.com" disabled>
+
+          <label for="phone">Telefoonnummer:</label>
+          <input type="text" id="phone" value="123-4567890" disabled>
+
+          <label for="address">Adres:</label>
+          <input type="text" id="address" value="Niet ingevuld" disabled>
+
+          <label for="city">Woonplaats:</label>
+          <input type="text" id="city" value="Niet ingevuld" disabled>
+        </div>
+      </div>
+    </section>
+
+<!-- opleiding -->
+    <section class="profile-section">
+      <h2>Ervaring & Opleiding</h2>
+      <div class="profile-card">
+        <div class="profile-info">
+          <label for="degree">Hoogste opleidingsniveau:</label>
+          <input type="text" id="degree" value="Niet ingevuld" disabled>
+
+          <label for="workExperience">Jaren werkervaring:</label>
+          <input type="text" id="workExperience" value="Niet ingevuld" disabled>
+
+          <label for="workWishes">Werkwensen:</label>
+          <textarea id="workWishes" disabled>Niet ingevuld</textarea>
+
+          <label for="workLocation">Gewenste werkplek:</label>
+          <input type="text" id="workLocation" value="Niet ingevuld" disabled>
+
+          <label for="workHours">Gewenste werkuren:</label>
+          <input type="text" id="workHours" value="Niet ingevuld" disabled>
+        </div>
+      </div>
+    </section>
+
+    <section class="profile-footer">
+      <button class="edit-button" id="editButton">Bewerken</button>
+      <button class="save-button" id="saveButton" disabled>Sla op</button>
+    </section>
+  </main>
+
+  <script src="../js/profiel.js"></script>
+</body>
+</html>
