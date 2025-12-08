@@ -257,6 +257,21 @@
     }
     function updateFavCount(){ const c = getFavs().filter(f=>f.type==='vacature').length; if(favCountEl) favCountEl.textContent = c; }
 
+    async function submitApplication(v, motivatie){
+      const payload = { vacancy_id: v.id, motivatie };
+      const res = await fetch(`${API_BASE}/api/sollicitaties`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || "Kon sollicitatie niet versturen");
+      }
+      return data;
+    }
+
     function openApplyModal(v){
       openModal(`
         <form id="applyForm">
@@ -264,24 +279,36 @@
             <div>
               <h3>Solliciteren op: ${fmt(v.title)}</h3>
               <p><strong>Bedrijf:</strong> ${fmt(v.company)}</p>
-              <label>Naam<br><input required style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px"></label>
+              <p class="text-muted" style="margin:.25rem 0 1rem">We gebruiken je ingelogde account voor de sollicitatie.</p>
             </div>
             <div>
-              <label>E-mail<br><input type="email" required style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px"></label>
-              <label style="display:block;margin-top:.5rem">Bericht<br>
-                <textarea rows="4" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px"></textarea>
+              <label style="display:block;margin-top:.5rem">Motivatie (optioneel)<br>
+                <textarea id="motivationField" rows="4" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px" placeholder="Vertel kort waarom deze rol bij je past."></textarea>
               </label>
             </div>
           </div>
+          <p id="applyStatus" aria-live="polite" style="min-height:1.2rem;margin-top:.5rem;color:#6b7280"></p>
           <div class="modal__footer" style="padding:0;margin-top:.75rem">
             <button type="button" class="modal__close" data-close>Annuleren</button>
-            <button type="submit" class="modal__close">Verstuur</button>
+            <button type="submit" id="submitApplicationBtn" class="modal__close">Verstuur</button>
           </div>
         </form>
       `);
       document.getElementById("applyForm").addEventListener("submit",(e)=>{
         e.preventDefault();
-        openModal(`<h3>Sollicitatie verzonden ✅</h3><p>We hebben je sollicitatie op <strong>${fmt(v.title)}</strong> geregistreerd.</p><div class="modal__footer"><button class="modal__close" data-close>Sluiten</button></div>`);
+        const statusEl = document.getElementById("applyStatus");
+        const btn = document.getElementById("submitApplicationBtn");
+        statusEl.textContent = "Sollicitatie wordt verstuurd...";
+        btn.disabled = true;
+        submitApplication(v, document.getElementById("motivationField").value)
+          .then(() => {
+            openModal(`<h3>Sollicitatie verzonden ✅</h3><p>We hebben je sollicitatie op <strong>${fmt(v.title)}</strong> geregistreerd. Je ontvangt een bevestiging in je berichten.</p><div class="modal__footer"><button class="modal__close" data-close>Sluiten</button></div>`);
+          })
+          .catch((err) => {
+            statusEl.textContent = err?.message || "Er ging iets mis. Probeer het opnieuw.";
+            statusEl.style.color = "#b91c1c";
+            btn.disabled = false;
+          });
       });
     }
 
