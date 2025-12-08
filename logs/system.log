@@ -1,0 +1,6 @@
+{"ts":"2025-12-05T14:35:17.647Z","level":"error","action":"sollicitatie_error","message":"Fout bij opslaan sollicitatie","context":{"error":"Table 'match.sollicitaties' doesn't exist"}}
+{"ts":"2025-12-05T14:35:20.721Z","level":"error","action":"sollicitatie_error","message":"Fout bij opslaan sollicitatie","context":{"error":"Table 'match.sollicitaties' doesn't exist"}}
+{"ts":"2025-12-05T14:49:22.115Z","level":"error","action":"sollicitatie_error","message":"Fout bij opslaan sollicitatie","context":{"error":"Table 'match.sollicitaties' doesn't exist"}}
+{"ts":"2025-12-05T14:50:19.256Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-05T15:44:14.519Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-05T15:46:18.745Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}

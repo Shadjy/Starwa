@@ -70,6 +70,51 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
+  // Berichten: toon eigen berichten (recent)
+  const messagesContainer = document.querySelector('.card.messages .card-content')
+  const formatTimeAgo = (dateStr) => {
+    const d = new Date(dateStr)
+    const diffMs = Date.now() - d.getTime()
+    const mins = Math.floor(diffMs / 60000)
+    if (Number.isNaN(mins)) return ''
+    if (mins < 1) return 'zojuist'
+    if (mins < 60) return `${mins} min geleden`
+    const h = Math.floor(mins / 60)
+    if (h < 24) return `${h} uur geleden`
+    const dgs = Math.floor(h / 24)
+    return `${dgs} dag${dgs === 1 ? '' : 'en'} geleden`
+  }
+  const renderMessages = (items = []) => {
+    if (!messagesContainer) return
+    messagesContainer.innerHTML = ''
+    if (!items.length) {
+      const p = document.createElement('p')
+      p.textContent = 'Geen berichten'
+      messagesContainer.appendChild(p)
+      return
+    }
+    items.forEach(msg => {
+      const el = document.createElement('div')
+      el.className = 'message'
+      el.innerHTML = `
+        <h3>${msg.title || 'Bericht'}</h3>
+        <p>${msg.body || ''}</p>
+        <span class="time">${formatTimeAgo(msg.created_at || msg.createdAt)}</span>
+      `
+      messagesContainer.appendChild(el)
+    })
+  }
+  const loadMessages = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/berichten?limit=3`, { credentials: 'include' })
+      if (!res.ok) throw new Error('not_ok')
+      const data = await res.json()
+      renderMessages(Array.isArray(data.items) ? data.items : [])
+    } catch (err) {
+      renderMessages([])
+    }
+  }
+
   // Matches: laad recent geplaatste vacatures (live uit backend)
   const matchesContainer = document.querySelector('.card.matches .card-content')
   const formatEuro = (n) => {
@@ -133,4 +178,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   loadMatches()
+  loadMessages()
 })
