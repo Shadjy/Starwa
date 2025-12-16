@@ -300,16 +300,19 @@ const applyFilters = () => {
 };
 
 const updateCounterBadge = () => {
-  const unread = state.notifications.filter((note) => !note.read).length;
-  if (unread === 0) {
-    elements.counterBadge.textContent = "Geen nieuwe meldingen";
-    elements.counterBadge.classList.remove("badge--primary");
-  } else {
-    elements.counterBadge.textContent = `${unread} nieuw`;
-    if (!elements.counterBadge.classList.contains("badge--primary")) {
-      elements.counterBadge.classList.add("badge--primary");
-    }
+  if (!elements.counterBadge) {
+    return;
   }
+  const unread = state.notifications.filter((note) => !note.read).length;
+  const displayValue = unread > 9 ? "9+" : String(unread);
+  elements.counterBadge.textContent = displayValue;
+  elements.counterBadge.dataset.count = String(unread);
+  elements.counterBadge.classList.toggle("is-max", unread > 9);
+  elements.counterBadge.classList.toggle("is-empty", unread === 0);
+  elements.counterBadge.setAttribute(
+    "aria-label",
+    `${unread} ongelezen berichten`
+  );
 };
 
 const updateMarkAllButton = () => {
@@ -782,6 +785,11 @@ const initEventListeners = () => {
     if (event.key === "Escape" && !elements.modal.classList.contains("hidden")) {
       closeModal();
     }
+  });
+
+  const headerProfileBtn = document.getElementById("headerProfileBtn");
+  headerProfileBtn?.addEventListener("click", () => {
+    window.location.assign("/profiel");
   });
 
   const backButton = document.getElementById("backButton");
