@@ -22,6 +22,15 @@
   font-weight: 800;
   color: var(--textColor);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.landing-header .logo-mark img {
+  height: 44px;
+  width: auto;
+  display: block;
 }
 
 .landing-nav {

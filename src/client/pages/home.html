@@ -8,32 +8,18 @@
   <link rel="stylesheet" href="../css/home.css">
 </head>
 <body class="landing">
-  <header class="app-header">
-    <div class="app-header__inner">
-      <a class="app-header__logo" href="/dashboard" aria-label="Ga naar dashboard">Starwa</a>
-      <div class="app-header__title">
-        <h1>Home</h1>
-      </div>
-      <a class="profile-chip app-header__profile" id="headerProfileBtn" href="/profiel" aria-label="Open profiel" data-avatar="">
-        <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
-          <img src="" alt="" />
-          <span class="profile-chip__initials">LJ</span>
-        </span>
-        <span class="profile-chip__name">Leo de Jong</span>
-      </a>
-      <a class="profile-chip message-chip app-header__messages" href="/berichten" aria-label="Open berichten">
-        <span class="message-chip__icon" aria-hidden="true">
-          <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
-            <path d="M3.25 4.75h13.5c.55 0 1 .45 1 1v8.5c0 .55-.45 1-1 1h-4.5l-3.25 2.5V15.25H3.25c-.55 0-1-.45-1-1v-8.5c0-.55.45-1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
-          </svg>
-        </span>
-        <span class="profile-chip__name">Berichten</span>
-        <span class="message-chip__badge" data-unread="2" aria-live="polite">2</span>
-      </a>
-      <a class="logout app-header__logout" href="/home">
-        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
-        <span class="logout-text">Log uit</span>
-      </a>
+  <header class="main-header landing-header">
+    <a class="logo-mark" href="/dashboard" aria-label="Ga naar dashboard">
+      <img src="../assests/starwaster.png" alt="Starwa">
+    </a>
+    <nav class="landing-nav">
+      <a href="#features">Waarom Starwa?</a>
+      <a href="#voor-wie">Voor wie</a>
+      <a href="#cta">Start nu</a>
+    </nav>
+    <div class="landing-actions">
+      <a class="btn ghost" href="/inlog-aanmeld">Inloggen</a>
+      <a class="btn primary" href="/inlog-aanmeld">Gratis starten</a>
     </div>
   </header>
 

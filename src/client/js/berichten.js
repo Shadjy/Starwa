@@ -787,6 +787,11 @@ const initEventListeners = () => {
     }
   });
 
+  const headerProfileBtn = document.getElementById("headerProfileBtn");
+  headerProfileBtn?.addEventListener("click", () => {
+    window.location.assign("/profiel");
+  });
+
   const backButton = document.getElementById("backButton");
   if (backButton) {
     backButton.addEventListener("click", () => {

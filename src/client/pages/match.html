@@ -13,26 +13,30 @@
 <body>
   <header class="app-header">
     <div class="app-header__inner">
-      <a class="app-header__logo" href="/dashboard" aria-label="Ga naar dashboard">Starwa</a>
+      <a class="app-header__logo" href="/dashboard" aria-label="Ga naar dashboard">
+        <img src="../assests/starwaster.png" alt="Starwa">
+      </a>
       <div class="app-header__title">
         <h1>Vacature Matches</h1>
       </div>
-      <button class="profile-chip app-header__profile" id="headerProfileBtn" type="button" aria-label="Open profiel" data-avatar="">
-        <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
-          <img src="" alt="" />
-          <span class="profile-chip__initials">LJ</span>
-        </span>
-        <span class="profile-chip__name">Leo de Jong</span>
-      </button>
-      <a class="profile-chip message-chip app-header__messages" href="/berichten" aria-label="Open berichten">
-        <span class="message-chip__icon" aria-hidden="true">
-          <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
-            <path d="M3.25 4.75h13.5c.55 0 1 .45 1 1v8.5c0 .55-.45 1-1 1h-4.5l-3.25 2.5V15.25H3.25c-.55 0-1-.45-1-1v-8.5c0-.55.45-1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
-          </svg>
-        </span>
-        <span class="profile-chip__name">Berichten</span>
-        <span class="message-chip__badge" data-unread="3" aria-live="polite">3</span>
-      </a>
+      <div class="app-header__center">
+        <button class="profile-chip" id="headerProfileBtn" type="button" aria-label="Open profiel" data-avatar="">
+          <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
+            <img src="" alt="" />
+            <span class="profile-chip__initials">LJ</span>
+          </span>
+          <span class="profile-chip__name">Leo de Jong</span>
+        </button>
+        <a class="profile-chip message-chip" href="/berichten" aria-label="Open berichten">
+          <span class="message-chip__icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+              <path d="M3.25 4.75h13.5c.55 0 1 .45 1 1v8.5c0 .55-.45 1-1 1h-4.5l-3.25 2.5V15.25H3.25c-.55 0-1-.45-1-1v-8.5c0-.55.45-1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="profile-chip__name">Berichten</span>
+          <span class="message-chip__badge" data-unread="3" aria-live="polite">3</span>
+        </a>
+      </div>
       <a href="/home" class="logout app-header__logout">
         <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
         <span class="logout-text">Log uit</span>
