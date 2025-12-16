@@ -100,6 +100,15 @@
   color: var(--mutedColor);
 }
 
+.profile-card {
+  justify-content: space-between;
+}
+
+.profile-actions {
+  margin-left: auto;
+  display: flex;
+}
+
 .cards-container {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -150,6 +159,15 @@
   border-radius: 999px;
 }
 
+/* Maak dropdowns voor kandidaatvelden iets hoger voor betere klikruimte */
+#candidateSector,
+#candidateAvailability,
+#candidateContract,
+#candidateHours {
+  height: 38px;
+  padding: 14px 16px;
+}
+
 .job,
 .message {
   border-radius: 14px;
@@ -165,6 +183,58 @@
 .message:hover {
   transform: translateY(-2px);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+}
+
+.bullet-preview {
+  list-style: none;
+  margin: 6px 0 0 18px;
+  padding-left: 0;
+  color: var(--textColor);
+  display: grid;
+  gap: 4px;
+  font-size: 0.95rem;
+}
+
+.list-entry {
+  height: 44px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--borderColor);
+  border-radius: 10px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.bullet-preview li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  padding-left: 12px;
+}
+
+.bullet-preview li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--textColor);
+  font-size: 1.1rem;
+}
+
+.bullet-preview .bullet-edit {
+  margin-left: auto;
+  background: #f7f2ea;
+  border: 1px solid var(--borderColor);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--textColor);
+}
+
+.bullet-preview .bullet-edit:hover {
+  background: #efeadf;
 }
 
 .job h3,
@@ -233,4 +303,63 @@
   .profile-info h2 {
     font-size: 20px;
   }
+}
+
+.modal .form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.modal {
+  padding-block: 5%;
+}
+
+.modal .panel {
+  max-height: calc(100vh - 10%);
+  overflow-y: auto;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  font-size: 0.85rem;
+  color: var(--mutedColor);
+  font-weight: 600;
+}
+
+.form-field input,
+.form-field textarea {
+  border: 1px solid var(--borderColor);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--cardBg);
+  color: var(--textColor);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: var(--primaryColor);
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+}
+
+.form-field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.muted-text {
+  color: var(--mutedColor);
+  font-size: 0.85rem;
+}
+
+body.modal-open {
+  overflow: hidden;
 }

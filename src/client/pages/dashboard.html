@@ -27,6 +27,9 @@
           <h2 id="profileName">Leo</h2>
           <p>Bekijk je profiel of pas je profiel aan</p>
         </div>
+        <div class="profile-actions">
+          <button class="btn btn--primary" type="button" id="btnCandidateInfo">Kandidaatgegevens invullen</button>
+        </div>
       </div>
     </section>
 
@@ -90,5 +93,133 @@
   </main>
 
   <script src="../js/dashboard.js"></script>
+
+  <div class="modal-backdrop" id="candidateModalBackdrop"></div>
+  <div class="modal" id="candidateModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="candidateModalTitle" hidden>
+    <div class="panel">
+      <div class="panel-header">
+        <h3 id="candidateModalTitle">Kandidaatgegevens</h3>
+        <button type="button" class="btn btn--ghost" id="closeCandidateModal">Sluiten</button>
+      </div>
+      <form id="candidateForm">
+        <div class="panel-body">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="candidateName">Naam</label>
+              <input type="text" id="candidateName" name="naam" autocomplete="name">
+            </div>
+            <div class="form-field">
+              <label for="candidateEmail">E-mailadres</label>
+              <input type="email" id="candidateEmail" name="email_adres">
+            </div>
+            <div class="form-field">
+              <label for="candidatePhone">Telefoonnummer</label>
+              <input type="tel" id="candidatePhone" name="telefoonnummer">
+            </div>
+            <div class="form-field">
+              <label for="candidateCurrent">Huidige functie</label>
+              <input type="text" id="candidateCurrent" name="huidige_functie">
+            </div>
+            <div class="form-field">
+              <label for="candidateDesired">Gewilde functie</label>
+              <input type="text" id="candidateDesired" name="gewilde_functie">
+            </div>
+            <div class="form-field">
+              <label for="candidateSector">Sector</label>
+              <select id="candidateSector" name="sector">
+                <option value="">Selecteer sector</option>
+                <option value="ICT">ICT</option>
+                <option value="Zorg">Zorg</option>
+                <option value="Techniek">Techniek</option>
+                <option value="Onderwijs">Onderwijs</option>
+                <option value="Finance">Finance</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="candidateLocation">Locatie</label>
+              <input type="text" id="candidateLocation" name="locatie">
+            </div>
+            <div class="form-field">
+              <label for="candidateAvailability">Beschikbaarheid</label>
+              <select id="candidateAvailability" name="beschikbaarheid">
+                <option value="">Kies beschikbaarheid</option>
+                <option value="Per direct">Per direct</option>
+                <option value="Binnen 2 weken">Binnen 2 weken</option>
+                <option value="Binnen 1 maand">Binnen 1 maand</option>
+                <option value="Binnen 3 maanden">Binnen 3 maanden</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="candidateContract">Contracttype</label>
+              <select id="candidateContract" name="contracttype">
+                <option value="">Kies contracttype</option>
+                <option value="Fulltime">Fulltime</option>
+                <option value="Parttime">Parttime</option>
+                <option value="Freelance/ZZP">Freelance/ZZP</option>
+                <option value="Stage">Stage</option>
+                <option value="Tijdelijk">Tijdelijk</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="candidateHours">Uren per week</label>
+              <select id="candidateHours" name="uren_per_week">
+                <option value="">Selecteer uren</option>
+                <option value="16">16</option>
+                <option value="24">24</option>
+                <option value="32">32</option>
+                <option value="36">36</option>
+                <option value="40">40</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="candidateSalary">Salarisindicatie</label>
+              <input type="text" id="candidateSalary" name="salarisindicatie">
+            </div>
+            <div class="form-field">
+              <label for="candidateCv">CV link</label>
+              <input type="url" id="candidateCv" name="cv_link">
+            </div>
+            <div class="form-field">
+              <label for="candidatePortfolio">Portfolio link</label>
+              <input type="url" id="candidatePortfolio" name="portfolio_link">
+            </div>
+            <div class="form-field">
+              <label for="candidateGithub">GitHub link</label>
+              <input type="url" id="candidateGithub" name="github_link">
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="candidateSkills">Vaardigheden (komma's of nieuwe regels)</label>
+            <input type="text" class="list-entry" data-list-input="vaardigheden" placeholder="Typ en druk Enter als je klaar bent met 1 zin">
+            <input type="hidden" id="candidateSkills" name="vaardigheden">
+            <ul class="bullet-preview" data-preview="vaardigheden"></ul>
+          </div>
+          <div class="form-field">
+            <label for="candidateLanguages">Talen (één per regel)</label>
+            <input type="text" class="list-entry" data-list-input="talen" placeholder="Typ en druk Enter als je klaar bent met 1 zin">
+            <input type="hidden" id="candidateLanguages" name="talen">
+            <ul class="bullet-preview" data-preview="talen"></ul>
+          </div>
+          <div class="form-field">
+            <label for="candidateExperience">Ervaring (één regel per bullet)</label>
+            <input type="text" class="list-entry" data-list-input="ervaring" placeholder="Typ en druk Enter als je klaar bent met 1 zin">
+            <input type="hidden" id="candidateExperience" name="ervaring">
+            <ul class="bullet-preview" data-preview="ervaring"></ul>
+          </div>
+          <div class="form-field">
+            <label for="candidateNotes">Notities</label>
+            <input type="text" class="list-entry" data-list-input="notities" placeholder="Typ en druk Enter als je klaar bent met 1 zin">
+            <input type="hidden" id="candidateNotes" name="notities">
+            <ul class="bullet-preview" data-preview="notities"></ul>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <span id="candidateFormMessage" class="muted-text"></span>
+          <button type="button" class="btn btn--secondary" data-candidate-cancel>Annuleren</button>
+          <button type="submit" class="btn btn--primary">Opslaan</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
