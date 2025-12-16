@@ -334,9 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   openCompanyBtn?.addEventListener('click', () => loadCompany())
 
-  // Open bedrijfsprofiel door op de profielkaart te klikken
-  const profileCardEl = document.getElementById('profileCard')
-  profileCardEl?.addEventListener('click', (e) => {
+  // Open bedrijfsprofiel expliciet via knop
+  openCompanyBtn?.addEventListener('click', (e) => {
     e.preventDefault()
     loadCompany().finally(() => openCompany())
   })
@@ -564,5 +563,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 })
-
 

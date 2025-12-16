@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/dashboard-werkgever.css">
 </head>
-<body class="employer-dashboard">
+<body class="employer-dashboard with-sticky-header">
 
-  <header class="main-header">
+  <header class="main-header employer-header">
     <div class="logo">Dashboard</div> 
     <a href="inlog-aanmeld.html" class="logout" id="logoutBtn">
       <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
@@ -19,19 +19,19 @@
   </header>
 
   <main class="dashboard container">
-    <section class="page-actions">
-      <button class="btn" id="openVacatureModal">Vacature maken</button>
-      <button class="btn secondary" id="openCompanyModal">Bedrijfsprofiel</button>
-    </section>
     <section class="profile-section">
       <div class="profile-card card" id="profileCard">
         <div class="profile-avatar" id="profileAvatar">WG</div>
         <div class="profile-info">
+          <div class="profile-header">
           <h2 id="profileName">Jouw Bedrijf</h2>
           <p>Beheer je bedrijfsprofiel en vacatures</p>
           <div class="profile-meta"><span class="badge" id="userIdBadge" aria-label="Employer ID" hidden></span></div>
-          <!-- Quick action: create new vacancy -->
-          
+          </div>
+          <div class="profile-actions">
+            <button class="btn" id="openVacatureModal">Vacature maken</button>
+            <button class="btn secondary" id="openCompanyModal">Bedrijfsprofiel</button>
+          </div>
         </div>
       </div>
     </section>

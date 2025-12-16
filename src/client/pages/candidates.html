@@ -180,9 +180,7 @@
   </div>
 
   <!-- Data & gedrag -->
-  <script src="../data/candidates.data.js" defer></script>
   <script defer>
-    // API base: same origin on :3000; else backend on :3000
     const API_BASE = (typeof window !== 'undefined' && window.STARWA_API_BASE)
       ? window.STARWA_API_BASE
       : (location.port === '3000' ? '' : `${location.protocol}//${location.hostname}:3000`)
@@ -207,7 +205,7 @@
     };
     const clampScore = (value) => {
       const num = Number(value);
-      if (!Number.isFinite(num)) return 0;
+      if (!Number.isFinite(num)) return null;
       return Math.max(0, Math.min(100, Math.round(num)));
     };
     const renderSkillsChips = (skills = []) => {
@@ -218,35 +216,43 @@
     };
     const displaySalary = (candidate = {}) => displayValue(candidate?.details?.salaryExpectation || candidate.salaryIndicatie || candidate.salaris, "Nog niet ingevuld");
     const displayContact = (candidate = {}) => displayValue(candidate?.details?.email || candidate.email || candidate?.details?.phone, "Geen contactgegevens beschikbaar");
-    const renderWhyList = (list = []) => (Array.isArray(list) && list.length ? list.map(liWithIcon).join("") : "<li>Geen toelichting beschikbaar</li>");
-    // Live kandidaten opslag
+    const renderWhyList = (list = []) => (Array.isArray(list) && list.length ? list.map(liWithIcon).join("") : "<li>Score wordt automatisch bepaald door het algoritme.</li>");
+    const filterSkipValues = ['alle', 'geen voorkeur'];
+    const filterKeys = ['functie', 'locatie', 'sector', 'contract', 'beschikbaarheid', 'skill', 'uren'];
+    const cleanFilterValue = (value) => {
+      if (value == null) return null;
+      const text = String(value).trim();
+      if (!text) return null;
+      if (filterSkipValues.includes(text.toLowerCase())) return null;
+      return text;
+    };
     let LIVE_CANDIDATES = [];
-    const mapSeekerToCandidate = (u = {}) => ({
-      id: u.id,
-      name: u.name || u.email || "Kandidaat",
-      currentTitle: u.current_title || u.currentTitle || "",
-      desiredRole: u.desired_role || u.desiredRole || "",
-      locatie: u.locatie || u.city || "",
-      uren: u.uren || u.uren_per_week || "",
-      sector: u.sector || "",
-      contractType: u.contractType || "",
-      beschikbaarheid: u.beschikbaarheid || u.availability || "",
-      salaryIndicatie: u.salary || "",
-      skills: Array.isArray(u.skills) ? u.skills : [],
-      details: { email: u.email },
-      score: Number.isFinite(u.score) ? u.score : 0,
-      why: [],
-    })
-    async function loadLiveCandidates(){
+    const getFilterValues = () => {
+      return filterKeys.reduce((acc, key) => {
+        const el = document.getElementById(key);
+        const cleaned = cleanFilterValue(el?.value);
+        if (cleaned) acc[key] = cleaned;
+        return acc;
+      }, {});
+    };
+    async function fetchCandidates(filterValues = {}) {
+      const params = new URLSearchParams();
+      params.set('limit', '100');
+      Object.entries(filterValues || {}).forEach(([key, value]) => {
+        if (value) params.set(key, value);
+      });
+      const qs = params.toString();
+      const target = `${API_BASE}/api/candidates${qs ? `?${qs}` : ''}`;
       try {
-        const res = await fetch(`${API_BASE}/api/candidates?limit=100`, { credentials: 'include' })
-        if (!res.ok) throw new Error('Kon kandidaten niet laden')
-        const data = await res.json()
-        LIVE_CANDIDATES = (data.items||[]).map(r => ({ id:r.id, name:r.name, email:r.email }))
-        // Initieel render zonder filters
-        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
+        const res = await fetch(target, { credentials: 'include' });
+        if (!res.ok) throw new Error('Kon kandidaten niet laden');
+        const data = await res.json();
+        LIVE_CANDIDATES = Array.isArray(data.items) ? data.items : [];
+        const ordered = [...LIVE_CANDIDATES].sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
+        render(ordered);
       } catch (err) {
-        console.warn('Live kandidaten laden mislukt:', err)
+        console.warn('Live kandidaten laden mislukt:', err);
+        render([]);
       }
     }
 
@@ -359,6 +365,11 @@
         const hours = displayHours(m.uren);
         const roleLine = displayValue(m.currentTitle || m.desiredRole, "Rol nog niet ingevuld");
         const contact = displayContact(m);
+        const reasons = Array.isArray(m.why) && m.why.length ? m.why : [];
+        const score = clampScore(m.score);
+        const scoreLabel = score == null ? 'Nog niet berekend' : `${score}%`;
+        const scoreSub = score == null ? 'Wordt bepaald door algoritme' : 'Matchscore';
+        const progressMarkup = score == null ? '' : `<div class="progress" aria-label="Matchpercentage ${score}%"><div class="bar" style="width:${score}%"></div></div>`;
         return `
         <div class="card candidate-card">
           <div class="candidate-header">
@@ -370,12 +381,10 @@
             </div>
             <div class="score-cluster">
               <div class="match-badge">
-                <span>${score}%</span>
-                <p>Matchscore</p>
+                <span>${scoreLabel}</span>
+                <p>${scoreSub}</p>
               </div>
-              <div class="progress" aria-label="Matchpercentage ${score}%">
-                <div class="bar" style="width:${score}%"></div>
-              </div>
+              ${progressMarkup}
             </div>
           </div>
           <dl class="info-grid">
@@ -410,7 +419,7 @@
           </div>
           <div class="why">
             <h3>Waarom deze score</h3>
-            <ul>${renderWhyList(m.why)}</ul>
+            <ul>${renderWhyList(reasons)}</ul>
           </div>
           <div class="candidate-footer">
             <div class="card-divider" role="presentation"></div>
@@ -489,35 +498,11 @@
       });
     }
 
-    const hasLiveCandidates = () => Array.isArray(LIVE_CANDIDATES) && LIVE_CANDIDATES.length > 0
-
-    function computeAndRenderFromForm({ allowLive = true } = {}){
-      if (allowLive && hasLiveCandidates()){
-        // Voor nu: toon live kandidaten zonder complexe scoring (komt later)
-        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
-        return
-      }
-      // Fallback: statische dataset met scoring
-      const data = computeMatchesForCandidates({
-        functie: document.getElementById("functie").value,
-        locatie: document.getElementById("locatie").value,
-        uren: document.getElementById("uren").value,
-        sector: document.getElementById("sector").value,
-        contract: document.getElementById("contract").value,
-        beschikbaarheid: document.getElementById("beschikbaarheid").value,
-        skill: document.getElementById("skill").value
-      })
-      render(data)
-    }
-
-    function init(){ updateFavCount(); loadLiveCandidates(); }
-    form.addEventListener("submit", e=>{ e.preventDefault(); computeAndRenderFromForm({ allowLive: false }); });
+    function init(){ updateFavCount(); fetchCandidates(); }
+    form.addEventListener("submit", e=>{ e.preventDefault(); fetchCandidates(getFilterValues()); });
     btnReset.addEventListener("click", ()=>{
-      if (hasLiveCandidates()) {
-        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
-      } else {
-        render([])
-      }
+      form.reset();
+      fetchCandidates();
     });
     window.addEventListener("DOMContentLoaded", init);
   </script>
