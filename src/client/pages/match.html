@@ -10,6 +10,7 @@
 </head>
 
 <body>
+
   <header class="main-header">
     <div class="logo">Starwa</div>
     <div class="header-actions">
@@ -22,126 +23,133 @@
 
   <main class="page">
     <div class="grid">
-      <!--Sidebar filters (blijft vast) -->
+      <!-- Sidebar filters (blijft vast, niet scrollen) -->
       <aside class="panel sidebar">
         <form id="matchForm">
-          <label class="label-row">
-            <span>Functie</span>
-            <button type="button" class="info-btn" data-info="functie" aria-label="Info functie">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="functie">
-            <option>Data Analist</option>
-            <option>Developer</option>
-            <option>Project Manager</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="functie">
+              <span>Functie</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info functie"
+                data-tooltip="Functie bepaalt of de vaardigheden aansluiten. Daarom weegt dit het zwaarst."
+              >i</button>
+            </label>
+            <select id="functie">
+              <option>Data Analist</option>
+              <option>Developer</option>
+              <option>Project Manager</option>
+            </select>
+          </div>
 
           <!-- Locatie -->
-          <label class="label-row">
-            <span>Locatie</span>
-            <button type="button" class="info-btn" data-info="locatie" aria-label="Info locatie">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="locatie">
-            <option>Utrecht</option>
-            <option>Amsterdam</option>
-            <option>Rotterdam</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="locatie">
+              <span>Locatie</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info locatie"
+                data-tooltip="Locatie is belangrijk voor reistijd/beschikbaarheid."
+              >i</button>
+            </label>
+            <select id="locatie">
+              <option>Utrecht</option>
+              <option>Amsterdam</option>
+              <option>Rotterdam</option>
+            </select>
+          </div>
 
           <!-- Uren per week -->
-          <label class="label-row">
-            <span>Uren per week</span>
-            <button type="button" class="info-btn" data-info="uren" aria-label="Info uren per week">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="uren">
-            <option>16</option><option>24</option><option>32</option><option>36</option><option selected>40</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="uren">
+              <span>Uren per week</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info uren per week"
+                data-tooltip="Uren bepalen of de contractomvang matcht."
+              >i</button>
+            </label>
+            <select id="uren">
+              <option>16</option><option>24</option><option>32</option><option>36</option><option selected>40</option>
+            </select>
+          </div>
 
           <!-- Sector -->
-          <label class="label-row">
-            <span>Sector</span>
-            <button type="button" class="info-btn" data-info="sector" aria-label="Info sector">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="sector">
-            <option>Alle</option>
-            <option>Finance</option>
-            <option>HealthTech</option>
-            <option>Duurzaamheid</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="sector">
+              <span>Sector</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info sector"
+                data-tooltip="Sector geeft domeinkennis/context."
+              >i</button>
+            </label>
+            <select id="sector">
+              <option>Alle</option>
+              <option>Finance</option>
+              <option>HealthTech</option>
+              <option>Duurzaamheid</option>
+            </select>
+          </div>
 
           <!-- Contracttype -->
-          <label class="label-row">
-            <span>Contracttype</span>
-            <button type="button" class="info-btn" data-info="contract" aria-label="Info contracttype">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="contract">
-            <option>Alle</option>
-            <option>Fulltime</option>
-            <option>Parttime</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="contract">
+              <span>Contracttype</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info contracttype"
+                data-tooltip="Gewenst contract (fulltime/parttime) moet aansluiten."
+              >i</button>
+            </label>
+            <select id="contract">
+              <option>Alle</option>
+              <option>Fulltime</option>
+              <option>Parttime</option>
+            </select>
+          </div>
 
           <!-- Urgentie -->
-          <label class="label-row">
-            <span>Urgentie</span>
-            <button type="button" class="info-btn" data-info="urgentie" aria-label="Info urgentie">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="urgentie">
-            <option>Alle</option>
-            <option>Laag</option>
-            <option>Normaal</option>
-            <option>Hoog</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="urgentie">
+              <span>Urgentie</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info urgentie"
+                data-tooltip="Urgentie helpt prioriteren, maar is niet doorslaggevend."
+              >i</button>
+            </label>
+            <select id="urgentie">
+              <option>Alle</option>
+              <option>Laag</option>
+              <option>Normaal</option>
+              <option>Hoog</option>
+            </select>
+          </div>
 
           <!-- Reiskostenvergoeding -->
-          <label class="label-row">
-            <span>Reiskostenvergoeding</span>
-            <button type="button" class="info-btn" data-info="reiskosten" aria-label="Info reiskostenvergoeding">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="reiskosten">
-            <option>Alle</option>
-            <option>Ja</option>
-            <option>Nee</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="reiskosten">
+              <span>Reiskostenvergoeding</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info reiskostenvergoeding"
+                data-tooltip="Reiskostenvergoeding is prettig, maar weegt het minst."
+              >i</button>
+            </label>
+            <select id="reiskosten">
+              <option>Alle</option>
+              <option>Ja</option>
+              <option>Nee</option>
+            </select>
+          </div>
 
           <div class="btn-row">
             <button type="submit">Bereken matches</button>
@@ -159,11 +167,6 @@
 
       <!-- Resultaten -->
       <section class="results" aria-label="Resultaten">
-        <div class="results-head">
-          <h1>Matching vacatures</h1>
-          <div class="results-sub" id="resultsSub">Toont vacatures (live of demo)</div>
-        </div>
-
         <div id="results" class="list"></div>
       </section>
     </div>
@@ -181,10 +184,8 @@
     </div>
   </main>
 
-  <!-- Data ophalen -->
   <script src="../data/match.data.js" defer></script>
 
-  <!-- gedrag (render + favorieten + modals) + live vacatures -->
   <script defer>
     // API base: same origin on :3000; else point to backend on :3000
     const API_BASE = (typeof window !== 'undefined' && window.STARWA_API_BASE)
@@ -197,7 +198,6 @@
     const modal = document.getElementById("modal");
     const modalBody = document.getElementById("modalBody");
     const favCountEl = document.getElementById("favCountJobs");
-    const resultsSub = document.getElementById("resultsSub");
 
     const fmt = s => String(s||"").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
@@ -216,34 +216,12 @@
     modal.addEventListener("click",(e)=>{ if (e.target.dataset.close !== undefined || e.target.classList.contains("modal__backdrop")) closeModal(); });
     window.addEventListener("keydown",(e)=>{ if(e.key === "Escape" && !modal.hidden) closeModal(); });
 
-    /* Info-popover inhoud */
-    const filterInfo = {
-      functie:{ weight:30, reason:"Functie bepaalt of de vaardigheden aansluiten. Daarom weegt dit het zwaarst." },
-      locatie:{ weight:20, reason:"Locatie is belangrijk voor reistijd/beschikbaarheid." },
-      uren:{ weight:20, reason:"Uren bepalen of de contractomvang matcht." },
-      sector:{ weight:10, reason:"Sector geeft domeinkennis/context." },
-      contract:{ weight:10, reason:"Gewenst contract (fulltime/parttime) moet aansluiten." },
-      urgentie:{ weight:5, reason:"Urgentie helpt prioriteren, maar is niet doorslaggevend." },
-      reiskosten:{ weight:5, reason:"Reiskostenvergoeding is prettig, maar weegt het minst." }
-    };
-    document.querySelectorAll(".info-btn").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const key = btn.dataset.info || "filter";
-        const info = filterInfo[key] || {weight:"—",reason:"—"};
-        openModal(`<h3 style="margin:.25rem 0 .5rem">Informatie over filter: ${key}</h3>
-          <p><strong>Weging:</strong> ${info.weight}</p>
-          <p>${info.reason}</p>`);
-      });
-    });
-
-    /* Waarom: alleen ✔ of ☐ */
     function liWithIcon(text){
       const cleaned = String(text||"").replace(/^(?:[\s•●○◦▪▫◻☐✅✔✖✗–—\-]+)+/,'').trim();
       const isOk = /matcht|exact|overeen/i.test(cleaned) && !/anders|wijkt/i.test(cleaned);
       return `<li class="${isOk?'why-ok':''}">${fmt(cleaned)}</li>`;
     }
 
-    /* Favorieten (localStorage) */
     const getFavs = () => { try { return JSON.parse(localStorage.getItem("favorites")||"[]"); } catch { return []; } };
     const setFavs = (a) => localStorage.setItem("favorites", JSON.stringify(a));
     const favKey = (type, srcId) => `${type}:${srcId}`;
@@ -301,11 +279,8 @@
               <div class="empty-text">Pas de filters links aan en klik op “Bereken matches”.</div>
             </div>
           </div>`;
-        if(resultsSub) resultsSub.textContent = "Geen resultaten";
         return;
       }
-
-      if(resultsSub) resultsSub.textContent = `${matches.length} vacatures gevonden`;
 
       resultsEl.innerHTML = matches.map(m=>{
         const saved = isFav("vacature", m.id);
@@ -340,13 +315,11 @@
         </div>`;
       }).join("");
 
-      /* binds */
       resultsEl.querySelectorAll('[data-action="info"]').forEach(btn=>{
         btn.addEventListener("click", ()=>{
           const id = Number(btn.dataset.id);
           const v = matches.find(x => x.id === id);
           const d = v.details || {};
-          const contacts = (d.contacts||[]).map(c=>`<li>${fmt(c.name)} — <a href="mailto:${fmt(c.email)}">${fmt(c.email)}</a></li>`).join("");
           const card = btn.closest(".card");
           const panel = card.querySelector("[data-detail]");
           const isHidden = panel.hasAttribute("hidden");
@@ -361,11 +334,6 @@
                   <p><strong>Salaris:</strong> ${fmt(d.salary||"-")}</p>
                   <p><strong>Urgentie:</strong> ${fmt(d.urgency||"-")}</p>
                 </div>
-                <div><h3>Bedrijfsfilosofie</h3><p>${fmt(d.philosophy||"—")}</p></div>
-                <div><h3>Primaire arbeidsvoorwaarden</h3><ul>${(d.primaryBenefits||[]).map(b=>`<li>${fmt(b)}</li>`).join("") || "<li>—</li>"}</ul></div>
-                <div><h3>Secundaire arbeidsvoorwaarden</h3><ul>${(d.secondaryBenefits||[]).map(b=>`<li>${fmt(b)}</li>`).join("") || "<li>—</li>"}</ul></div>
-                <div><h3>Reiskostenvergoeding</h3><p>${fmt(d.travelAllowance||"—")}</p></div>
-                <div><h3>Contactpersonen</h3><ul>${contacts || "<li>—</li>"}</ul></div>
               </div>`;
             panel.removeAttribute("hidden");
             card.classList.add("detail-open");
@@ -404,11 +372,9 @@
       });
     }
 
-    // Live vacatures ophalen en optionele, simpele scoring toepassen op basis van filters
     let LIVE_VACATURES = [];
 
     function mapVacancyToMatch(v, filters){
-      // veilig mappen (zodat “niet correct tonen” minder snel gebeurt)
       const f = filters || {};
       let score = 0;
       const why = [];
@@ -453,18 +419,12 @@
       try {
         const res = await fetch(`${API_BASE}/api/vacatures?active=1&limit=100`, { credentials: 'include' });
         if (!res.ok) throw new Error('Kon vacatures niet laden');
-
         const data = await res.json();
         LIVE_VACATURES = Array.isArray(data.items) ? data.items : [];
-
-        const items = LIVE_VACATURES.map(v => mapVacancyToMatch(v, {}));
-        render(items);
-
-        if(resultsSub) resultsSub.textContent = `${items.length} vacatures (live)`;
+        render(LIVE_VACATURES.map(v => mapVacancyToMatch(v, {})));
       } catch (err) {
         console.warn('Live vacatures laden mislukt:', err);
-        computeAndRenderFromForm(); // fallback mock
-        if(resultsSub) resultsSub.textContent = `Demo vacatures (geen live verbinding)`;
+        render(computeMatchesForJobs(getFilters()));
       }
     }
 
@@ -483,15 +443,10 @@
     function computeAndRenderFromForm(){
       if (LIVE_VACATURES && LIVE_VACATURES.length){
         const f = getFilters();
-        const data = LIVE_VACATURES.map(v => mapVacancyToMatch(v, f)).sort((a,b)=>b.score-a.score);
-        render(data);
-        if(resultsSub) resultsSub.textContent = `${data.length} vacatures (live)`;
+        render(LIVE_VACATURES.map(v => mapVacancyToMatch(v, f)).sort((a,b)=>b.score-a.score));
         return;
       }
-      // fallback op mock dataset (match.data.js)
-      const data = computeMatchesForJobs(getFilters());
-      render(data);
-      if(resultsSub) resultsSub.textContent = `${data.length} vacatures (demo)`;
+      render(computeMatchesForJobs(getFilters()));
     }
 
     function init(){
@@ -510,4 +465,3 @@
   </script>
 </body>
 </html>
-  
