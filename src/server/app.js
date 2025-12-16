@@ -73,7 +73,7 @@ app.get('/inlog-aanmeld', (_req, res) => {
 
 
 app.get('/dashboard', (_req, res) => {
-  sendHtml(res, path.join(PAGES_DIR, 'dashboard.html'))
+  sendHtml(res, path.join(PAGES_DIR, 'match.html'))
 })
 
 app.get('/dashboard-werkgever', (_req, res) => {

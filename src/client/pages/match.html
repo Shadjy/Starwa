@@ -4,159 +4,152 @@
   <meta charset="UTF-8" />
   <title>Vacature Matching Demo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- jouw globale thema -->
+
   <link rel="stylesheet" href="../css/global.css" />
-  <link rel="stylesheet" href="../css/berichten.css" />
-  <!-- pagina-specifieke stijl -->
   <link rel="stylesheet" href="../css/match.css" />
 </head>
+
 <body>
-  <header class="mp-header">
-    <div class="mp-header__inner">
-      <a class="ghost-button ghost-button--back" href="/dashboard">Terug naar Dashboard</a>
 
-      <div class="mp-header__title">
-        <div>
-          <h1>Vacature Matches</h1>
-          <span class="mp-header__subtitle">Overzicht</span>
-        </div>
-      </div>
-
-      <div class="mp-header__actions">
-        <a class="ghost-button" href="/profiel.html">Profiel</a>
-        <a href="/home" class="logout">
-          <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
-          <span class="logout-text">Log uit</span>
-        </a>
-      </div>
+  <header class="main-header">
+    <div class="logo">Starwa</div>
+    <div class="header-actions">
+      <a href="/home" class="logout">
+        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+        <span class="logout-text">Log uit</span>
+      </a>
     </div>
   </header>
 
-  <main class="wrap">
-    <h1>Matching algoritme – vacatures</h1>
-
+  <main class="page">
     <div class="grid">
-      <!-- Filters (sticky) -->
+      <!-- Sidebar filters (blijft vast, niet scrollen) -->
       <aside class="panel sidebar">
         <form id="matchForm">
-          <!-- Functie -->
-          <label class="label-row">
-            <span>Functie</span>
-            <button type="button" class="info-btn" data-info="functie" aria-label="Info functie">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="functie">
-            <option>Data Analist</option>
-            <option>Developer</option>
-            <option>Project Manager</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="functie">
+              <span>Functie</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info functie"
+                data-tooltip="Functie bepaalt of de vaardigheden aansluiten. Daarom weegt dit het zwaarst."
+              >i</button>
+            </label>
+            <select id="functie">
+              <option>Data Analist</option>
+              <option>Developer</option>
+              <option>Project Manager</option>
+            </select>
+          </div>
 
           <!-- Locatie -->
-          <label class="label-row">
-            <span>Locatie</span>
-            <button type="button" class="info-btn" data-info="locatie" aria-label="Info locatie">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="locatie">
-            <option>Utrecht</option>
-            <option>Amsterdam</option>
-            <option>Rotterdam</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="locatie">
+              <span>Locatie</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info locatie"
+                data-tooltip="Locatie is belangrijk voor reistijd/beschikbaarheid."
+              >i</button>
+            </label>
+            <select id="locatie">
+              <option>Utrecht</option>
+              <option>Amsterdam</option>
+              <option>Rotterdam</option>
+            </select>
+          </div>
 
           <!-- Uren per week -->
-          <label class="label-row">
-            <span>Uren per week</span>
-            <button type="button" class="info-btn" data-info="uren" aria-label="Info uren per week">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="uren">
-            <option>16</option><option>24</option><option>32</option><option>36</option><option selected>40</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="uren">
+              <span>Uren per week</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info uren per week"
+                data-tooltip="Uren bepalen of de contractomvang matcht."
+              >i</button>
+            </label>
+            <select id="uren">
+              <option>16</option><option>24</option><option>32</option><option>36</option><option selected>40</option>
+            </select>
+          </div>
 
           <!-- Sector -->
-          <label class="label-row">
-            <span>Sector</span>
-            <button type="button" class="info-btn" data-info="sector" aria-label="Info sector">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="sector">
-            <option>Alle</option>
-            <option>Finance</option>
-            <option>HealthTech</option>
-            <option>Duurzaamheid</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="sector">
+              <span>Sector</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info sector"
+                data-tooltip="Sector geeft domeinkennis/context."
+              >i</button>
+            </label>
+            <select id="sector">
+              <option>Alle</option>
+              <option>Finance</option>
+              <option>HealthTech</option>
+              <option>Duurzaamheid</option>
+            </select>
+          </div>
 
           <!-- Contracttype -->
-          <label class="label-row">
-            <span>Contracttype</span>
-            <button type="button" class="info-btn" data-info="contract" aria-label="Info contracttype">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="contract">
-            <option>Alle</option>
-            <option>Fulltime</option>
-            <option>Parttime</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="contract">
+              <span>Contracttype</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info contracttype"
+                data-tooltip="Gewenst contract (fulltime/parttime) moet aansluiten."
+              >i</button>
+            </label>
+            <select id="contract">
+              <option>Alle</option>
+              <option>Fulltime</option>
+              <option>Parttime</option>
+            </select>
+          </div>
 
           <!-- Urgentie -->
-          <label class="label-row">
-            <span>Urgentie</span>
-            <button type="button" class="info-btn" data-info="urgentie" aria-label="Info urgentie">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="urgentie">
-            <option>Alle</option>
-            <option>Laag</option>
-            <option>Normaal</option>
-            <option>Hoog</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="urgentie">
+              <span>Urgentie</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info urgentie"
+                data-tooltip="Urgentie helpt prioriteren, maar is niet doorslaggevend."
+              >i</button>
+            </label>
+            <select id="urgentie">
+              <option>Alle</option>
+              <option>Laag</option>
+              <option>Normaal</option>
+              <option>Hoog</option>
+            </select>
+          </div>
 
           <!-- Reiskostenvergoeding -->
-          <label class="label-row">
-            <span>Reiskostenvergoeding</span>
-            <button type="button" class="info-btn" data-info="reiskosten" aria-label="Info reiskostenvergoeding">
-              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
-                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
-              </svg>
-            </button>
-          </label>
-          <select id="reiskosten">
-            <option>Alle</option>
-            <option>Ja</option>
-            <option>Nee</option>
-          </select>
+          <div class="field">
+            <label class="label-row" for="reiskosten">
+              <span>Reiskostenvergoeding</span>
+              <button
+                type="button"
+                class="info-btn"
+                aria-label="Info reiskostenvergoeding"
+                data-tooltip="Reiskostenvergoeding is prettig, maar weegt het minst."
+              >i</button>
+            </label>
+            <select id="reiskosten">
+              <option>Alle</option>
+              <option>Ja</option>
+              <option>Nee</option>
+            </select>
+          </div>
 
           <div class="btn-row">
             <button type="submit">Bereken matches</button>
@@ -164,7 +157,6 @@
           </div>
         </form>
 
-        <!-- Favorieten link + teller -->
         <div class="fav-panel">
           <a href="../pages/favorieten-vacatures.html">
             <span>Favorieten</span>
@@ -173,39 +165,40 @@
         </div>
       </aside>
 
-      <!-- Resultaten (sticky paneel met eigen scroll) -->
-      <section class="panel results">
+      <!-- Resultaten -->
+      <section class="results" aria-label="Resultaten">
         <div id="results" class="list"></div>
       </section>
     </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal" hidden>
+      <div class="modal__backdrop" data-close></div>
+      <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal__header">
+          <h3 id="modalTitle" style="margin:.25rem 0">Meer info</h3>
+          <button class="modal__close" data-close aria-label="Sluiten">×</button>
+        </div>
+        <div id="modalBody" class="modal__body"></div>
+      </div>
+    </div>
   </main>
 
-  <!-- Modal -->
-  <div class="modal" id="modal" hidden>
-    <div class="modal__backdrop" data-close></div>
-    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modal__header">
-        <h3 id="modalTitle" style="margin:.25rem 0">Meer info</h3>
-        <button class="modal__close" data-close aria-label="Sluiten">×</button>
-      </div>
-      <div id="modalBody" class="modal__body"></div>
-    </div>
-  </div>
-
-  <!-- Data & gedrag -->
   <script src="../data/match.data.js" defer></script>
-  <!-- gedrag (render + favorieten + modals) + live vacatures -->
+
   <script defer>
-    // API base: same origin on :3000; else point to backend on :3000 (e.g. Live Server)
+    // API base: same origin on :3000; else point to backend on :3000
     const API_BASE = (typeof window !== 'undefined' && window.STARWA_API_BASE)
       ? window.STARWA_API_BASE
-      : (location.port === '3000' ? '' : `${location.protocol}//${location.hostname}:3000`)
+      : (location.port === '3000' ? '' : `${location.protocol}//${location.hostname}:3000`);
+
     const resultsEl = document.getElementById("results");
     const form = document.getElementById("matchForm");
     const btnReset = document.getElementById("btnReset");
     const modal = document.getElementById("modal");
     const modalBody = document.getElementById("modalBody");
     const favCountEl = document.getElementById("favCountJobs");
+
     const fmt = s => String(s||"").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
     function openModal(html){
@@ -223,34 +216,12 @@
     modal.addEventListener("click",(e)=>{ if (e.target.dataset.close !== undefined || e.target.classList.contains("modal__backdrop")) closeModal(); });
     window.addEventListener("keydown",(e)=>{ if(e.key === "Escape" && !modal.hidden) closeModal(); });
 
-    /* Info-popover inhoud */
-    const filterInfo = {
-      functie:{ weight:30, reason:"Functie bepaalt of de vaardigheden aansluiten. Daarom weegt dit het zwaarst." },
-      locatie:{ weight:20, reason:"Locatie is belangrijk voor reistijd/beschikbaarheid." },
-      uren:{ weight:20, reason:"Uren bepalen of de contractomvang matcht." },
-      sector:{ weight:10, reason:"Sector geeft domeinkennis/context." },
-      contract:{ weight:10, reason:"Gewenst contract (fulltime/parttime) moet aansluiten." },
-      urgentie:{ weight:5, reason:"Urgentie helpt prioriteren, maar is niet doorslaggevend." },
-      reiskosten:{ weight:5, reason:"Reiskostenvergoeding is prettig, maar weegt het minst." }
-    };
-    document.querySelectorAll(".info-btn").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const key = btn.dataset.info || "filter";
-        const info = filterInfo[key] || {weight:"—",reason:"—"};
-        openModal(`<h3 style="margin:.25rem 0 .5rem">Informatie over filter: ${key}</h3>
-          <p><strong>Weging:</strong> ${info.weight}</p>
-          <p>${info.reason}</p>`);
-      });
-    });
-
-    /* Waarom: alleen ✔ of ☐ */
     function liWithIcon(text){
       const cleaned = String(text||"").replace(/^(?:[\s•●○◦▪▫◻☐✅✔✖✗–—\-]+)+/,'').trim();
       const isOk = /matcht|exact|overeen/i.test(cleaned) && !/anders|wijkt/i.test(cleaned);
       return `<li class="${isOk?'why-ok':''}">${fmt(cleaned)}</li>`;
     }
 
-    /* Favorieten (localStorage) */
     const getFavs = () => { try { return JSON.parse(localStorage.getItem("favorites")||"[]"); } catch { return []; } };
     const setFavs = (a) => localStorage.setItem("favorites", JSON.stringify(a));
     const favKey = (type, srcId) => `${type}:${srcId}`;
@@ -266,7 +237,10 @@
       setFavs(favs);
       updateFavCount();
     }
-    function updateFavCount(){ const c = getFavs().filter(f=>f.type==='vacature').length; if(favCountEl) favCountEl.textContent = c; }
+    function updateFavCount(){
+      const c = getFavs().filter(f=>f.type==='vacature').length;
+      if(favCountEl) favCountEl.textContent = c;
+    }
 
     async function submitApplication(v, motivatie){
       const payload = { vacancy_id: v.id, motivatie };
@@ -324,7 +298,7 @@
     }
 
     function render(matches){
-      if(!matches.length){
+      if(!matches || !matches.length){
         resultsEl.innerHTML = `
           <div class="card empty-state">
             <div>
@@ -334,6 +308,7 @@
           </div>`;
         return;
       }
+
       resultsEl.innerHTML = matches.map(m=>{
         const saved = isFav("vacature", m.id);
         return `
@@ -345,12 +320,16 @@
             </div>
             <div class="badge">${m.score ?? 0}% match</div>
           </div>
+
           <div class="why">
             <strong>Waarom deze score:</strong>
-            <ul>${m.why.map(liWithIcon).join("")}</ul>
+            <ul>${(m.why || []).map(liWithIcon).join("")}</ul>
           </div>
+
           <div class="progress"><div class="bar" style="width:${m.score}%"></div></div>
+
           <div class="detail-panel" data-detail hidden></div>
+
           <div class="actions">
             <div class="left">
               <button class="secondary" data-id="${m.id}" data-action="info" type="button">Meer info</button>
@@ -360,18 +339,18 @@
               <button class="fav ${saved?'saved':''}" data-id="${m.id}" data-action="fav" type="button">${saved?'Opgeslagen':'Favoriet'}</button>
             </div>
           </div>
-        </div>`}).join("");
+        </div>`;
+      }).join("");
 
-      /* binds */
       resultsEl.querySelectorAll('[data-action="info"]').forEach(btn=>{
         btn.addEventListener("click", ()=>{
           const id = Number(btn.dataset.id);
           const v = matches.find(x => x.id === id);
           const d = v.details || {};
-          const contacts = (d.contacts||[]).map(c=>`<li>${fmt(c.name)} — <a href="mailto:${fmt(c.email)}">${fmt(c.email)}</a></li>`).join("");
           const card = btn.closest(".card");
           const panel = card.querySelector("[data-detail]");
           const isHidden = panel.hasAttribute("hidden");
+
           if (isHidden) {
             panel.innerHTML = `
               <div class="detail-grid">
@@ -382,11 +361,6 @@
                   <p><strong>Salaris:</strong> ${fmt(d.salary||"-")}</p>
                   <p><strong>Urgentie:</strong> ${fmt(d.urgency||"-")}</p>
                 </div>
-                <div><h3>Bedrijfsfilosofie</h3><p>${fmt(d.philosophy||"—")}</p></div>
-                <div><h3>Primaire arbeidsvoorwaarden</h3><ul>${(d.primaryBenefits||[]).map(b=>`<li>${fmt(b)}</li>`).join("") || "<li>—</li>"}</ul></div>
-                <div><h3>Secundaire arbeidsvoorwaarden</h3><ul>${(d.secondaryBenefits||[]).map(b=>`<li>${fmt(b)}</li>`).join("") || "<li>—</li>"}</ul></div>
-                <div><h3>Reiskostenvergoeding</h3><p>${fmt(d.travelAllowance||"—")}</p></div>
-                <div><h3>Contactpersonen</h3><ul>${contacts || "<li>—</li>"}</ul></div>
               </div>`;
             panel.removeAttribute("hidden");
             card.classList.add("detail-open");
@@ -411,11 +385,13 @@
         btn.addEventListener("click", ()=>{
           const id = Number(btn.dataset.id);
           const v = matches.find(x=>x.id===id);
+
           toggleFav("vacature", v.id, {
             id:v.id, title:v.title, company:v.company, locatie:v.locatie,
             uren:v.uren, functie:v.functie, sector:v.sector, contractType:v.contractType,
             score:v.score, why:v.why
           });
+
           const saved = isFav("vacature", v.id);
           btn.classList.toggle('saved', saved);
           btn.textContent = saved ? 'Opgeslagen' : 'Favoriet';
@@ -423,51 +399,59 @@
       });
     }
 
-    // Live vacatures ophalen en optionele, simpele scoring toepassen op basis van filters
     let LIVE_VACATURES = [];
+
     function mapVacancyToMatch(v, filters){
-      // Simpele score: +20 voor functie match, +20 locatie match, +20 uren match, +10 dienstverband match
       const f = filters || {};
       let score = 0;
       const why = [];
-      const fun = (v.functietitel || '').trim();
-      const cat = (v.categorie || '').trim();
+
+      const fun = (v.functietitel || v.title || '').trim();
+      const cat = (v.categorie || v.sector || '').trim();
       const role = fun || cat;
-      const loc = (v.locatie || '').trim();
-      const uren = (v.uren_per_week != null) ? String(v.uren_per_week) : '';
-      const dienst = (v.dienstverband || '').trim();
+
+      const loc = (v.locatie || v.location || '').trim();
+      const uren = (v.uren_per_week ?? v.hours_per_week ?? v.uren ?? '') !== '' ? String(v.uren_per_week ?? v.hours_per_week ?? v.uren) : '';
+      const dienst = (v.dienstverband || v.contractType || '').trim();
+
       if (f.functie && role && f.functie === role) { score += 20; why.push(`Functie matcht: ${role}`) } else if (f.functie) { why.push(`Functie anders: gezocht '${f.functie}', vacature '${role||"-"}'`) }
       if (f.locatie && loc && f.locatie === loc) { score += 20; why.push(`Locatie matcht: ${loc}`) } else if (f.locatie) { why.push(`Locatie anders: gezocht '${f.locatie}', vacature '${loc||"-"}'`) }
       if (f.uren && uren && f.uren === uren) { score += 20; why.push(`Uren matcht: ${uren}`) } else if (f.uren) { why.push(`Uren anders: gezocht '${f.uren}', vacature '${uren||"-"}'`) }
-      if (f.contract && f.contract !== 'Alle' && dienst) { if (f.contract === dienst) { score += 10; why.push(`Contract matcht: ${dienst}`) } else { why.push(`Contract anders: gezocht '${f.contract}', vacature '${dienst}'`) } }
-      score = Math.max(0, Math.min(100, score))
+      if (f.contract && f.contract !== 'Alle' && dienst) {
+        if (f.contract === dienst) { score += 10; why.push(`Contract matcht: ${dienst}`) }
+        else { why.push(`Contract anders: gezocht '${f.contract}', vacature '${dienst}'`) }
+      }
+
+      score = Math.max(0, Math.min(100, score));
+
       return {
-        id: v.id,
-        title: v.functietitel || 'Vacature',
-        company: v.company_name || '-',
+        id: v.id ?? v.vacature_id ?? Math.floor(Math.random()*1e9),
+        title: v.functietitel || v.title || 'Vacature',
+        company: v.company_name || v.company || '-',
         functie: role || '-',
         locatie: loc || '-',
         uren: uren || '-',
-        sector: v.categorie || '-',
+        sector: cat || '-',
         contractType: dienst || '-',
         score,
         why,
-        details: { salary: (v.salaris_min || v.salaris_max) ? `${v.salaris_min||''} - ${v.salaris_max||''}` : '-', contractType: dienst }
-      }
+        details: {
+          salary: (v.salaris_min || v.salaris_max) ? `${v.salaris_min||''} - ${v.salaris_max||''}` : '-',
+          contractType: dienst
+        }
+      };
     }
+
     async function loadLiveVacancies(){
       try {
-        const res = await fetch(`${API_BASE}/api/vacatures?active=1&limit=100`, { credentials: 'include' })
-        if (!res.ok) throw new Error('Kon vacatures niet laden')
-        const data = await res.json()
-        LIVE_VACATURES = Array.isArray(data.items) ? data.items : []
-        // Toon initieel alle actieve vacatures zonder filters (neutrale score 0)
-        const items = LIVE_VACATURES.map(v => mapVacancyToMatch(v, {}))
-        render(items)
+        const res = await fetch(`${API_BASE}/api/vacatures?active=1&limit=100`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Kon vacatures niet laden');
+        const data = await res.json();
+        LIVE_VACATURES = Array.isArray(data.items) ? data.items : [];
+        render(LIVE_VACATURES.map(v => mapVacancyToMatch(v, {})));
       } catch (err) {
-        console.warn('Live vacatures laden mislukt:', err)
-        // fallback naar mock dataset
-        computeAndRenderFromForm()
+        console.warn('Live vacatures laden mislukt:', err);
+        render(computeMatchesForJobs(getFilters()));
       }
     }
 
@@ -480,23 +464,30 @@
         contract: document.getElementById("contract").value,
         urgentie: document.getElementById("urgentie").value,
         reiskosten: document.getElementById("reiskosten").value
-      }
-    }
-    function computeAndRenderFromForm(){
-      if (LIVE_VACATURES && LIVE_VACATURES.length){
-        const f = getFilters()
-        const data = LIVE_VACATURES.map(v => mapVacancyToMatch(v, f)).sort((a,b)=>b.score-a.score)
-        render(data)
-        return
-      }
-      // fallback op mock dataset
-      const data = computeMatchesForJobs(getFilters());
-      render(data);
+      };
     }
 
-    function init(){ updateFavCount(); loadLiveVacancies(); }
+    function computeAndRenderFromForm(){
+      if (LIVE_VACATURES && LIVE_VACATURES.length){
+        const f = getFilters();
+        render(LIVE_VACATURES.map(v => mapVacancyToMatch(v, f)).sort((a,b)=>b.score-a.score));
+        return;
+      }
+      render(computeMatchesForJobs(getFilters()));
+    }
+
+    function init(){
+      updateFavCount();
+      loadLiveVacancies();
+    }
+
     form.addEventListener("submit", e=>{ e.preventDefault(); computeAndRenderFromForm(); });
-    btnReset.addEventListener("click", ()=> render([]));
+
+    btnReset.addEventListener("click", ()=>{
+      form.reset();
+      computeAndRenderFromForm();
+    });
+
     window.addEventListener("DOMContentLoaded", init);
   </script>
 </body>
