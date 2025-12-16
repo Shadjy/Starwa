@@ -9,6 +9,11 @@ import authRoutes from './routes/auth.js'
 import vacaturesRoutes from './routes/vacatures.js'
 import companyRoutes from './routes/company.js'
 import candidatesRoutes from './routes/candidates.js'
+import sollicitatiesRoutes from './routes/sollicitaties.js'
+import berichtenRoutes from './routes/berichten.js'
+import bus from './events/bus.js'
+import { registerSollicitatieListeners } from './events/sollicitatie.js'
+import ensureTables from './db/bootstrap.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -46,6 +51,12 @@ app.use('/api/auth', authRoutes)
 app.use('/api/vacatures', vacaturesRoutes)
 app.use('/api/company', companyRoutes)
 app.use('/api/candidates', candidatesRoutes)
+app.use('/api/sollicitaties', sollicitatiesRoutes)
+app.use('/api/berichten', berichtenRoutes)
+// Events listeners
+registerSollicitatieListeners(bus)
+// Idempotent bootstrap voor tabellen (voor demo/dev)
+ensureTables().catch(err => console.error('Schema bootstrap failed:', err))
 
 
 app.get('/', (_req, res) => {

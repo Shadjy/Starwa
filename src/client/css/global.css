@@ -75,3 +75,17 @@ button {
   align-items: center;
   gap: 12px;
 }
+
+body.with-sticky-header {
+  padding-top: 120px;
+}
+
+body.with-sticky-header .main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  backdrop-filter: none;
+  background: linear-gradient(180deg, var(--gradientStart), var(--gradientEnd));
+}

@@ -6,16 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Werkgever</title>
   <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/berichten.css">
   <link rel="stylesheet" href="../css/dashboard-werkgever.css">
 </head>
 <body class="employer-dashboard">
 
-  <header class="main-header">
-    <div class="logo">Dashboard</div> 
-    <a href="inlog-aanmeld.html" class="logout" id="logoutBtn">
-      <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
-      <span class="logout-text">Log uit</span>
-    </a>
+  <header class="mp-header">
+    <div class="mp-header__inner">
+      <a class="ghost-button ghost-button--back" href="/dashboard-werkgever.html">Terug naar Dashboard</a>
+
+      <div class="mp-header__title">
+        <div>
+          <h1>Dashboard Werkgever</h1>
+          <span class="mp-header__subtitle">Overzicht</span>
+        </div>
+      </div>
+
+      <div class="mp-header__actions">
+        <button type="button" class="ghost-button" id="headerProfileBtn">Profiel</button>
+        <a href="inlog-aanmeld.html" class="logout" id="logoutBtn">
+          <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+          <span class="logout-text">Log uit</span>
+        </a>
+      </div>
+    </div>
   </header>
 
   <main class="dashboard container">

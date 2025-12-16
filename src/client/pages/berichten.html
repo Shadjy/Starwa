@@ -262,6 +262,22 @@
 
         <p class="modal-message" id="modalMessage"></p>
 
+        <div class="modal-reply" id="modalReply" hidden>
+          <label class="sr-only" for="replyType">Type reactie</label>
+          <select id="replyType" class="select-input">
+            <option value="info">Informatie</option>
+            <option value="invite">Uitnodiging</option>
+            <option value="interview">Interviewvoorstel</option>
+            <option value="general">Algemeen</option>
+          </select>
+          <label class="sr-only" for="replyBody">Bericht</label>
+          <textarea id="replyBody" rows="3" class="textarea" placeholder="Reageer op deze sollicitatie..." aria-label="Bericht"></textarea>
+          <p class="reply-status" id="replyStatus" aria-live="polite"></p>
+          <div class="modal-actions" style="justify-content:flex-end">
+            <button class="button-primary" type="button" id="replySend">Versturen</button>
+          </div>
+        </div>
+
         <div class="modal-actions">
           <button class="button-primary" type="button" id="modalMarkRead">
             Markeer als gelezen

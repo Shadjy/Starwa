@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveButton = document.getElementById("saveButton");
   const profileInputs = document.querySelectorAll(".profile-info input, .profile-info textarea");
   const profilePage = document.querySelector(".profile-page");
+  const headerProfileBtn = document.getElementById("headerProfileBtn");
 
   let isEditing = false;
 
@@ -60,4 +61,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("workLocation").value = savedProfile.workLocation || "Niet ingevuld";
     document.getElementById("workHours").value = savedProfile.workHours || "Niet ingevuld";
   }
+
+  headerProfileBtn?.addEventListener("click", () => {
+    // Scroll naar de edit sectie en activeer editmodus
+    editButton?.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (!isEditing) {
+      editButton?.click();
+    }
+  });
 });

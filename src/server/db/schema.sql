@@ -141,3 +141,80 @@ SET @sql_vacancies_is_active := IF(@col_vacancies_is_active = 0,
   'ALTER TABLE `vacancies` ADD COLUMN `is_active` TINYINT(1) NOT NULL DEFAULT 1 AFTER `contactpersoon`',
   'SELECT 1');
 PREPARE stmt FROM @sql_vacancies_is_active; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+
+-- Sollicitaties van werknemers op vacatures
+CREATE TABLE IF NOT EXISTS `sollicitaties` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `werknemer_id` INT UNSIGNED NOT NULL,
+  `werkgever_id` INT UNSIGNED NOT NULL,
+  `vacature_id` INT UNSIGNED NOT NULL,
+  `motivatie` MEDIUMTEXT DEFAULT NULL,
+  `status` VARCHAR(32) NOT NULL DEFAULT 'ingediend',
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_sollicitatie_unique` (`werknemer_id`, `vacature_id`),
+  KEY `idx_sollicitatie_vacature` (`vacature_id`),
+  KEY `idx_sollicitatie_status` (`status`),
+  CONSTRAINT `fk_sollicitatie_werknemer` FOREIGN KEY (`werknemer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_sollicitatie_werkgever` FOREIGN KEY (`werkgever_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_sollicitatie_vacature` FOREIGN KEY (`vacature_id`) REFERENCES `vacancies` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Berichten inbox
+CREATE TABLE IF NOT EXISTS `messages` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `receiver_user_id` INT UNSIGNED NOT NULL,
+  `sender_user_id` INT UNSIGNED DEFAULT NULL,
+  `title` VARCHAR(255) NOT NULL,
+  `body` MEDIUMTEXT NOT NULL,
+  `type` VARCHAR(64) NOT NULL,
+  `related_id` INT UNSIGNED DEFAULT NULL,
+  `metadata` JSON DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `read_at` TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_message_dedup` (`receiver_user_id`, `type`, `related_id`),
+  KEY `idx_messages_receiver` (`receiver_user_id`, `created_at`),
+  CONSTRAINT `fk_messages_receiver` FOREIGN KEY (`receiver_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_messages_sender` FOREIGN KEY (`sender_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- System logging (backend acties / events)
+CREATE TABLE IF NOT EXISTS `system_logs` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `level` VARCHAR(16) NOT NULL DEFAULT 'info',
+  `action` VARCHAR(120) NOT NULL,
+  `message` TEXT NOT NULL,
+  `context` JSON DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_system_logs_action` (`action`),
+  KEY `idx_system_logs_level` (`level`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Gespreksdossier per sollicitatie
+CREATE TABLE IF NOT EXISTS `sollicitatie_threads` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `sollicitatie_id` INT UNSIGNED NOT NULL,
+  `archived` TINYINT(1) NOT NULL DEFAULT 0,
+  `archived_at` TIMESTAMP NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_thread_sollicitatie` (`sollicitatie_id`),
+  CONSTRAINT `fk_thread_sollicitatie` FOREIGN KEY (`sollicitatie_id`) REFERENCES `sollicitaties` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `sollicitatie_thread_messages` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `thread_id` INT UNSIGNED NOT NULL,
+  `sender_user_id` INT UNSIGNED NOT NULL,
+  `receiver_user_id` INT UNSIGNED NOT NULL,
+  `type` VARCHAR(48) NOT NULL DEFAULT 'general', -- general | info | invite | interview
+  `body` MEDIUMTEXT NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_thread_messages_thread` (`thread_id`, `created_at`),
+  CONSTRAINT `fk_thread_message_thread` FOREIGN KEY (`thread_id`) REFERENCES `sollicitatie_threads` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_thread_message_sender` FOREIGN KEY (`sender_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_thread_message_receiver` FOREIGN KEY (`receiver_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
