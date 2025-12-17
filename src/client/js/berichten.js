@@ -211,6 +211,49 @@ const computeInitials = (source) =>
     .join("")
     .toUpperCase();
 
+const initialsFromName = (name = "") => {
+  const parts = name.split(/\s+/).filter(Boolean);
+  if (!parts.length) return "NA";
+  return parts.map((p) => p[0]).join("").slice(0, 2).toUpperCase();
+};
+
+const updateHeaderProfileChip = (user = {}, profile = {}) => {
+  const headerProfileBtn = document.getElementById("headerProfileBtn");
+  if (!headerProfileBtn) return;
+  const nameEl = headerProfileBtn.querySelector(".profile-chip__name");
+  const initialsEl = headerProfileBtn.querySelector(".profile-chip__initials");
+  const imgEl = headerProfileBtn.querySelector("img");
+  const avatarEl = headerProfileBtn.querySelector(".profile-chip__avatar");
+  const displayName =
+    user?.naam ||
+    user?.contactpersoon ||
+    user?.displayName ||
+    user?.email ||
+    "Profiel";
+  if (nameEl) nameEl.textContent = displayName;
+  if (initialsEl) initialsEl.textContent = initialsFromName(displayName);
+  const avatarUrl = profile?.avatar_url || "";
+  if (imgEl) imgEl.src = avatarUrl;
+  if (avatarEl) avatarEl.dataset.hasPhoto = avatarUrl ? "true" : "false";
+};
+
+const hydrateHeaderProfile = async () => {
+  try {
+    const res = await fetch(`${API_BASE}/api/profile/me`, {
+      credentials: "include",
+    });
+    if (res.status === 401) {
+      window.location.assign("/inlog-aanmeld");
+      return;
+    }
+    if (!res.ok) return;
+    const data = await res.json();
+    updateHeaderProfileChip(data.user || {}, data.profile || {});
+  } catch (err) {
+    console.warn("Header-profiel laden mislukt:", err);
+  }
+};
+
 const getCookie = (name) => {
   const v = document.cookie.split(";").map((c) => c.trim());
   for (const c of v) {
@@ -803,6 +846,7 @@ const initEventListeners = () => {
 const init = async () => {
   populateTypeFilter();
   initEventListeners();
+  await hydrateHeaderProfile();
   await loadMessages();
 };
 

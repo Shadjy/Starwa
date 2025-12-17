@@ -4,6 +4,24 @@ import { logSystem } from '../services/logger.js'
 async function ensureTables() {
   // Minimal runtime migrations to avoid 500s when schema.sql niet is gedraaid
   const stmts = [
+    `CREATE TABLE IF NOT EXISTS user_profiles (
+      id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+      user_id INT UNSIGNED NOT NULL,
+      phone VARCHAR(64) DEFAULT NULL,
+      address VARCHAR(255) DEFAULT NULL,
+      city VARCHAR(160) DEFAULT NULL,
+      degree VARCHAR(160) DEFAULT NULL,
+      work_experience VARCHAR(64) DEFAULT NULL,
+      work_wishes TEXT DEFAULT NULL,
+      work_location VARCHAR(160) DEFAULT NULL,
+      work_hours VARCHAR(64) DEFAULT NULL,
+      avatar_url VARCHAR(255) DEFAULT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (id),
+      UNIQUE KEY uq_profile_user (user_id),
+      CONSTRAINT fk_profile_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
     `CREATE TABLE IF NOT EXISTS sollicitaties (
       id INT UNSIGNED NOT NULL AUTO_INCREMENT,
       werknemer_id INT UNSIGNED NOT NULL,

@@ -11,6 +11,7 @@ import companyRoutes from './routes/company.js'
 import candidatesRoutes from './routes/candidates.js'
 import sollicitatiesRoutes from './routes/sollicitaties.js'
 import berichtenRoutes from './routes/berichten.js'
+import profileRoutes from './routes/profile.js'
 import bus from './events/bus.js'
 import { registerSollicitatieListeners } from './events/sollicitatie.js'
 import ensureTables from './db/bootstrap.js'
@@ -53,6 +54,7 @@ app.use('/api/company', companyRoutes)
 app.use('/api/candidates', candidatesRoutes)
 app.use('/api/sollicitaties', sollicitatiesRoutes)
 app.use('/api/berichten', berichtenRoutes)
+app.use('/api/profile', profileRoutes)
 // Events listeners
 registerSollicitatieListeners(bus)
 // Idempotent bootstrap voor tabellen (voor demo/dev)

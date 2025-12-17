@@ -4,6 +4,54 @@ document.addEventListener("DOMContentLoaded", () => {
     ? window.STARWA_API_BASE
     : (location.port === '3000' ? '' : `${location.protocol}//${location.hostname}:3000`)
 
+  const ensureAuthed = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/auth/me`, { credentials: 'include' })
+      if (res.status === 401) {
+        window.location.href = '/inlog-aanmeld'
+        return null
+      }
+      if (!res.ok) throw new Error('not_ok')
+      const data = await res.json()
+      return data?.user || null
+    } catch {
+      window.location.href = '/inlog-aanmeld'
+      return null
+    }
+  }
+
+  const initialsFromName = (name = '') => {
+    const parts = name.split(/\s+/).filter(Boolean)
+    if (!parts.length) return 'NA'
+    return parts.map(p => p[0]).join('').slice(0, 2).toUpperCase()
+  }
+
+  const hydrateHeaderProfile = async () => {
+    const headerProfileBtn = document.getElementById("headerProfileBtn")
+    if (!headerProfileBtn) return
+    const nameEl = headerProfileBtn.querySelector('.profile-chip__name')
+    const initialsEl = headerProfileBtn.querySelector('.profile-chip__initials')
+    const imgEl = headerProfileBtn.querySelector('img')
+    const avatarEl = headerProfileBtn.querySelector('.profile-chip__avatar')
+    try {
+      const res = await fetch(`${API_BASE}/api/profile/me`, { credentials: 'include' })
+      if (res.status === 401) {
+        window.location.href = '/inlog-aanmeld'
+        return
+      }
+      if (!res.ok) return
+      const data = await res.json()
+      const displayName = data?.user?.naam || data?.user?.contactpersoon || data?.user?.displayName || data?.user?.email || 'Profiel'
+      if (nameEl) nameEl.textContent = displayName
+      if (initialsEl) initialsEl.textContent = initialsFromName(displayName)
+      const avatarUrl = data?.profile?.avatar_url || ''
+      if (imgEl) imgEl.src = avatarUrl
+      if (avatarEl) avatarEl.dataset.hasPhoto = avatarUrl ? 'true' : 'false'
+    } catch (err) {
+      // Fallback: laat statische waarden staan
+    }
+  }
+
   const go = (path) => { window.location.href = path }
 
   // Profiel
@@ -24,6 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Profiel openen alleen via de header; kaart nav verwijderd
   const headerProfileBtn = document.getElementById("headerProfileBtn")
   headerProfileBtn?.addEventListener("click", () => go('/profiel'))
+  hydrateHeaderProfile()
+  ensureAuthed()
   
   const matchAnchors = [
     ...document.querySelectorAll('a[href$="match.html"]'),
