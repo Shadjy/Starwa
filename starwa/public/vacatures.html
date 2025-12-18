@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vacaturebeheer</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+        <div>
+          <h1 style="margin:0;">Vacaturebeheer</h1>
+          <div style="color:var(--mutedColor)">Beheer uw openstaande vacatures</div>
+        </div>
+        <button class="btn" id="btn-new">+ Nieuwe vacature</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="card">
+        <div class="card-body">
+          <div class="filters" style="margin-bottom:12px;">
+            <div>
+              <label class="label" for="f-q">Zoek (titel/locatie)</label>
+              <input id="f-q" class="input" placeholder="Zoeken..." />
+            </div>
+            <div>
+              <label class="label" for="f-dienstverband">Dienstverband</label>
+              <select id="f-dienstverband" class="select">
+                <option value="">Alle</option>
+                <option value="fulltime">Fulltime</option>
+                <option value="parttime">Parttime</option>
+                <option value="zzp">ZZP</option>
+                <option value="stage">Stage</option>
+              </select>
+            </div>
+            <div>
+              <label class="label" for="f-actief">Status</label>
+              <select id="f-actief" class="select">
+                <option value="">Alle</option>
+                <option value="1">Actief</option>
+                <option value="0">Inactief</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Titel</th>
+                  <th>Locatie</th>
+                  <th>Dienstverband</th>
+                  <th>Status</th>
+                  <th>Acties</th>
+                </tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button class="btn secondary" id="btn-prev">Vorige</button>
+            <span id="page-indicator"></span>
+            <button class="btn secondary" id="btn-next">Volgende</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="modal" id="modal" aria-hidden="true">
+      <div class="modal-backdrop" id="backdrop"></div>
+      <div class="panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="panel-header">
+          <h2 id="modal-title" style="margin:0;">Vacature</h2>
+          <button class="btn ghost" id="btn-close" aria-label="Sluiten">✕</button>
+        </div>
+        <form id="form">
+          <div class="panel-body">
+            <input type="hidden" id="f-id" />
+            <div class="grid-2">
+              <div>
+                <label class="label" for="f-titel">Titel</label>
+                <input class="input" id="f-titel" required />
+              </div>
+              <div>
+                <label class="label" for="f-locatie">Locatie</label>
+                <input class="input" id="f-locatie" required />
+              </div>
+            </div>
+            <div>
+              <label class="label" for="f-beschrijving">Beschrijving</label>
+              <textarea class="textarea" id="f-beschrijving" rows="5" required></textarea>
+            </div>
+            <div class="grid-2">
+              <div>
+                <label class="label" for="f-dienstverband2">Dienstverband</label>
+                <select class="select" id="f-dienstverband2">
+                  <option value="fulltime">Fulltime</option>
+                  <option value="parttime">Parttime</option>
+                  <option value="zzp">ZZP</option>
+                  <option value="stage">Stage</option>
+                </select>
+              </div>
+              <div class="grid-2">
+                <div>
+                  <label class="label" for="f-smin">Salaris min</label>
+                  <input class="input" id="f-smin" type="number" min="0" />
+                </div>
+                <div>
+                  <label class="label" for="f-smax">Salaris max</label>
+                  <input class="input" id="f-smax" type="number" min="0" />
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="label" for="f-tags-input">Voeg tags toe</label>
+              <div class="tag-input" id="f-tags" role="group" aria-label="Tags invoer">
+                <div class="tag-list" id="f-tags-list"></div>
+                <input class="tag-input-field" id="f-tags-input" placeholder="bijv. design, reizen, muziek…" />
+              </div>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <button type="button" class="btn secondary" id="btn-cancel">Annuleren</button>
+            <button type="submit" class="btn" id="btn-save">Opslaan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast-container" id="toasts"></div>
+
+    <script src="/app.js"></script>
+  </body>
+  </html>
