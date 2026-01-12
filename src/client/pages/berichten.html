@@ -13,46 +13,33 @@
   </head>
   <body>
     <div class="messages-page">
-      <header class="mp-header">
-        <div class="mp-header__inner">
-          <button
-            class="ghost-button ghost-button--back"
-            type="button"
-            id="backButton"
-            aria-label="Terug"
-          >
-            <i aria-hidden="true" class="icon icon-back">
-              <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
-                <path
-                  d="M11.5 4.5 6 10l5.5 5.5"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.8"
-                />
-              </svg>
-            </i>
-            <span aria-hidden="true">Terug</span>
-          </button>
-
-          <div class="mp-header__title">
-            <i aria-hidden="true" class="icon icon-bell">
-              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                <path
-                  d="M12 2a5 5 0 0 0-5 5v1.25c0 .5-.16.99-.45 1.39l-.88 1.22a2 2 0 0 0 1.63 3.14h11.41a2 2 0 0 0 1.63-3.14l-.88-1.22a2.5 2.5 0 0 1-.45-1.39V7a5 5 0 0 0-5-5Zm0 19a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 21Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </i>
-            <div>
-              <h1>Meldingen</h1>
-              <span class="mp-header__subtitle">Vacature Match Webapp</span>
-            </div>
+      <header class="app-header">
+        <div class="app-header__inner">
+          <a class="app-header__logo" href="../pages/candidates.html" aria-label="Ga naar dashboard">
+            <img src="../assests/starwaster.png" alt="Starwa">
+          </a>
+          <div class="app-header__title">
+            <h1>Berichten</h1>
           </div>
-
-          <span class="badge badge--primary" id="newCounter">0 nieuw</span>
-          <a href="/home" class="logout" style="margin-left:auto">
+          <div class="app-header__center">
+            <button class="profile-chip" id="headerProfileBtn" type="button" aria-label="Open profiel" data-avatar="">
+              <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
+                <img src="" alt="" />
+                <span class="profile-chip__initials">LJ</span>
+              </span>
+              <span class="profile-chip__name"></span>
+            </button>
+            <a class="profile-chip message-chip" href="/berichten" aria-label="Ga naar berichten">
+              <span class="message-chip__icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+                  <path d="M3.25 4.75h13.5c.55 0 1 .45 1 1v8.5c0 .55-.45 1-1 1h-4.5l-3.25 2.5V15.25H3.25c-.55 0-1-.45-1-1v-8.5c0-.55.45-1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+                </svg>
+              </span>
+              <span class="profile-chip__name">Berichten</span>
+              <span class="message-chip__badge" id="newCounter" aria-live="polite">0</span>
+            </a>
+          </div>
+          <a href="/home" class="logout app-header__logout">
             <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
             <span class="logout-text">Log uit</span>
           </a>
@@ -191,6 +178,77 @@
       </button>
     </div>
 
+    <!-- Bedrijfsprofiel modal -->
+    <div class="company-modal-backdrop" id="companyModalBackdrop"></div>
+    <div class="company-modal" id="companyModal" aria-hidden="true" role="dialog" aria-labelledby="companyModalTitle">
+      <div class="panel">
+        <div class="panel-header">
+          <h3 id="companyModalTitle">Bedrijfsprofiel</h3>
+          <button class="btn ghost" id="closeCompanyModal" aria-label="Sluiten">Sluiten</button>
+        </div>
+        <form id="companyForm">
+          <div class="panel-body grid-2">
+            <div>
+              <label class="label" for="cp_bedrijfsnaam">Bedrijfsnaam *</label>
+              <input class="input" id="cp_bedrijfsnaam" name="bedrijfsnaam" required />
+            </div>
+            <div>
+              <label class="label" for="cp_kvk">KvK-nummer</label>
+              <input class="input" id="cp_kvk" name="kvk_nummer" />
+            </div>
+            <div>
+              <label class="label" for="cp_sector">Sector / branche</label>
+              <input class="input" id="cp_sector" name="sector" />
+            </div>
+            <div>
+              <label class="label" for="cp_grootte">Bedrijfsgrootte</label>
+              <select class="select" id="cp_grootte" name="bedrijfs_grootte">
+                <option value="">Maak een keuze</option>
+                <option>1-10</option>
+                <option>11-50</option>
+                <option>51-200</option>
+                <option>>200</option>
+              </select>
+            </div>
+            <div class="span-2">
+              <label class="label" for="cp_locatie">Locatie (adres)</label>
+              <input class="input" id="cp_locatie" name="locatie_adres" />
+            </div>
+            <div>
+              <label class="label" for="cp_website">Website</label>
+              <input class="input" id="cp_website" name="website" />
+            </div>
+            <div>
+              <label class="label" for="cp_slogan">Bedrijfsslogan</label>
+              <input class="input" id="cp_slogan" name="slogan" />
+            </div>
+            <div class="span-2">
+              <label class="label" for="cp_beschrijving">Bedrijfsbeschrijving</label>
+              <textarea class="textarea" id="cp_beschrijving" name="beschrijving" rows="4"></textarea>
+            </div>
+            <div class="span-2">
+              <label class="label" for="cp_cultuur">Bedrijfscultuur (comma gescheiden)</label>
+              <input class="input" id="cp_cultuur" name="cultuur" placeholder="informeel, innovatief, duurzaam" />
+            </div>
+            <div>
+              <label class="label" for="cp_contact_naam">Contactpersoon (naam)</label>
+              <input class="input" id="cp_contact_naam" name="contactpersoon_naam" />
+            </div>
+            <div>
+              <label class="label" for="cp_contact_email">Contact e-mail</label>
+              <input type="email" class="input" id="cp_contact_email" name="contact_email" />
+            </div>
+          </div>
+          <div class="panel-footer">
+            <button type="button" class="btn ghost" id="cancelCompany">Annuleren</button>
+            <button type="submit" class="btn" id="saveCompany">Opslaan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast-container" id="companyToasts" aria-live="polite" aria-atomic="true"></div>
+
     <!-- Modal -->
     <div
       class="modal-backdrop hidden"
@@ -262,6 +320,22 @@
 
         <p class="modal-message" id="modalMessage"></p>
 
+        <div class="modal-reply" id="modalReply" hidden>
+          <label class="sr-only" for="replyType">Type reactie</label>
+          <select id="replyType" class="select-input">
+            <option value="info">Informatie</option>
+            <option value="invite">Uitnodiging</option>
+            <option value="interview">Interviewvoorstel</option>
+            <option value="general">Algemeen</option>
+          </select>
+          <label class="sr-only" for="replyBody">Bericht</label>
+          <textarea id="replyBody" rows="3" class="textarea" placeholder="Reageer op deze sollicitatie..." aria-label="Bericht"></textarea>
+          <p class="reply-status" id="replyStatus" aria-live="polite"></p>
+          <div class="modal-actions" style="justify-content:flex-end">
+            <button class="button-primary" type="button" id="replySend">Versturen</button>
+          </div>
+        </div>
+
         <div class="modal-actions">
           <button class="button-primary" type="button" id="modalMarkRead">
             Markeer als gelezen
@@ -273,6 +347,7 @@
       </div>
     </div>
 
+    <script src="../js/company-modal.js" defer></script>
     <script type="module" src="../js/berichten.js"></script>
   </body>
 </html>

@@ -4,6 +4,54 @@ document.addEventListener("DOMContentLoaded", () => {
     ? window.STARWA_API_BASE
     : (location.port === '3000' ? '' : `${location.protocol}//${location.hostname}:3000`)
 
+  const ensureAuthed = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/auth/me`, { credentials: 'include' })
+      if (res.status === 401) {
+        window.location.href = '/inlog-aanmeld'
+        return null
+      }
+      if (!res.ok) throw new Error('not_ok')
+      const data = await res.json()
+      return data?.user || null
+    } catch {
+      window.location.href = '/inlog-aanmeld'
+      return null
+    }
+  }
+
+  const initialsFromName = (name = '') => {
+    const parts = name.split(/\s+/).filter(Boolean)
+    if (!parts.length) return 'NA'
+    return parts.map(p => p[0]).join('').slice(0, 2).toUpperCase()
+  }
+
+  const hydrateHeaderProfile = async () => {
+    const headerProfileBtn = document.getElementById("headerProfileBtn")
+    if (!headerProfileBtn) return
+    const nameEl = headerProfileBtn.querySelector('.profile-chip__name')
+    const initialsEl = headerProfileBtn.querySelector('.profile-chip__initials')
+    const imgEl = headerProfileBtn.querySelector('img')
+    const avatarEl = headerProfileBtn.querySelector('.profile-chip__avatar')
+    try {
+      const res = await fetch(`${API_BASE}/api/profile/me`, { credentials: 'include' })
+      if (res.status === 401) {
+        window.location.href = '/inlog-aanmeld'
+        return
+      }
+      if (!res.ok) return
+      const data = await res.json()
+      const displayName = data?.user?.naam || data?.user?.contactpersoon || data?.user?.displayName || data?.user?.email || 'Profiel'
+      if (nameEl) nameEl.textContent = displayName
+      if (initialsEl) initialsEl.textContent = initialsFromName(displayName)
+      const avatarUrl = data?.profile?.avatar_url || ''
+      if (imgEl) imgEl.src = avatarUrl
+      if (avatarEl) avatarEl.dataset.hasPhoto = avatarUrl ? 'true' : 'false'
+    } catch (err) {
+      // Fallback: laat statische waarden staan
+    }
+  }
+
   const go = (path) => { window.location.href = path }
 
   // Profiel
@@ -21,8 +69,11 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   const profileCard = document.getElementById("profileCard")
-  if (profileCard) profileCard.addEventListener("click", () => go('/profiel'))
-
+  // Profiel openen alleen via de header; kaart nav verwijderd
+  const headerProfileBtn = document.getElementById("headerProfileBtn")
+  headerProfileBtn?.addEventListener("click", () => go('/profiel'))
+  hydrateHeaderProfile()
+  ensureAuthed()
   
   const matchAnchors = [
     ...document.querySelectorAll('a[href$="match.html"]'),
@@ -67,6 +118,51 @@ document.addEventListener("DOMContentLoaded", () => {
       if (messagesViewAll.tagName.toLowerCase() !== 'a') e.preventDefault()
       go('/berichten')
     })
+  }
+
+  // Berichten: toon eigen berichten (recent)
+  const messagesContainer = document.querySelector('.card.messages .card-content')
+  const formatTimeAgo = (dateStr) => {
+    const d = new Date(dateStr)
+    const diffMs = Date.now() - d.getTime()
+    const mins = Math.floor(diffMs / 60000)
+    if (Number.isNaN(mins)) return ''
+    if (mins < 1) return 'zojuist'
+    if (mins < 60) return `${mins} min geleden`
+    const h = Math.floor(mins / 60)
+    if (h < 24) return `${h} uur geleden`
+    const dgs = Math.floor(h / 24)
+    return `${dgs} dag${dgs === 1 ? '' : 'en'} geleden`
+  }
+  const renderMessages = (items = []) => {
+    if (!messagesContainer) return
+    messagesContainer.innerHTML = ''
+    if (!items.length) {
+      const p = document.createElement('p')
+      p.textContent = 'Geen berichten'
+      messagesContainer.appendChild(p)
+      return
+    }
+    items.forEach(msg => {
+      const el = document.createElement('div')
+      el.className = 'message'
+      el.innerHTML = `
+        <h3>${msg.title || 'Bericht'}</h3>
+        <p>${msg.body || ''}</p>
+        <span class="time">${formatTimeAgo(msg.created_at || msg.createdAt)}</span>
+      `
+      messagesContainer.appendChild(el)
+    })
+  }
+  const loadMessages = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/berichten?limit=3`, { credentials: 'include' })
+      if (!res.ok) throw new Error('not_ok')
+      const data = await res.json()
+      renderMessages(Array.isArray(data.items) ? data.items : [])
+    } catch (err) {
+      renderMessages([])
+    }
   }
 
   // Matches: laad recent geplaatste vacatures (live uit backend)
@@ -132,4 +228,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   loadMatches()
+  loadMessages()
 })
