@@ -16,3 +16,5 @@
 {"ts":"2025-12-16T13:23:54.499Z","level":"info","action":"message_created","message":"Message 4 created","context":{"receiver_user_id":32,"sender_user_id":36,"type":"sollicitatie_notificatie","related_id":2}}
 {"ts":"2025-12-16T13:23:54.523Z","level":"info","action":"sollicitatie_event_processed","message":"Berichten aangemaakt na sollicitatie","context":{"sollicitatieId":2}}
 {"ts":"2025-12-16T13:24:05.175Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":3,"userId":36,"read":true}}
+{"ts":"2026-01-12T13:11:05.227Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T13:11:17.175Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}

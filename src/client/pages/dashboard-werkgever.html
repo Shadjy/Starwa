@@ -11,24 +11,36 @@
 </head>
 <body class="employer-dashboard">
 
-  <header class="mp-header">
-    <div class="mp-header__inner">
-      <a class="ghost-button ghost-button--back" href="/dashboard-werkgever.html">Terug naar Dashboard</a>
-
-      <div class="mp-header__title">
-        <div>
-          <h1>Dashboard Werkgever</h1>
-          <span class="mp-header__subtitle">Overzicht</span>
-        </div>
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a class="app-header__logo" href="/dashboard-werkgever" aria-label="Ga naar dashboard">
+        <img src="../assests/starwaster.png" alt="Starwa">
+      </a>
+      <div class="app-header__title">
+        <h1>Dashboard Werkgever</h1>
       </div>
-
-      <div class="mp-header__actions">
-        <button type="button" class="ghost-button" id="headerProfileBtn">Profiel</button>
-        <a href="inlog-aanmeld.html" class="logout" id="logoutBtn">
-          <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
-          <span class="logout-text">Log uit</span>
+      <div class="app-header__center">
+        <button class="profile-chip" id="headerProfileBtn" type="button" aria-label="Open profiel" data-avatar="">
+          <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
+            <img src="" alt="" />
+            <span class="profile-chip__initials">WG</span>
+          </span>
+          <span class="profile-chip__name">Profiel</span>
+        </button>
+        <a class="profile-chip message-chip" href="/berichten" data-link="berichten" aria-label="Ga naar berichten">
+          <span class="message-chip__icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+              <path d="M3.25 4.75h13.5c.55 0 1 .45 1 1v8.5c0 .55-.45 1-1 1h-4.5l-3.25 2.5V15.25H3.25c-.55 0-1-.45-1-1v-8.5c0-.55.45-1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="profile-chip__name">Berichten</span>
+          <span class="message-chip__badge" id="newCounter" aria-live="polite">0</span>
         </a>
       </div>
+      <a href="/home" class="logout app-header__logout" id="logoutBtn">
+        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+        <span class="logout-text">Log uit</span>
+      </a>
     </div>
   </header>
 

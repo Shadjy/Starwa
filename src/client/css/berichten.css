@@ -272,6 +272,68 @@
 .type-color-message{ color:#9160d6; }
 .type-color-update{ color:#d08a32; }
 
+/* ===== Bedrijfsprofiel modal (gedeeld) ===== */
+.company-modal-backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,0.35); opacity:0;
+  pointer-events:none; transition: opacity .18s ease; z-index:1200;
+}
+.company-modal-backdrop.active{ opacity:1; pointer-events:auto; }
+.company-modal{
+  position:fixed; inset:0; display:grid; place-items:center; pointer-events:none; z-index:1210;
+}
+.company-modal .panel{
+  width:min(820px,96vw); max-height:90vh; background:#fff; border:1px solid var(--borderColor);
+  border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.15); transform:translateY(10px); opacity:0;
+  transition: opacity .18s ease, transform .18s ease; overflow:hidden; display:flex; flex-direction:column;
+}
+.company-modal.active{ pointer-events:auto; }
+.company-modal.active .panel{ opacity:1; transform:translateY(0); }
+.company-modal .panel-header{
+  padding:16px; border-bottom:1px solid var(--borderColor); display:flex; align-items:center; justify-content:space-between;
+}
+.company-modal .panel-body{
+  padding:16px; display:grid; gap:12px; overflow:auto; overscroll-behavior:contain; flex:1 1 auto; min-height:0;
+}
+.company-modal .panel-footer{
+  position:relative; padding:12px 16px; border-top:1px solid var(--borderColor);
+  display:flex; gap:8px; justify-content:flex-end; background: var(--cardBg, #fff);
+}
+.company-modal .panel-footer.elevated{ box-shadow:0 -10px 20px rgba(0,0,0,0.08); background:#fff; }
+.company-modal .panel-footer::before{
+  content:""; position:absolute; left:0; right:0; top:-12px; height:12px;
+  background:linear-gradient(to bottom, var(--cardBg, #fff), rgba(255,255,255,0)); opacity:0; pointer-events:none;
+  transition: opacity .18s ease;
+}
+.company-modal .panel-footer.elevated::before{ opacity:1; }
+.company-modal form{ display:flex; flex-direction:column; flex:1 1 auto; min-height:0; }
+.company-modal .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.company-modal .span-2{ grid-column:1 / -1; }
+.company-modal .label{ display:block; font-weight:600; margin-bottom:6px; color:var(--mutedColor); }
+.company-modal .input,
+.company-modal .select,
+.company-modal .textarea{
+  width:100%; padding:10px 12px; border:1px solid var(--borderColor); border-radius:10px;
+  background:#fff; color:var(--textColor);
+}
+.company-modal .btn{
+  appearance:none; border:1px solid var(--borderColor); border-radius:10px; padding:10px 14px;
+  background:var(--primaryColor); color:#fff; cursor:pointer; transition: transform .05s ease, filter .2s;
+}
+.company-modal .btn:hover{ filter:brightness(1.05); }
+.company-modal .btn:active{ transform:translateY(1px); }
+.company-modal .btn.ghost{ background:transparent; color:var(--textColor); }
+body.modal-open{ overflow:hidden; }
+
+.toast-container{
+  position:fixed; right:16px; bottom:16px; display:flex; flex-direction:column; gap:8px; z-index:1400;
+}
+.toast{
+  background:#fff; border:2px solid var(--borderColor); padding:10px 12px; border-radius:10px;
+  box-shadow:0 10px 24px rgba(0,0,0,0.08); min-width:220px;
+}
+.toast.success{ border-color:var(--successColor); }
+.toast.error{ border-color:var(--errorColor); }
+
 /* ===== Responsiveness ===== */
 @media (max-width: 900px){
   .mp-header__inner{ padding:1.1rem 1.6rem; }

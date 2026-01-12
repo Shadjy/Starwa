@@ -15,7 +15,7 @@
     <div class="messages-page">
       <header class="app-header">
         <div class="app-header__inner">
-          <a class="app-header__logo" href="/dashboard" aria-label="Ga naar dashboard">
+          <a class="app-header__logo" href="../pages/candidates.html" aria-label="Ga naar dashboard">
             <img src="../assests/starwaster.png" alt="Starwa">
           </a>
           <div class="app-header__title">
@@ -27,7 +27,7 @@
                 <img src="" alt="" />
                 <span class="profile-chip__initials">LJ</span>
               </span>
-              <span class="profile-chip__name">Leo de Jong</span>
+              <span class="profile-chip__name"></span>
             </button>
             <a class="profile-chip message-chip" href="/berichten" aria-label="Ga naar berichten">
               <span class="message-chip__icon" aria-hidden="true">
@@ -178,6 +178,77 @@
       </button>
     </div>
 
+    <!-- Bedrijfsprofiel modal -->
+    <div class="company-modal-backdrop" id="companyModalBackdrop"></div>
+    <div class="company-modal" id="companyModal" aria-hidden="true" role="dialog" aria-labelledby="companyModalTitle">
+      <div class="panel">
+        <div class="panel-header">
+          <h3 id="companyModalTitle">Bedrijfsprofiel</h3>
+          <button class="btn ghost" id="closeCompanyModal" aria-label="Sluiten">Sluiten</button>
+        </div>
+        <form id="companyForm">
+          <div class="panel-body grid-2">
+            <div>
+              <label class="label" for="cp_bedrijfsnaam">Bedrijfsnaam *</label>
+              <input class="input" id="cp_bedrijfsnaam" name="bedrijfsnaam" required />
+            </div>
+            <div>
+              <label class="label" for="cp_kvk">KvK-nummer</label>
+              <input class="input" id="cp_kvk" name="kvk_nummer" />
+            </div>
+            <div>
+              <label class="label" for="cp_sector">Sector / branche</label>
+              <input class="input" id="cp_sector" name="sector" />
+            </div>
+            <div>
+              <label class="label" for="cp_grootte">Bedrijfsgrootte</label>
+              <select class="select" id="cp_grootte" name="bedrijfs_grootte">
+                <option value="">Maak een keuze</option>
+                <option>1-10</option>
+                <option>11-50</option>
+                <option>51-200</option>
+                <option>>200</option>
+              </select>
+            </div>
+            <div class="span-2">
+              <label class="label" for="cp_locatie">Locatie (adres)</label>
+              <input class="input" id="cp_locatie" name="locatie_adres" />
+            </div>
+            <div>
+              <label class="label" for="cp_website">Website</label>
+              <input class="input" id="cp_website" name="website" />
+            </div>
+            <div>
+              <label class="label" for="cp_slogan">Bedrijfsslogan</label>
+              <input class="input" id="cp_slogan" name="slogan" />
+            </div>
+            <div class="span-2">
+              <label class="label" for="cp_beschrijving">Bedrijfsbeschrijving</label>
+              <textarea class="textarea" id="cp_beschrijving" name="beschrijving" rows="4"></textarea>
+            </div>
+            <div class="span-2">
+              <label class="label" for="cp_cultuur">Bedrijfscultuur (comma gescheiden)</label>
+              <input class="input" id="cp_cultuur" name="cultuur" placeholder="informeel, innovatief, duurzaam" />
+            </div>
+            <div>
+              <label class="label" for="cp_contact_naam">Contactpersoon (naam)</label>
+              <input class="input" id="cp_contact_naam" name="contactpersoon_naam" />
+            </div>
+            <div>
+              <label class="label" for="cp_contact_email">Contact e-mail</label>
+              <input type="email" class="input" id="cp_contact_email" name="contact_email" />
+            </div>
+          </div>
+          <div class="panel-footer">
+            <button type="button" class="btn ghost" id="cancelCompany">Annuleren</button>
+            <button type="submit" class="btn" id="saveCompany">Opslaan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast-container" id="companyToasts" aria-live="polite" aria-atomic="true"></div>
+
     <!-- Modal -->
     <div
       class="modal-backdrop hidden"
@@ -276,6 +347,7 @@
       </div>
     </div>
 
+    <script src="../js/company-modal.js" defer></script>
     <script type="module" src="../js/berichten.js"></script>
   </body>
 </html>
