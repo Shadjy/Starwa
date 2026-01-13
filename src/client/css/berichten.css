@@ -334,6 +334,26 @@ body.modal-open{ overflow:hidden; }
 .toast.success{ border-color:var(--successColor); }
 .toast.error{ border-color:var(--errorColor); }
 
+/* Bedrijfsprofiel modal header (gedeeld) */
+.profile-card--modal{ margin:0; box-shadow:none; border:none; cursor:default; padding:10px 12px; gap:12px; display:flex; align-items:center; }
+.profile-card--modal .profile-avatar{ background:var(--secondaryColor); color:var(--textColor); font-weight:700; border-radius:50%; width:48px; height:48px; display:grid; place-items:center; font-size:1rem; }
+.profile-card--modal .profile-info{ display:flex; align-items:center; gap:12px; }
+.profile-card--modal h2{ font-size:1.05rem; margin:0; }
+.profile-card--modal .badge{ font-size:11px; padding:4px 8px; }
+
+/* Bedrijfsprofiel modal layout (matcht dashboard) */
+.company-modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,0.35); opacity:0; transition: opacity .18s ease; pointer-events:none; z-index:1200; }
+.company-modal-backdrop.active{ opacity:1; pointer-events:auto; }
+.company-modal{ position:fixed; inset:0; display:grid; place-items:center; pointer-events:none; z-index:1210; }
+.company-modal .panel{ width:min(820px,96vw); max-height:90vh; background:#fff; border:1px solid var(--borderColor); border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.15); transform:translateY(10px); opacity:0; transition: opacity .18s ease, transform .18s ease; overflow:hidden; display:flex; flex-direction:column; }
+.company-modal.active{ pointer-events:auto; }
+.company-modal.active .panel{ transform:translateY(0); opacity:1; }
+.company-modal .panel-header{ padding:16px; border-bottom:1px solid var(--borderColor); display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.company-modal .panel-body{ padding:16px; display:grid; gap:12px; overflow:auto; overscroll-behavior:contain; flex:1 1 auto; min-height:0; }
+.company-modal .panel-footer{ position:relative; padding:12px 16px; border-top:1px solid var(--borderColor); display:flex; gap:8px; justify-content:flex-end; background:var(--cardBg); }
+.company-modal .panel-footer.elevated{ box-shadow:0 -10px 20px rgba(0,0,0,0.08); background:#fff; }
+.company-modal form{ display:flex; flex-direction:column; flex:1 1 auto; min-height:0; }
+
 /* ===== Responsiveness ===== */
 @media (max-width: 900px){
   .mp-header__inner{ padding:1.1rem 1.6rem; }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
-    <title>Meldingen Â· Vacature Match Webapp</title>
+    <title>Berichten</title>
 
     <!-- Laat global staan voor app-brede tokens -->
     <link rel="stylesheet" href="../css/global.css" />
@@ -35,14 +35,20 @@
                   <path d="M3.25 4.75h13.5c.55 0 1 .45 1 1v8.5c0 .55-.45 1-1 1h-4.5l-3.25 2.5V15.25H3.25c-.55 0-1-.45-1-1v-8.5c0-.55.45-1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
                 </svg>
               </span>
-              <span class="profile-chip__name">Berichten</span>
-              <span class="message-chip__badge" id="newCounter" aria-live="polite">0</span>
-            </a>
-          </div>
-          <a href="/home" class="logout app-header__logout">
-            <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
-            <span class="logout-text">Log uit</span>
-          </a>
+          <span class="profile-chip__name">Berichten</span>
+          <span class="message-chip__badge" id="newCounter" aria-live="polite">0</span>
+        </a>
+        <a class="profile-chip" href="/pages/vacature-aanmaken.html" aria-label="Vacature maken">
+          <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
+            <span class="profile-chip__initials">VM</span>
+          </span>
+          <span class="profile-chip__name">Vacature maken</span>
+        </a>
+      </div>
+      <a href="/home" class="logout app-header__logout">
+        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+        <span class="logout-text">Log uit</span>
+      </a>
         </div>
       </header>
 
@@ -183,7 +189,18 @@
     <div class="company-modal" id="companyModal" aria-hidden="true" role="dialog" aria-labelledby="companyModalTitle">
       <div class="panel">
         <div class="panel-header">
-          <h3 id="companyModalTitle">Bedrijfsprofiel</h3>
+          <h3 id="companyModalTitle" class="sr-only">Bedrijfsprofiel</h3>
+          <div class="profile-card card profile-card--modal" aria-label="Bedrijfsprofiel samenvatting">
+            <div class="profile-avatar" id="profileAvatarModal">WG</div>
+            <div class="profile-info">
+              <div class="profile-header">
+                <h2 id="profileNameModal">Jouw Bedrijf</h2>
+              </div>
+              <div class="profile-meta">
+                <span class="badge" id="profileIdBadge" aria-label="Employer ID" hidden></span>
+              </div>
+            </div>
+          </div>
           <button class="btn ghost" id="closeCompanyModal" aria-label="Sluiten">Sluiten</button>
         </div>
         <form id="companyForm">

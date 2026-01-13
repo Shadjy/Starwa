@@ -13,6 +13,9 @@
   const closeBtn = document.getElementById("closeCompanyModal");
   const cancelBtn = document.getElementById("cancelCompany");
   const toastContainer = document.getElementById("companyToasts");
+  const nameEl = document.getElementById("profileNameModal");
+  const avatarEl = document.getElementById("profileAvatarModal");
+  const idBadge = document.getElementById("profileIdBadge");
   const setField = (id, val = "") => {
     const el = document.getElementById(id);
     if (el) el.value = val || "";
@@ -60,6 +63,21 @@
     lastFocus?.focus?.();
   };
 
+  const setProfilePreview = (name = "", employerId = null) => {
+    const display = name || "Jouw Bedrijf";
+    const initials = (display || "WG").split(/\s+/).filter(Boolean).map((w) => w[0]).join("").slice(0, 2).toUpperCase() || "WG";
+    if (nameEl) nameEl.textContent = display;
+    if (avatarEl) avatarEl.textContent = initials;
+    if (idBadge) {
+      if (employerId) {
+        idBadge.textContent = `Employer ID: ${employerId}`;
+        idBadge.hidden = false;
+      } else {
+        idBadge.hidden = true;
+      }
+    }
+  };
+
   const fillCompanyForm = (p = {}) => {
     setField("cp_bedrijfsnaam", p.bedrijfsnaam);
     setField("cp_kvk", p.kvk_nummer);
@@ -72,19 +90,37 @@
     setField("cp_cultuur", p.cultuur);
     setField("cp_contact_naam", p.contactpersoon_naam);
     setField("cp_contact_email", p.contact_email);
+    if (p?.bedrijfsnaam) setProfilePreview(p.bedrijfsnaam, p?.id || p?.employer_id);
+  };
+
+  let cachedEmployerId = null;
+  const loadEmployerId = async () => {
+    if (cachedEmployerId) return cachedEmployerId;
+    try {
+      const res = await fetch(`${API_BASE}/api/auth/me`, { credentials: "include" });
+      if (!res.ok) return null;
+      const data = await res.json();
+      cachedEmployerId = data?.user?.id ?? null;
+      return cachedEmployerId;
+    } catch {
+      return null;
+    }
   };
 
   const loadCompany = async () => {
     try {
+      const employerIdPromise = loadEmployerId();
       const res = await fetch(`${API_BASE}/api/company/me`, { credentials: "include" });
       if (!res.ok) return;
       const data = await res.json();
       const p = data.profile || {};
       fillCompanyForm(p);
+      const employerId = await employerIdPromise;
       if (p.bedrijfsnaam) {
         const profileNameEl = document.getElementById("profileName");
         if (profileNameEl) profileNameEl.textContent = p.bedrijfsnaam;
       }
+      if (p?.bedrijfsnaam || employerId) setProfilePreview(p?.bedrijfsnaam, employerId);
     } catch (err) {
       console.warn("Company-profiel laden mislukt:", err);
     }
@@ -137,6 +173,7 @@
       if (payload.bedrijfsnaam) {
         const profileNameEl = document.getElementById("profileName");
         if (profileNameEl) profileNameEl.textContent = payload.bedrijfsnaam;
+        setProfilePreview(payload.bedrijfsnaam, cachedEmployerId);
       }
       closeCompany();
     } catch (err) {
