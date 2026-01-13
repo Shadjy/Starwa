@@ -158,7 +158,7 @@ label {
 
 .filters {
   display: grid;
-  grid-template-columns: 1fr 220px 160px;
+  grid-template-rows: 1fr;
   gap: 12px;
 }
 

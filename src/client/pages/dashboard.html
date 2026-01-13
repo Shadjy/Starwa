@@ -5,31 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
   <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/berichten.css">
   <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
 
-  <header class="main-header">
-    <div class="logo">Starwa</div>
-    <a href="/inlog-aanmeld" class="logout">
-      <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
-      <span class="logout-text">Log uit</span>
-    </a>
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a class="app-header__logo" href="/dashboard" aria-label="Ga naar dashboard">
+        <img src="../assests/starwaster.png" alt="Starwa">
+      </a>
+      <div class="app-header__title">
+        <h1>Dashboard</h1>
+      </div>
+      <div class="app-header__center">
+        <button class="profile-chip" id="headerProfileBtn" type="button" aria-label="Open profiel" data-avatar="">
+          <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
+            <img src="" alt="" />
+            <span class="profile-chip__initials">LJ</span>
+          </span>
+          <span class="profile-chip__name">Leo de Jong</span>
+        </button>
+        <a class="profile-chip message-chip" href="/berichten" aria-label="Open berichten">
+          <span class="message-chip__icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+              <path d="M3.25 4.75h13.5c.55 0 1 .45 1 1v8.5c0 .55-.45 1-1 1h-4.5l-3.25 2.5V15.25H3.25c-.55 0-1-.45-1-1v-8.5c0-.55.45-1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="profile-chip__name">Berichten</span>
+          <span class="message-chip__badge" data-unread="4" aria-live="polite">4</span>
+        </a>
+      </div>
+      <a href="/home" class="logout app-header__logout">
+        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+        <span class="logout-text">Log uit</span>
+      </a>
+    </div>
   </header>
 
   <main class="dashboard">
-
-    
-    <section class="profile-section">
-      <div class="profile-card" id="profileCard">
-        <div class="profile-avatar" id="profileAvatar"></div>
-        <div class="profile-info">
-          <h2 id="profileName">Leo</h2>
-          <p>Bekijk je profiel of pas je profiel aan</p>
-        </div>
-      </div>
-    </section>
-
 
     <section class="cards-container">
 
@@ -90,5 +104,17 @@
   </main>
 
   <script src="../js/dashboard.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll(".message-chip__badge").forEach((badge) => {
+        const count = Number(badge.dataset.unread || badge.textContent || 0);
+        const displayValue = count > 9 ? "9+" : String(count);
+        badge.textContent = displayValue;
+        badge.classList.toggle("is-max", count > 9);
+        badge.classList.toggle("is-empty", count === 0);
+        badge.setAttribute("aria-label", `${count} ongelezen berichten`);
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -1,0 +1,72 @@
+@import "./theme.css";
+
+/* Basis uit dashboard-werkgever die hier gebruikt wordt */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  color: var(--textColor);
+  font-family: var(--fontFamily);
+  background: linear-gradient(180deg, var(--gradientStart) 0%, var(--gradientEnd) 100%) no-repeat fixed;
+  background-color: var(--gradientEnd);
+}
+
+.btn { appearance: none; border: 1px solid var(--borderColor); border-radius: 10px; padding: 10px 14px; background: var(--primaryColor); color: #fff; cursor: pointer; transition: transform .05s ease, filter .2s; }
+.btn:hover { filter: brightness(1.05); }
+.btn:active { transform: translateY(1px); }
+.btn.secondary { background: var(--secondaryColor); color: var(--textColor); }
+.btn.ghost { background: transparent; color: var(--textColor); }
+.btn.danger { background: var(--errorColor); color: #fff; }
+
+.page-actions { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 0; }
+
+.card { background: var(--cardBg); border: 1px solid var(--borderColor); border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+.badge { display: inline-block; padding: 4px 8px; border-radius: 8px; font-size: 12px; border: 1px solid var(--borderColor); background: var(--secondaryColor); color: var(--textColor); }
+
+.input, .select, .textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--borderColor); border-radius: 10px; background: #fff; color: var(--textColor); }
+.label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--mutedColor); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gap-8 { gap: 8px !important; }
+.span-2 { grid-column: 1 / -1; }
+@media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* Modal styling uit dashboard-werkgever */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); opacity: 0; transition: opacity .18s ease; pointer-events: none; z-index: 1090; }
+.modal-backdrop.active { opacity: 1; pointer-events: auto; }
+.modal { position: fixed; inset: 0; display: grid; place-items: center; z-index: 1100; pointer-events: none; }
+.modal .panel { width: min(820px, 96vw); max-height: 90vh; background: #fff; border: 1px solid var(--borderColor); border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); transform: translateY(10px); opacity: 0; transition: opacity .18s ease, transform .18s ease; overflow: hidden; display: flex; flex-direction: column; }
+.modal.active { pointer-events: auto; }
+.modal.active .panel { transform: translateY(0); opacity: 1; }
+.panel-header { padding: 16px; border-bottom: 1px solid var(--borderColor); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.panel-body { padding: 16px; display: grid; gap: 12px; overflow: auto; overscroll-behavior: contain; flex: 1 1 auto; min-height: 0; }
+.panel-footer { position: relative; padding: 12px 16px; border-top: 1px solid var(--borderColor); display: flex; gap: 8px; justify-content: flex-end; background: var(--cardBg); }
+.panel-footer.elevated { box-shadow: 0 -10px 20px rgba(0,0,0,0.08); background: #fff; }
+.modal .panel form { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+body.modal-open { overflow: hidden; }
+
+/* Tag input (skills) */
+.tag-input { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; border: 1px solid var(--borderColor); border-radius: 10px; background: #fff; }
+.tag-input-field { flex: 1 0 180px; min-width: 140px; border: none; outline: none; padding: 6px 4px; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border: 1px solid var(--borderColor); background: var(--secondaryColor); color: var(--textColor); border-radius: 999px; font-size: 12px; }
+.chip .remove { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--borderColor); background: #fff; cursor: pointer; }
+.chip .remove:hover { background: var(--highlightColor); }
+
+/* Profielkaart in modal header */
+.profile-card--modal { margin: 0; box-shadow: none; border: none; cursor: default; padding: 10px 12px; gap: 12px; display:flex; align-items:center; }
+.profile-card--modal .profile-avatar { background: var(--secondaryColor); color: var(--textColor); font-weight:700; border-radius:50%; width:48px; height:48px; display:grid; place-items:center; font-size:1rem; }
+.profile-card--modal .profile-info { display:flex; align-items:center; gap:12px; }
+.profile-card--modal h2 { font-size:1.05rem; margin:0; }
+.profile-card--modal .badge { font-size:11px; padding:4px 8px; }
+
+/* Paginalayout voor open/closed kolommen */
+.va-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1400px; margin: 2rem auto 3rem; padding: 0 2rem; }
+.va-column { background: var(--cardBg); border: 1px solid var(--borderColor); border-radius: 16px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
+.va-column h2 { margin-top: 0; margin-bottom: .5rem; }
+.va-list { display: flex; flex-direction: column; gap: 12px; }
+.va-item { padding: 12px; border: 1px solid var(--borderColor); border-radius: 12px; background: #fff; }
+.va-item h3 { margin: 0 0 4px 0; }
+.va-item p { margin: 0; color: var(--mutedColor); }
+.va-column--open { margin-left: 5%; }
+.va-column--closed { margin-right: 5%; }
+@media (max-width: 860px){ .va-layout { grid-template-columns: 1fr; } }

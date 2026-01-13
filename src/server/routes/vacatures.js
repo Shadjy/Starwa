@@ -11,12 +11,24 @@ function getUserFromCookies(req) {
 
 // List vacancies
 router.get('/', async (req, res) => {
-  let sql = 'SELECT v.*, COALESCE(cp.bedrijfsnaam, u.bedrijfsnaam) AS company_name\n             FROM vacancies v\n             LEFT JOIN company_profiles cp ON cp.id = v.company_profile_id\n             LEFT JOIN users u ON u.id = v.employer_id'
+  let sql = 'SELECT v.*, COALESCE(cp.bedrijfsnaam, u.bedrijfsnaam) AS company_name'
   const params = []
   try {
     const { employer_id, limit = 50, mine, active } = req.query
     const { uid, role } = getUserFromCookies(req)
     const lim = Math.max(1, Math.min(Number(limit) || 50, 200))
+
+    // Als werknemer: info over eigen sollicitatie status meenemen
+    const selectApplied = (role === 'worker' && uid)
+    if (selectApplied) {
+      sql += ', s.status AS sollicitatie_status, CASE WHEN s.id IS NULL THEN 0 ELSE 1 END AS applied_by_me'
+    }
+
+    sql += '\nFROM vacancies v\nLEFT JOIN company_profiles cp ON cp.id = v.company_profile_id\nLEFT JOIN users u ON u.id = v.employer_id'
+    if (selectApplied) {
+      sql += '\nLEFT JOIN sollicitaties s ON s.vacature_id = v.id AND s.werknemer_id = ?'
+      params.push(uid)
+    }
 
     const wheres = []
     if (mine && role === 'employer' && uid) {

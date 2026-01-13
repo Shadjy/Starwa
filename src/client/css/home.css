@@ -21,6 +21,16 @@
   font-size: 26px;
   font-weight: 800;
   color: var(--textColor);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.landing-header .logo-mark img {
+  height: 44px;
+  width: auto;
+  display: block;
 }
 
 .landing-nav {
@@ -47,6 +57,17 @@
   display: flex;
   gap: 10px;
   align-items: center;
+}
+
+/* Header buttons: wit en outline voor nav/login, primary blijft ongewijzigd */
+.landing .mp-header .ghost-button {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.8);
+}
+.landing .mp-header .ghost-button:hover {
+  color: #fff;
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .container {

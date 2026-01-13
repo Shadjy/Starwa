@@ -49,12 +49,12 @@ router.post('/login', async (req, res, next) => {
     // Succes
     const safeUser = { id: user.id, email: user.email, role: user.role, naam: user.naam }
     // Zet eenvoudige cookies voor backend-koppeling (geen sessie nodig)
-    res.cookie('uid', String(user.id), { httpOnly: true, sameSite: 'lax' })
-    res.cookie('role', String(user.role), { httpOnly: true, sameSite: 'lax' })
+    res.cookie('uid', String(user.id), { httpOnly: true, sameSite: 'lax', signed: true })
+    res.cookie('role', String(user.role), { httpOnly: true, sameSite: 'lax', signed: true })
     if (wantsJson(req)) {
       return res.json({ message: 'Succesvol ingelogd.', user: safeUser })
     }
-    const redirectTo = user.role === 'employer' ? '/dashboard-werkgever' : '/dashboard'
+    const redirectTo = '/pages/candidates.html'
     return res.redirect(303, redirectTo)
   } catch (err) {
     next(err)
@@ -108,13 +108,13 @@ router.post('/register', async (req, res, next) => {
     // Haal nieuw aangemaakte gebruiker op om cookie te zetten
     const [newUser] = await query('SELECT id, role, email, naam FROM users WHERE email = ? LIMIT 1', [body.email])
     if (newUser) {
-      res.cookie('uid', String(newUser.id), { httpOnly: true, sameSite: 'lax' })
-      res.cookie('role', String(newUser.role), { httpOnly: true, sameSite: 'lax' })
+      res.cookie('uid', String(newUser.id), { httpOnly: true, sameSite: 'lax', signed: true })
+      res.cookie('role', String(newUser.role), { httpOnly: true, sameSite: 'lax', signed: true })
     }
     if (wantsJson(req)) {
       return res.status(201).json({ message: 'Geregistreerd.' })
     }
-    const redirectAfterRegister = role === 'employer' ? '/dashboard-werkgever' : '/vragenlijst'
+    const redirectAfterRegister = '/pages/candidates.html'
     return res.redirect(303, redirectAfterRegister)
   } catch (err) {
     next(err)
@@ -143,6 +143,8 @@ router.get('/me', async (req, res, next) => {
 router.post('/logout', (req, res) => {
   res.clearCookie('uid')
   res.clearCookie('role')
+  res.clearCookie('uid', { signed: true })
+  res.clearCookie('role', { signed: true })
   return res.json({ message: 'Uitgelogd' })
 })
 
