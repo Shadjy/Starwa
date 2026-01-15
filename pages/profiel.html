@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profielpagina</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/profiel.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="#" class="back-link">← Terug naar Dashboard</a>
+        <button class="edit-btn">Bewerken</button>
+    </header>
+
+    <!-- Profielsectie -->
+    <section class="profile-header">
+        <div class="profile-left">
+            <div class="avatar">S</div>
+            <div class="user-info">
+                <h2>naam</h2>
+                <p>email</p>
+            </div>
+        </div>
+        <div class="profile-progress">
+            <div class="progress-circle">
+                <span id="progress-value">0%</span>
+            </div>
+            <p>Compleet</p>
+        </div>
+    </section>
+
+    <!-- Informatiekaarten -->
+    <section class="profile-content">
+        <div class="card">
+            <h3>Persoonlijke Informatie</h3>
+            <p><strong>Volledige naam:</strong> naam</p>
+            <p><strong>E-mailadres:</strong> email</p>
+            <p><strong>Telefoonnummer:</strong> Niet ingevuld</p>
+            <p><strong>Adres:</strong> Niet ingevuld</p>
+            <p><strong>Woonplaats:</strong> Niet ingevuld</p>
+            <p><strong>Geboortedatum:</strong> Niet ingevuld</p>
+        </div>
+
+        <div class="card">
+            <h3>Ervaring & Opleiding</h3>
+            <p><strong>Hoogste opleidingsniveau:</strong> WO/Universiteit</p>
+            <p><strong>Jaren werkervaring:</strong> 111</p>
+            <p><strong>Over mij:</strong> 222</p>
+        </div>
+
+        <div class="card">
+            <h3>Werkvoorkeuren</h3>
+            <p><strong>Gewenste functietitel:</strong> 11</p>
+            <p><strong>Branche:</strong> Zorg & Welzijn</p>
+            <p><strong>Werktijden voorkeur:</strong> Flexibel</p>
+            <p><strong>Minimum salaris:</strong> €111 per maand</p>
+            <p><strong>Reisafstand:</strong> Binnen 15 km</p>
+            <p><strong>Belangrijke arbeidsvoorwaarden:</strong> Opleidingsmogelijkheden</p>
+        </div>
+    </section>
+
+    <!-- Bewerken formulier -->
+    <section class="profile-edit" id="edit-form" style="display: none;">
+        <form id="profile-form">
+            <h3>Bewerk Profiel</h3>
+
+            <!-- Persoonlijke Informatie -->
+            <h4>Persoonlijke Informatie</h4>
+            <label for="full-name">Volledige naam:</label>
+            <input type="text" id="full-name" name="full-name" value="naam">
+
+            <label for="email">E-mailadres:</label>
+            <input type="email" id="email" name="email" value="email">
+
+            <label for="phone">Telefoonnummer:</label>
+            <input type="text" id="phone" name="phone" placeholder="Niet ingevuld">
+
+            <label for="address">Adres:</label>
+            <input type="text" id="address" name="address" placeholder="Niet ingevuld">
+
+            <label for="city">Woonplaats:</label>
+            <input type="text" id="city" name="city" placeholder="Niet ingevuld">
+
+            <label for="birthdate">Geboortedatum:</label>
+            <input type="date" id="birthdate" name="birthdate">
+
+            <!-- Ervaring & Opleiding -->
+            <h4>Ervaring & Opleiding</h4>
+            <label for="education">Hoogste opleidingsniveau:</label>
+            <input type="text" id="education" name="education" value="WO/Universiteit">
+
+            <label for="experience">Jaren werkervaring:</label>
+            <input type="number" id="experience" name="experience" value="111">
+
+            <label for="about-me">Over mij:</label>
+            <textarea id="about-me" name="about-me">222</textarea>
+
+            <!-- Werkvoorkeuren -->
+            <h4>Werkvoorkeuren</h4>
+            <label for="job-title">Gewenste functietitel:</label>
+            <input type="text" id="job-title" name="job-title" value="11">
+
+            <label for="industry">Branche:</label>
+            <input type="text" id="industry" name="industry" value="Zorg & Welzijn">
+
+            <label for="work-hours">Werktijden voorkeur:</label>
+            <input type="text" id="work-hours" name="work-hours" value="Flexibel">
+
+            <label for="salary">Minimum salaris:</label>
+            <input type="text" id="salary" name="salary" value="€111 per maand">
+
+            <label for="travel-distance">Reisafstand:</label>
+            <input type="text" id="travel-distance" name="travel-distance" value="Binnen 15 km">
+
+            <label for="benefits">Belangrijke arbeidsvoorwaarden:</label>
+            <textarea id="benefits" name="benefits">Opleidingsmogelijkheden</textarea>
+
+            <button type="button" id="save-btn">Opslaan</button>
+            <button type="button" id="cancel-btn">Annuleren</button>
+        </form>
+    </section>
+
+    <script src="../js/profiel.js"></script>
+</body>
+</html>
