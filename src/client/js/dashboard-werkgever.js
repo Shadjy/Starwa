@@ -48,6 +48,52 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
 
+  // Berichtenlijst (eigen berichten)
+  const messagesContainer = document.querySelector('.card.messages .card-content')
+  const formatTimeAgo = (dateStr) => {
+    const d = new Date(dateStr)
+    const diffMs = Date.now() - d.getTime()
+    const mins = Math.floor(diffMs / 60000)
+    if (Number.isNaN(mins)) return ''
+    if (mins < 1) return 'zojuist'
+    if (mins < 60) return `${mins} min geleden`
+    const h = Math.floor(mins / 60)
+    if (h < 24) return `${h} uur geleden`
+    const dgs = Math.floor(h / 24)
+    return `${dgs} dag${dgs === 1 ? '' : 'en'} geleden`
+  }
+  const renderMessages = (items = []) => {
+    if (!messagesContainer) return
+    messagesContainer.innerHTML = ''
+    if (!items.length) {
+      const p = document.createElement('p')
+      p.textContent = 'Geen berichten'
+      messagesContainer.appendChild(p)
+      return
+    }
+    items.forEach(msg => {
+      const el = document.createElement('div')
+      el.className = 'message'
+      el.innerHTML = `
+        <h3>${msg.title || 'Bericht'}</h3>
+        <p>${msg.body || ''}</p>
+        <span class="time">${formatTimeAgo(msg.created_at || msg.createdAt)}</span>
+      `
+      el.addEventListener('click', () => go('/berichten'))
+      messagesContainer.appendChild(el)
+    })
+  }
+  const loadMessages = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/berichten?limit=3`, { credentials: 'include' })
+      if (!res.ok) throw new Error('not_ok')
+      const data = await res.json()
+      renderMessages(Array.isArray(data.items) ? data.items : [])
+    } catch (err) {
+      renderMessages([])
+    }
+  }
+
   // Kandidaten (card) – laad een beknopt overzicht met live seekers
   const candContainer = document.querySelector('.card.candidates .card-content')
   const renderCandidates = (items = []) => {
@@ -84,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderCandidates([])
     }
   }
+  loadMessages()
 
   // Item click feedback (optioneel toast)
   const toastContainer = document.getElementById('toasts')
@@ -113,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const companyModal = document.getElementById('companyModal')
   const companyBackdrop = document.getElementById('companyModalBackdrop')
   const openCompanyBtn = document.getElementById('openCompanyModal')
+  const headerProfileBtn = document.getElementById('headerProfileBtn')
   const closeCompanyBtn = document.getElementById('closeCompanyModal')
   const cancelCompanyBtn = document.getElementById('cancelCompany')
   const companyForm = document.getElementById('companyForm')
@@ -333,10 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   openCompanyBtn?.addEventListener('click', () => loadCompany())
-
-  // Open bedrijfsprofiel door op de profielkaart te klikken
-  const profileCardEl = document.getElementById('profileCard')
-  profileCardEl?.addEventListener('click', (e) => {
+  headerProfileBtn?.addEventListener('click', (e) => {
     e.preventDefault()
     loadCompany().finally(() => openCompany())
   })
@@ -564,5 +609,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 })
-
 

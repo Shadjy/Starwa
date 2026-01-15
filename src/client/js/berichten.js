@@ -12,6 +12,10 @@ const ICONS = {
   inbox: `<svg viewBox="0 0 20 20"><path d="M3.75 4.5h12.5L18 11.5v4a.5.5 0 0 1-.5.5H2.5a.5.5 0 0 1-.5-.5v-4ZM3.75 4.5 2 11.5m16 0h-4.5l-1.4 2.8a.5.5 0 0 1-.45.27H8.35a.5.5 0 0 1-.45-.27L6.5 11.5H2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`,
 };
 
+const API_BASE = (typeof window !== "undefined" && window.STARWA_API_BASE)
+  ? window.STARWA_API_BASE
+  : (location.port === "3000" ? "" : `${location.protocol}//${location.hostname}:3000`);
+
 const TYPE_CONFIG = {
   match: {
     label: "Match gevonden",
@@ -34,6 +38,24 @@ const TYPE_CONFIG = {
   message: {
     label: "Bericht",
     filterLabel: "Berichten",
+    icon: "message",
+    accentClass: "type-color-message",
+  },
+  sollicitatie_bevestiging: {
+    label: "Sollicitatie bevestigd",
+    filterLabel: "Sollicitaties",
+    icon: "checkCircle",
+    accentClass: "type-color-application",
+  },
+  sollicitatie_notificatie: {
+    label: "Sollicitatie ontvangen",
+    filterLabel: "Sollicitaties",
+    icon: "briefcase",
+    accentClass: "type-color-message",
+  },
+  sollicitatie_antwoord: {
+    label: "Reactie sollicitatie",
+    filterLabel: "Sollicitaties",
     icon: "message",
     accentClass: "type-color-message",
   },
@@ -131,7 +153,7 @@ const seedNotifications = [
 ];
 
 const state = {
-  notifications: seedNotifications.map((item) => ({ ...item })),
+  notifications: [],
   filters: {
     search: "",
     type: "all",
@@ -165,6 +187,11 @@ const elements = {
   modalClose: document.getElementById("modalClose"),
   modalSaveToggle: document.getElementById("modalSaveToggle"),
   modalSaveText: document.getElementById("modalSaveText"),
+  replySection: document.getElementById("modalReply"),
+  replyType: document.getElementById("replyType"),
+  replyBody: document.getElementById("replyBody"),
+  replyStatus: document.getElementById("replyStatus"),
+  replySend: document.getElementById("replySend"),
 };
 
 const iconElement = (name) => {
@@ -184,10 +211,102 @@ const computeInitials = (source) =>
     .join("")
     .toUpperCase();
 
+const initialsFromName = (name = "") => {
+  const parts = name.split(/\s+/).filter(Boolean);
+  if (!parts.length) return "NA";
+  return parts.map((p) => p[0]).join("").slice(0, 2).toUpperCase();
+};
+
+const updateHeaderProfileChip = (user = {}, profile = {}) => {
+  const headerProfileBtn = document.getElementById("headerProfileBtn");
+  if (!headerProfileBtn) return;
+  const nameEl = headerProfileBtn.querySelector(".profile-chip__name");
+  const initialsEl = headerProfileBtn.querySelector(".profile-chip__initials");
+  const imgEl = headerProfileBtn.querySelector("img");
+  const avatarEl = headerProfileBtn.querySelector(".profile-chip__avatar");
+  const displayName =
+    user?.naam ||
+    user?.contactpersoon ||
+    user?.displayName ||
+    user?.email ||
+    "Profiel";
+  if (nameEl) nameEl.textContent = displayName;
+  if (initialsEl) initialsEl.textContent = initialsFromName(displayName);
+  const avatarUrl = profile?.avatar_url || "";
+  if (imgEl) imgEl.src = avatarUrl;
+  if (avatarEl) avatarEl.dataset.hasPhoto = avatarUrl ? "true" : "false";
+};
+
+const hydrateHeaderProfile = async () => {
+  try {
+    const res = await fetch(`${API_BASE}/api/profile/me`, {
+      credentials: "include",
+    });
+    if (res.status === 401) {
+      window.location.assign("/inlog-aanmeld");
+      return;
+    }
+    if (!res.ok) return;
+    const data = await res.json();
+    updateHeaderProfileChip(data.user || {}, data.profile || {});
+  } catch (err) {
+    console.warn("Header-profiel laden mislukt:", err);
+  }
+};
+
+const getCookie = (name) => {
+  const v = document.cookie.split(";").map((c) => c.trim());
+  for (const c of v) {
+    if (c.startsWith(name + "=")) return c.split("=").slice(1).join("=");
+  }
+  return "";
+};
+
 const formatRoleLine = (notification) =>
   notification.role
-    ? `${notification.role} · ${notification.company}`
+    ? `${notification.role} - ${notification.company}`
     : notification.company;
+
+const formatTimeAgo = (dateStr) => {
+  const date = new Date(dateStr);
+  const diffMs = Date.now() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  if (Number.isNaN(diffMins)) return "";
+  if (diffMins < 1) return "zojuist";
+  if (diffMins < 60) return `${diffMins} min geleden`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours} uur geleden`;
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays} dag${diffDays === 1 ? "" : "en"} geleden`;
+};
+
+const mapBackendMessage = (msg) => {
+  const meta = msg.metadata || {};
+  const postedAt = msg.created_at || msg.createdAt || new Date().toISOString();
+  const baseCompany =
+    meta.werkgever_naam ||
+    meta.werkgever_bedrijfsnaam ||
+    meta.werknemer_naam ||
+    meta.vacature_titel ||
+    "Starwa";
+  return {
+    id: `api-${msg.id}`,
+    apiId: msg.id,
+    type: msg.type || "message",
+    title: msg.title || "Bericht",
+    message: msg.body || "",
+    detailMessage: msg.body || "",
+    company: baseCompany,
+    role: meta.vacature_titel || "",
+    postedAt,
+    timeAgo: formatTimeAgo(postedAt),
+    read: !!msg.read,
+    saved: false,
+    badge: "Nieuw",
+    status: meta.status || "",
+    metadata: meta,
+  };
+};
 
 const applyFilters = () => {
   const { search, type, unreadOnly, savedOnly } = state.filters;
@@ -224,16 +343,19 @@ const applyFilters = () => {
 };
 
 const updateCounterBadge = () => {
-  const unread = state.notifications.filter((note) => !note.read).length;
-  if (unread === 0) {
-    elements.counterBadge.textContent = "Geen nieuwe meldingen";
-    elements.counterBadge.classList.remove("badge--primary");
-  } else {
-    elements.counterBadge.textContent = `${unread} nieuw`;
-    if (!elements.counterBadge.classList.contains("badge--primary")) {
-      elements.counterBadge.classList.add("badge--primary");
-    }
+  if (!elements.counterBadge) {
+    return;
   }
+  const unread = state.notifications.filter((note) => !note.read).length;
+  const displayValue = unread > 9 ? "9+" : String(unread);
+  elements.counterBadge.textContent = displayValue;
+  elements.counterBadge.dataset.count = String(unread);
+  elements.counterBadge.classList.toggle("is-max", unread > 9);
+  elements.counterBadge.classList.toggle("is-empty", unread === 0);
+  elements.counterBadge.setAttribute(
+    "aria-label",
+    `${unread} ongelezen berichten`
+  );
 };
 
 const updateMarkAllButton = () => {
@@ -243,6 +365,25 @@ const updateMarkAllButton = () => {
     "aria-disabled",
     hasUnread ? "false" : "true"
   );
+};
+
+const loadMessages = async () => {
+  try {
+    const res = await fetch(`${API_BASE}/api/berichten?limit=200`, { credentials: "include" });
+    if (!res.ok) throw new Error("not_ok");
+    const data = await res.json();
+    const items = Array.isArray(data.items) ? data.items : [];
+    state.notifications = items.map(mapBackendMessage);
+    renderNotifications();
+  } catch (err) {
+    console.warn("Berichten laden mislukt:", err);
+    state.notifications = [];
+    renderNotifications();
+    const errorMsg = document.createElement("p");
+    errorMsg.style.margin = "1rem";
+    errorMsg.textContent = "Berichten konden niet worden geladen.";
+    elements.notificationsSection.appendChild(errorMsg);
+  }
 };
 
 const renderEmptyState = () => {
@@ -411,6 +552,14 @@ const markNotificationAsRead = (id, read = true) => {
     return;
   }
   note.read = read;
+  if (note.apiId) {
+    fetch(`${API_BASE}/api/berichten/${note.apiId}/read`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ read }),
+    }).catch(() => {});
+  }
   renderNotifications();
 };
 
@@ -470,6 +619,33 @@ const updateModal = (note) => {
 
   elements.modalMessage.textContent =
     note.detailMessage ?? note.message ?? "";
+
+  // Optioneel link uit metadata
+  if (note.metadata?.link) {
+    const link = document.createElement("a");
+    link.href = note.metadata.link;
+    link.textContent = "Open dossier";
+    link.style.display = "inline-block";
+    link.style.marginTop = "8px";
+    link.target = "_self";
+    elements.modalMessage.appendChild(document.createElement("br"));
+    elements.modalMessage.appendChild(link);
+  }
+
+  // Reply-sectie tonen bij sollicitatie-gerelateerde threads
+  const showReply = !!note.metadata?.thread_id && !!note.metadata?.sollicitatie_id;
+  if (elements.replySection) {
+    elements.replySection.hidden = !showReply;
+    elements.replyBody.value = "";
+    elements.replyStatus.textContent = "";
+    if (showReply) {
+      elements.replyType.value = "info";
+      const role = getCookie("role");
+      elements.replyBody.placeholder = role === "employer"
+        ? "Stuur meer info of uitnodiging naar de kandidaat..."
+        : "Reageer op de werkgever...";
+    }
+  }
 
   elements.modalMarkRead.textContent = note.read
     ? "Markeer als ongelezen"
@@ -562,7 +738,17 @@ const initEventListeners = () => {
 
   elements.markAllButton.addEventListener("click", () => {
     state.notifications.forEach((note) => {
-      note.read = true;
+      if (!note.read) {
+        note.read = true;
+        if (note.apiId) {
+          fetch(`${API_BASE}/api/berichten/${note.apiId}/read`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ read: true }),
+          }).catch(() => {});
+        }
+      }
     });
     renderNotifications();
   });
@@ -585,6 +771,37 @@ const initEventListeners = () => {
     }
     removeNotification(state.activeModalId);
   });
+
+  if (elements.replySend) {
+    elements.replySend.addEventListener("click", async () => {
+      if (!state.activeModalId) return;
+      const note = state.notifications.find((item) => item.id === state.activeModalId);
+      if (!note || !note.metadata?.sollicitatie_id || !note.metadata?.thread_id) return;
+      const body = elements.replyBody.value.trim();
+      if (!body) {
+        elements.replyStatus.textContent = "Bericht is leeg.";
+        elements.replyStatus.style.color = "#b91c1c";
+        return;
+      }
+      elements.replyStatus.textContent = "Versturen...";
+      elements.replyStatus.style.color = "#6b7280";
+      try {
+        const res = await fetch(`${API_BASE}/api/sollicitaties/${note.metadata.sollicitatie_id}/react`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ body, type: elements.replyType.value || "info" }),
+        });
+        if (!res.ok) throw new Error("Kon niet versturen");
+        elements.replyStatus.textContent = "Verzonden.";
+        elements.replyStatus.style.color = "#16a34a";
+        elements.replyBody.value = "";
+      } catch (err) {
+        elements.replyStatus.textContent = err?.message || "Fout bij versturen.";
+        elements.replyStatus.style.color = "#b91c1c";
+      }
+    });
+  }
 
   elements.modalSaveToggle.addEventListener("click", () => {
     if (!state.activeModalId) {
@@ -613,6 +830,11 @@ const initEventListeners = () => {
     }
   });
 
+  const headerProfileBtn = document.getElementById("headerProfileBtn");
+  headerProfileBtn?.addEventListener("click", () => {
+    window.location.assign("/profiel");
+  });
+
   const backButton = document.getElementById("backButton");
   if (backButton) {
     backButton.addEventListener("click", () => {
@@ -621,10 +843,11 @@ const initEventListeners = () => {
   }
 };
 
-const init = () => {
+const init = async () => {
   populateTypeFilter();
   initEventListeners();
-  renderNotifications();
+  await hydrateHeaderProfile();
+  await loadMessages();
 };
 
 init();

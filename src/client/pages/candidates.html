@@ -5,21 +5,31 @@
   <title>Kandidaten Matching Demo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/berichten.css" />
   <link rel="stylesheet" href="../css/candidates.css" />
 </head>
 <body>
-  <header class="main-header">
-    <div class="logo">Starwa</div>
-    <div class="header-actions">
-      <a href="/dashboard-werkgever" class="back-button">Terug naar Dashboard</a>
-      <a href="/home" class="logout">
-        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
-        <span class="logout-text">Log uit</span>
-      </a>
+  <header class="mp-header">
+    <div class="mp-header__inner">
+      <a class="ghost-button ghost-button--back" href="/dashboard-werkgever">Terug naar Dashboard</a>
+
+      <div class="mp-header__title">
+        <div>
+          <h1>Kandidaten</h1>
+          <span class="mp-header__subtitle">Matching overzicht</span>
+        </div>
+      </div>
+
+      <div class="mp-header__actions">
+        <a class="ghost-button" href="/profiel.html">Profiel</a>
+        <a href="/home" class="logout">
+          <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+          <span class="logout-text">Log uit</span>
+        </a>
+      </div>
     </div>
   </header>
   <main class="wrap container">
-    <h1>Matching algoritme – kandidaten</h1>
 
     <div class="grid layout">
       <!-- Filters (sticky) -->
@@ -154,7 +164,7 @@
 
         <!-- Favorieten link + teller -->
         <div class="fav-panel">
-          <a href="../favorieten/favorieten-candidates.html">
+          <a href="../pages/favorieten-candidates.html">
             <span>Favorieten</span>
             <span class="fav-chip"><span id="favCountCands">0</span></span>
           </a>
@@ -194,14 +204,49 @@
     const modalBody = document.getElementById("modalBody");
     const favCountEl = document.getElementById("favCountCands");
     const fmt = s => String(s||"").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    const displayValue = (value, fallback = "Nog niet ingevuld") => {
+      const text = String(value ?? "").trim();
+      return text ? fmt(text) : fmt(fallback);
+    };
+    const displayHours = (value) => {
+      if (value === null || value === undefined) return fmt("Niet opgegeven");
+      const text = String(value).trim();
+      if (!text) return fmt("Niet opgegeven");
+      const num = Number(text);
+      if (!Number.isNaN(num) && num > 0) return fmt(`${num} uur p/w`);
+      return fmt(text);
+    };
+    const clampScore = (value) => {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return 0;
+      return Math.max(0, Math.min(100, Math.round(num)));
+    };
+    const renderSkillsChips = (skills = []) => {
+      if (Array.isArray(skills) && skills.length) {
+        return skills.slice(0, 8).map(s => `<span class="chip">${fmt(s)}</span>`).join("");
+      }
+      return `<span class="chip chip--muted">Nog geen vaardigheden</span>`;
+    };
+    const displaySalary = (candidate = {}) => displayValue(candidate?.details?.salaryExpectation || candidate.salaryIndicatie || candidate.salaris, "Nog niet ingevuld");
+    const displayContact = (candidate = {}) => displayValue(candidate?.details?.email || candidate.email || candidate?.details?.phone, "Geen contactgegevens beschikbaar");
+    const renderWhyList = (list = []) => (Array.isArray(list) && list.length ? list.map(liWithIcon).join("") : "<li>Geen toelichting beschikbaar</li>");
     // Live kandidaten opslag
     let LIVE_CANDIDATES = [];
-    const mapSeekerToCandidate = (u) => ({
+    const mapSeekerToCandidate = (u = {}) => ({
       id: u.id,
-      name: u.name || u.email,
-      currentTitle: '-', desiredRole: '-',
-      locatie: '-', uren: '-', sector: '-', contractType: '-', beschikbaarheid: '-',
-      skills: [], details: { email: u.email }, score: 0, why: []
+      name: u.name || u.email || "Kandidaat",
+      currentTitle: u.current_title || u.currentTitle || "",
+      desiredRole: u.desired_role || u.desiredRole || "",
+      locatie: u.locatie || u.city || "",
+      uren: u.uren || u.uren_per_week || "",
+      sector: u.sector || "",
+      contractType: u.contractType || "",
+      beschikbaarheid: u.beschikbaarheid || u.availability || "",
+      salaryIndicatie: u.salary || "",
+      skills: Array.isArray(u.skills) ? u.skills : [],
+      details: { email: u.email },
+      score: Number.isFinite(u.score) ? u.score : 0,
+      why: [],
     })
     async function loadLiveCandidates(){
       try {
@@ -306,7 +351,7 @@
     function render(matches){
       if(!matches.length){
         resultsEl.innerHTML = `
-          <div class="card empty-state">
+          <div class="card candidate-card empty-state">
             <div>
               <div class="empty-title">Geen kandidaten gevonden</div>
               <div class="empty-text">Pas de filters links aan en klik op “Zoek kandidaten”.</div>
@@ -316,55 +361,79 @@
       }
       resultsEl.innerHTML = matches.map(m=>{
         const saved = isFav("kandidaat", m.id);
+        const score = clampScore(m.score);
+        const location = displayValue(m.locatie, "Niet opgegeven");
+        const availability = displayValue(m.beschikbaarheid, "Nog niet bekend");
+        const contract = displayValue(m.contractType, "Niet opgegeven");
+        const sector = displayValue(m.sector, "Niet opgegeven");
+        const salary = displaySalary(m);
+        const hours = displayHours(m.uren);
+        const roleLine = displayValue(m.currentTitle || m.desiredRole, "Rol nog niet ingevuld");
+        const contact = displayContact(m);
         return `
-        <div class="card">
-          <div class="title">
+        <div class="card candidate-card">
+          <div class="candidate-header">
             <div>
-              <div class="job-title">${fmt(m.name)} — ${fmt(m.currentTitle || m.desiredRole)}</div>
-              <div class="meta">${fmt(m.locatie)} • ${fmt(m.beschikbaarheid)} • ${fmt(m.uren)}u • ${fmt(m.sector)} • ${fmt(m.contractType)} • ${fmt((m.skills||[]).join(", "))}</div>
+              <p class="eyebrow">Kandidaat</p>
+              <h2>${displayValue(m.name, "Naam onbekend")}</h2>
+              <p class="candidate-role">${roleLine}</p>
+              <p class="candidate-summary">${contact}</p>
             </div>
-            <div class="badge">${m.score}% match</div>
+            <div class="score-cluster">
+              <div class="match-badge">
+                <span>${score}%</span>
+                <p>Matchscore</p>
+              </div>
+              <div class="progress" aria-label="Matchpercentage ${score}%">
+                <div class="bar" style="width:${score}%"></div>
+              </div>
+            </div>
+          </div>
+          <dl class="info-grid">
+            <div>
+              <dt>Locatie</dt>
+              <dd>${location}</dd>
+            </div>
+            <div>
+              <dt>Beschikbaarheid</dt>
+              <dd>${availability}</dd>
+            </div>
+            <div>
+              <dt>Contract</dt>
+              <dd>${contract}</dd>
+            </div>
+            <div>
+              <dt>Sector</dt>
+              <dd>${sector}</dd>
+            </div>
+            <div>
+              <dt>Uren per week</dt>
+              <dd>${hours}</dd>
+            </div>
+            <div>
+              <dt>Salarisindicatie</dt>
+              <dd>${salary}</dd>
+            </div>
+          </dl>
+          <div class="skills-row">
+            <span class="skills-label">Vaardigheden</span>
+            <div class="skills-chips">${renderSkillsChips(m.skills)}</div>
           </div>
           <div class="why">
-            <strong>Waarom deze score:</strong>
-            <ul>${m.why.map(liWithIcon).join("")}</ul>
+            <h3>Waarom deze score</h3>
+            <ul>${renderWhyList(m.why)}</ul>
           </div>
-          <div class="progress"><div class="bar" style="width:${m.score}%"></div></div>
-          <div class="actions">
-            <div class="left">
-              <button class="secondary" data-id="${m.id}" data-action="info" type="button">Meer info</button>
-            </div>
-            <div class="right">
-              <button class="primary" data-id="${m.id}" data-action="invite" type="button">Uitnodigen</button>
-              <button class="fav ${saved?'saved':''}" data-id="${m.id}" data-action="fav" type="button">${saved?'Opgeslagen':'Favoriet'}</button>
+          <div class="candidate-footer">
+            <div class="card-divider" role="presentation"></div>
+            <div class="candidate-actions">
+              <button class="btn secondary" data-id="${m.id}" data-action="info" type="button">Meer info</button>
+              <div class="btn-group">
+                <button class="btn" data-id="${m.id}" data-action="invite" type="button">Uitnodigen</button>
+                <button class="btn ghost fav ${saved?'saved':''}" data-id="${m.id}" data-action="fav" type="button">${saved?'Opgeslagen':'Favoriet'}</button>
+              </div>
             </div>
           </div>
         </div>`}).join("");
-      
-      // Post-format titles/meta for live candidates so content is visible
-      try {
-        const cards = resultsEl.querySelectorAll('.card')
-        cards.forEach((card, idx) => {
-          const m = matches[idx] || {}
-          const titleEl = card.querySelector('.job-title')
-          if (titleEl && m && m.name) {
-            const extra = (m.currentTitle || m.desiredRole) ? (' - ' + String(m.currentTitle || m.desiredRole)) : ''
-            titleEl.textContent = String(m.name) + extra
-          }
-          const metaEl = card.querySelector('.meta')
-          if (metaEl) {
-            const parts = []
-            const email = (m && m.details && m.details.email) || m.email
-            if (email) parts.push(String(email))
-            if (m.locatie && m.locatie !== '-') parts.push(String(m.locatie))
-            if (m.beschikbaarheid && m.beschikbaarheid !== '-') parts.push(String(m.beschikbaarheid))
-            if (m.uren && m.uren !== '-') parts.push(String(m.uren) + 'u')
-            if (m.sector && m.sector !== '-') parts.push(String(m.sector))
-            if (m.contractType && m.contractType !== '-') parts.push(String(m.contractType))
-            metaEl.textContent = parts.join(' • ')
-          }
-        })
-      } catch {}
 
       /* binds */
       resultsEl.querySelectorAll('[data-action="info"]').forEach(btn=>{
@@ -431,8 +500,10 @@
       });
     }
 
-    function computeAndRenderFromForm(){
-      if (LIVE_CANDIDATES && LIVE_CANDIDATES.length){
+    const hasLiveCandidates = () => Array.isArray(LIVE_CANDIDATES) && LIVE_CANDIDATES.length > 0
+
+    function computeAndRenderFromForm({ allowLive = true } = {}){
+      if (allowLive && hasLiveCandidates()){
         // Voor nu: toon live kandidaten zonder complexe scoring (komt later)
         render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
         return
@@ -451,8 +522,14 @@
     }
 
     function init(){ updateFavCount(); loadLiveCandidates(); }
-    form.addEventListener("submit", e=>{ e.preventDefault(); computeAndRenderFromForm(); });
-    btnReset.addEventListener("click", ()=> render([]));
+    form.addEventListener("submit", e=>{ e.preventDefault(); computeAndRenderFromForm({ allowLive: false }); });
+    btnReset.addEventListener("click", ()=>{
+      if (hasLiveCandidates()) {
+        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
+      } else {
+        render([])
+      }
+    });
     window.addEventListener("DOMContentLoaded", init);
   </script>
 </body>

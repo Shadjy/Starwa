@@ -9,7 +9,9 @@
 </head>
 <body class="landing">
   <header class="main-header landing-header">
-    <div class="logo-mark">Starwa</div>
+    <a class="logo-mark" href="/dashboard" aria-label="Ga naar dashboard">
+      <img src="../assests/starwaster.png" alt="Starwa">
+    </a>
     <nav class="landing-nav">
       <a href="#features">Waarom Starwa?</a>
       <a href="#voor-wie">Voor wie</a>
@@ -160,5 +162,17 @@
       <p>&copy; 2025 Starwa. Alle rechten voorbehouden.</p>
     </div>
   </footer>
+  <script>
+    (() => {
+      document.querySelectorAll(".message-chip__badge").forEach((badge) => {
+        const count = Number(badge.dataset.unread || badge.textContent || 0);
+        const displayValue = count > 9 ? "9+" : String(count);
+        badge.textContent = displayValue;
+        badge.classList.toggle("is-max", count > 9);
+        badge.classList.toggle("is-empty", count === 0);
+        badge.setAttribute("aria-label", `${count} ongelezen berichten`);
+      });
+    })();
+  </script>
 </body>
 </html>
