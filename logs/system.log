@@ -16,6 +16,145 @@
 {"ts":"2025-12-16T13:23:54.499Z","level":"info","action":"message_created","message":"Message 4 created","context":{"receiver_user_id":32,"sender_user_id":36,"type":"sollicitatie_notificatie","related_id":2}}
 {"ts":"2025-12-16T13:23:54.523Z","level":"info","action":"sollicitatie_event_processed","message":"Berichten aangemaakt na sollicitatie","context":{"sollicitatieId":2}}
 {"ts":"2025-12-16T13:24:05.175Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":3,"userId":36,"read":true}}
+{"ts":"2025-12-16T14:26:01.898Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T14:26:08.952Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T14:27:35.333Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T14:28:27.339Z","level":"info","action":"sollicitatie_created","message":"Nieuwe sollicitatie opgeslagen","context":{"sollicitatieId":4,"werknemer_id":36,"werkgever_id":19,"vacancy_id":7}}
+{"ts":"2025-12-16T14:28:27.557Z","level":"info","action":"message_created","message":"Message 7 created","context":{"receiver_user_id":36,"sender_user_id":19,"type":"sollicitatie_bevestiging","related_id":4}}
+{"ts":"2025-12-16T14:28:27.688Z","level":"info","action":"message_created","message":"Message 8 created","context":{"receiver_user_id":19,"sender_user_id":36,"type":"sollicitatie_notificatie","related_id":4}}
+{"ts":"2025-12-16T14:28:27.735Z","level":"info","action":"sollicitatie_event_processed","message":"Berichten aangemaakt na sollicitatie","context":{"sollicitatieId":4}}
+{"ts":"2025-12-16T14:29:14.700Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":8,"userId":19,"read":true}}
+{"ts":"2025-12-16T14:31:48.538Z","level":"info","action":"sollicitatie_created","message":"Nieuwe sollicitatie opgeslagen","context":{"sollicitatieId":5,"werknemer_id":36,"werkgever_id":19,"vacancy_id":1}}
+{"ts":"2025-12-16T14:31:48.749Z","level":"info","action":"message_created","message":"Message 9 created","context":{"receiver_user_id":36,"sender_user_id":19,"type":"sollicitatie_bevestiging","related_id":5}}
+{"ts":"2025-12-16T14:31:48.836Z","level":"info","action":"message_created","message":"Message 10 created","context":{"receiver_user_id":19,"sender_user_id":36,"type":"sollicitatie_notificatie","related_id":5}}
+{"ts":"2025-12-16T14:31:48.880Z","level":"info","action":"sollicitatie_event_processed","message":"Berichten aangemaakt na sollicitatie","context":{"sollicitatieId":5}}
+{"ts":"2025-12-16T15:22:46.273Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":10,"userId":19,"read":true}}
+{"ts":"2025-12-16T20:19:27.803Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T20:19:29.355Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T20:19:32.268Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T20:23:08.633Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T20:23:11.480Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T20:43:21.839Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":9,"userId":36,"read":true}}
+{"ts":"2025-12-16T20:43:23.919Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":7,"userId":36,"read":true}}
+{"ts":"2025-12-16T22:21:34.342Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:21:54.959Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:22:00.868Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:22:04.771Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:24:13.277Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:27:42.464Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:27:48.855Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:28:12.573Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:30:04.070Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:30:06.657Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:30:09.689Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:34:43.543Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:34:44.979Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:53:09.896Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T22:53:53.281Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:06:25.869Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:10:22.519Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:13:25.427Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:16:02.170Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:16:31.659Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:24:40.554Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:27:46.066Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:38:10.191Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:43:40.029Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:49:19.368Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:53:45.514Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-16T23:57:48.196Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-17T00:02:44.802Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-17T00:04:49.916Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-17T00:05:23.059Z","level":"info","action":"sollicitatie_created","message":"Nieuwe sollicitatie opgeslagen","context":{"sollicitatieId":8,"werknemer_id":36,"werkgever_id":19,"vacancy_id":13}}
+{"ts":"2025-12-17T00:05:23.266Z","level":"info","action":"message_created","message":"Message 15 created","context":{"receiver_user_id":36,"sender_user_id":19,"type":"sollicitatie_bevestiging","related_id":8}}
+{"ts":"2025-12-17T00:05:23.389Z","level":"info","action":"message_created","message":"Message 16 created","context":{"receiver_user_id":19,"sender_user_id":36,"type":"sollicitatie_notificatie","related_id":8}}
+{"ts":"2025-12-17T00:05:23.431Z","level":"info","action":"sollicitatie_event_processed","message":"Berichten aangemaakt na sollicitatie","context":{"sollicitatieId":8}}
+{"ts":"2025-12-17T00:05:38.249Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":15,"userId":36,"read":true}}
+{"ts":"2025-12-17T10:58:29.819Z","level":"info","action":"sollicitatie_created","message":"Nieuwe sollicitatie opgeslagen","context":{"sollicitatieId":11,"werknemer_id":36,"werkgever_id":19,"vacancy_id":15}}
+{"ts":"2025-12-17T10:58:29.948Z","level":"info","action":"message_created","message":"Message 21 created","context":{"receiver_user_id":36,"sender_user_id":19,"type":"sollicitatie_bevestiging","related_id":11}}
+{"ts":"2025-12-17T10:58:30.022Z","level":"info","action":"message_created","message":"Message 22 created","context":{"receiver_user_id":19,"sender_user_id":36,"type":"sollicitatie_notificatie","related_id":11}}
+{"ts":"2025-12-17T10:58:30.048Z","level":"info","action":"sollicitatie_event_processed","message":"Berichten aangemaakt na sollicitatie","context":{"sollicitatieId":11}}
+{"ts":"2025-12-17T11:01:45.312Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-18T14:03:57.868Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-18T15:02:00.152Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-18T20:35:39.539Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-18T21:01:42.335Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2025-12-20T10:54:56.418Z","level":"error","action":"bootstrap_error","message":"Schema bootstrap faalde","context":{"sql":"CREATE TABLE IF NOT EXISTS user_profiles (\n      id INT UNSIGNED NOT NULL AUTO_INCREMENT,\n      user_id INT UNSIGNED NOT NULL,\n      phone VARCHAR(64) DEFAULT NULL,\n      address VARCHAR(255) DEFAULT NULL,\n      city VARCHAR(160) DEFAULT NULL,\n      degree VARCHAR(160) DEFAULT NULL,\n      work_experience VARCHAR(64) DEFAULT NULL,\n      work_wishes TEXT DEFAULT NULL,\n      work_location VARCHAR(160) DEFAULT NULL,\n      work_hours VARCHAR(64) DEFAULT NULL,\n      avatar_url VARCHAR(255) DEFAULT NULL,\n      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n      PRIMARY KEY (id),\n      UNIQUE KEY uq_profile_user (user_id),\n      CONSTRAINT fk_profile_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE\n    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci","error":"connect ETIMEDOUT"}}
+{"ts":"2025-12-20T10:55:11.868Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T14:08:00.747Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T14:16:53.886Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T14:21:41.498Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T14:25:53.036Z","level":"info","action":"sollicitatie_invite","message":"Kandidaat uitgenodigd","context":{"sollicitatie_id":12,"vacature_id":13,"werknemer_id":52,"werkgever_id":19,"message_id":23}}
+{"ts":"2026-01-12T14:26:17.312Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":23,"userId":52,"read":true}}
+{"ts":"2026-01-12T14:42:24.581Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T14:42:49.123Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T14:46:07.354Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T14:46:12.434Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T14:47:35.798Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T15:24:43.490Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T15:25:59.871Z","level":"info","action":"sollicitatie_invite","message":"Kandidaat uitgenodigd","context":{"sollicitatie_id":13,"vacature_id":14,"werknemer_id":52,"werkgever_id":19,"message_id":24}}
+{"ts":"2026-01-12T15:26:14.917Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":24,"userId":52,"read":true}}
+{"ts":"2026-01-12T15:27:18.549Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":20,"userId":19,"read":true}}
+{"ts":"2026-01-12T15:27:19.256Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":22,"userId":19,"read":true}}
+{"ts":"2026-01-12T15:29:29.995Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T15:29:33.965Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T15:30:50.038Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T15:31:34.709Z","level":"info","action":"sollicitatie_invite","message":"Kandidaat uitgenodigd","context":{"sollicitatie_id":14,"vacature_id":7,"werknemer_id":52,"werkgever_id":19,"message_id":25}}
+{"ts":"2026-01-12T15:32:10.676Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":18,"userId":19,"read":true}}
+{"ts":"2026-01-12T15:32:10.677Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":16,"userId":19,"read":true}}
+{"ts":"2026-01-12T15:32:22.819Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T15:32:41.711Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":25,"userId":52,"read":true}}
+{"ts":"2026-01-12T15:36:20.660Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T15:38:06.205Z","level":"info","action":"sollicitatie_invite","message":"Kandidaat uitgenodigd","context":{"sollicitatie_id":15,"vacature_id":17,"werknemer_id":52,"werkgever_id":19,"message_id":26}}
+{"ts":"2026-01-12T15:38:16.502Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":26,"userId":52,"read":true}}
+{"ts":"2026-01-12T15:54:37.317Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T15:56:30.085Z","level":"info","action":"sollicitatie_invite","message":"Kandidaat uitgenodigd","context":{"sollicitatie_id":16,"vacature_id":17,"werknemer_id":36,"werkgever_id":19,"message_id":27}}
+{"ts":"2026-01-12T15:56:44.572Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":27,"userId":36,"read":true}}
+{"ts":"2026-01-12T15:56:46.698Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":21,"userId":36,"read":true}}
+{"ts":"2026-01-13T08:48:54.482Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-13T08:50:05.799Z","level":"info","action":"sollicitatie_invite","message":"Kandidaat uitgenodigd","context":{"sollicitatie_id":17,"vacature_id":15,"werknemer_id":52,"werkgever_id":19,"message_id":28}}
+{"ts":"2026-01-13T08:50:23.893Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":28,"userId":52,"read":true}}
+{"ts":"2026-01-13T08:57:56.343Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-13T09:28:59.657Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-13T09:30:09.877Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":28,"userId":52,"read":false}}
+{"ts":"2026-01-13T09:30:10.590Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":28,"userId":52,"read":true}}
+{"ts":"2026-01-13T09:30:11.081Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":28,"userId":52,"read":false}}
+{"ts":"2026-01-13T09:30:12.753Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":28,"userId":52,"read":true}}
+{"ts":"2026-01-13T09:37:56.201Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-13T09:39:25.659Z","level":"info","action":"sollicitatie_invite","message":"Kandidaat uitgenodigd","context":{"sollicitatie_id":18,"vacature_id":1,"werknemer_id":52,"werkgever_id":19,"message_id":29}}
+{"ts":"2026-01-13T09:39:32.763Z","level":"info","action":"sollicitatie_invite","message":"Kandidaat uitgenodigd","context":{"sollicitatie_id":19,"vacature_id":2,"werknemer_id":52,"werkgever_id":19,"message_id":30}}
+{"ts":"2026-01-13T09:40:04.168Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":30,"userId":52,"read":true}}
+{"ts":"2026-01-13T09:42:18.322Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-13T09:43:35.809Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-13T09:44:30.535Z","level":"info","action":"message_created","message":"Message 31 created","context":{"receiver_user_id":19,"sender_user_id":52,"type":"sollicitatie_antwoord","related_id":8}}
+{"ts":"2026-01-13T09:44:30.574Z","level":"info","action":"sollicitatie_decision","message":"Uitnodiging verwerkt","context":{"sollicitatie_id":19,"werknemer_id":52,"werkgever_id":19,"decision":"accept","status":"uitnodiging_geaccepteerd"}}
+{"ts":"2026-01-13T09:44:30.640Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":30,"userId":52,"read":true}}
+{"ts":"2026-01-13T09:44:54.061Z","level":"info","action":"message_created","message":"Message 32 created","context":{"receiver_user_id":19,"sender_user_id":52,"type":"sollicitatie_antwoord","related_id":9}}
+{"ts":"2026-01-13T09:44:54.080Z","level":"info","action":"sollicitatie_reply","message":"Reactie toegevoegd aan dossier","context":{"sollicitatie_id":19,"sender":52,"receiver":19,"type":"invite"}}
+{"ts":"2026-01-13T09:45:14.671Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":32,"userId":19,"read":true}}
+{"ts":"2026-01-13T09:45:31.867Z","level":"info","action":"message_created","message":"Message 33 created","context":{"receiver_user_id":52,"sender_user_id":19,"type":"sollicitatie_antwoord","related_id":10}}
+{"ts":"2026-01-13T09:45:31.886Z","level":"info","action":"sollicitatie_reply","message":"Reactie toegevoegd aan dossier","context":{"sollicitatie_id":19,"sender":19,"receiver":52,"type":"info"}}
+{"ts":"2026-01-13T09:57:57.514Z","level":"info","action":"message_created","message":"Message 34 created","context":{"receiver_user_id":52,"sender_user_id":19,"type":"sollicitatie_antwoord","related_id":11}}
+{"ts":"2026-01-13T09:57:57.553Z","level":"info","action":"sollicitatie_reply","message":"Reactie toegevoegd aan dossier","context":{"sollicitatie_id":19,"sender":19,"receiver":52,"type":"info"}}
+{"ts":"2026-01-13T09:58:18.849Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":34,"userId":52,"read":true}}
+{"ts":"2026-01-13T09:58:59.270Z","level":"info","action":"message_created","message":"Message 35 created","context":{"receiver_user_id":19,"sender_user_id":52,"type":"sollicitatie_antwoord","related_id":12}}
+{"ts":"2026-01-13T09:58:59.294Z","level":"info","action":"sollicitatie_reply","message":"Reactie toegevoegd aan dossier","context":{"sollicitatie_id":19,"sender":52,"receiver":19,"type":"info"}}
+{"ts":"2026-01-13T09:59:39.755Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":35,"userId":19,"read":true}}
+{"ts":"2026-01-13T10:06:54.853Z","level":"info","action":"sollicitatie_invite","message":"Kandidaat uitgenodigd","context":{"sollicitatie_id":20,"vacature_id":16,"werknemer_id":52,"werkgever_id":19,"message_id":36}}
+{"ts":"2026-01-13T10:07:09.970Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":36,"userId":52,"read":true}}
+{"ts":"2026-01-13T10:07:41.500Z","level":"info","action":"message_created","message":"Message 37 created","context":{"receiver_user_id":19,"sender_user_id":52,"type":"sollicitatie_antwoord","related_id":14}}
+{"ts":"2026-01-13T10:07:41.520Z","level":"info","action":"sollicitatie_decision","message":"Uitnodiging verwerkt","context":{"sollicitatie_id":20,"werknemer_id":52,"werkgever_id":19,"decision":"accept","status":"uitnodiging_geaccepteerd"}}
+{"ts":"2026-01-13T10:07:41.563Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":36,"userId":52,"read":true}}
+{"ts":"2026-01-13T10:07:52.718Z","level":"info","action":"message_created","message":"Message 38 created","context":{"receiver_user_id":19,"sender_user_id":52,"type":"sollicitatie_antwoord","related_id":15}}
+{"ts":"2026-01-13T10:07:52.738Z","level":"info","action":"sollicitatie_reply","message":"Reactie toegevoegd aan dossier","context":{"sollicitatie_id":20,"sender":52,"receiver":19,"type":"invite"}}
+{"ts":"2026-01-13T10:08:37.376Z","level":"info","action":"message_created","message":"Message 39 created","context":{"receiver_user_id":19,"sender_user_id":52,"type":"sollicitatie_antwoord","related_id":16}}
+{"ts":"2026-01-13T10:08:37.399Z","level":"info","action":"sollicitatie_reply","message":"Reactie toegevoegd aan dossier","context":{"sollicitatie_id":20,"sender":52,"receiver":19,"type":"invite"}}
+{"ts":"2026-01-13T11:08:00.549Z","level":"info","action":"message_created","message":"Message 40 created","context":{"receiver_user_id":19,"sender_user_id":52,"type":"sollicitatie_antwoord","related_id":17}}
+{"ts":"2026-01-13T11:08:00.587Z","level":"info","action":"sollicitatie_reply","message":"Reactie toegevoegd aan dossier","context":{"sollicitatie_id":20,"sender":52,"receiver":19,"type":"invite"}}
+{"ts":"2026-01-13T11:08:14.334Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":40,"userId":19,"read":true}}
+{"ts":"2026-01-13T11:08:27.039Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":39,"userId":19,"read":true}}
+{"ts":"2026-01-13T11:08:57.793Z","level":"info","action":"message_created","message":"Message 41 created","context":{"receiver_user_id":52,"sender_user_id":19,"type":"sollicitatie_antwoord","related_id":18}}
+{"ts":"2026-01-13T11:08:57.812Z","level":"info","action":"sollicitatie_reply","message":"Reactie toegevoegd aan dossier","context":{"sollicitatie_id":20,"sender":19,"receiver":52,"type":"info"}}
 {"ts":"2026-01-12T13:11:05.227Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
 {"ts":"2026-01-12T13:11:17.175Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
 {"ts":"2026-01-12T15:16:04.510Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}

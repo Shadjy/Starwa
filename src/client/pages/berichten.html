@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
-    <title>Berichten</title>
+    <title>Meldingen - Vacature Match Webapp</title>
 
     <!-- Laat global staan voor app-brede tokens -->
     <link rel="stylesheet" href="../css/global.css" />
@@ -335,20 +335,37 @@
           </div>
         </div>
 
+        
         <p class="modal-message" id="modalMessage"></p>
 
+        <div class="modal-decision hidden" id="modalDecision">
+          <div class="modal-thread__header">
+            <h3 class="modal-thread__title">Uitnodiging acties</h3>
+          </div>
+          <p class="modal-decision__copy">
+            Kies een actie. Het antwoordveld hieronder wordt meegestuurd (verplicht bij weigeren).
+          </p>
+          <div class="modal-decision__actions">
+            <button class="button-primary" type="button" id="inviteAcceptBtn">Accepteer uitnodiging</button>
+            <button class="danger-button" type="button" id="inviteDeclineBtn">Weiger uitnodiging</button>
+          </div>
+          <p class="reply-status" id="inviteDecisionStatus" aria-live="polite"></p>
+        </div>
+
+        <div class="modal-thread hidden" id="modalThread">
+          <div class="modal-thread__header">
+            <h3 class="modal-thread__title" id="modalThreadTitle">Dossier</h3>
+            <span class="badge hidden" id="modalThreadCount"></span>
+          </div>
+          <div class="modal-thread__list" id="modalThreadList"></div>
+          <p class="reply-status" id="modalThreadStatus" aria-live="polite"></p>
+        </div>
+
         <div class="modal-reply" id="modalReply" hidden>
-          <label class="sr-only" for="replyType">Type reactie</label>
-          <select id="replyType" class="select-input">
-            <option value="info">Informatie</option>
-            <option value="invite">Uitnodiging</option>
-            <option value="interview">Interviewvoorstel</option>
-            <option value="general">Algemeen</option>
-          </select>
           <label class="sr-only" for="replyBody">Bericht</label>
           <textarea id="replyBody" rows="3" class="textarea" placeholder="Reageer op deze sollicitatie..." aria-label="Bericht"></textarea>
           <p class="reply-status" id="replyStatus" aria-live="polite"></p>
-          <div class="modal-actions" style="justify-content:flex-end">
+          <div class="modal-reply__actions">
             <button class="button-primary" type="button" id="replySend">Versturen</button>
           </div>
         </div>
@@ -364,6 +381,7 @@
       </div>
     </div>
 
+    <script type="module" src="../js/berichten.js?v=20260113"></script>
     <script src="../js/company-modal.js" defer></script>
     <script type="module" src="../js/berichten.js"></script>
   </body>

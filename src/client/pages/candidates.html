@@ -438,31 +438,114 @@
     }
     function updateFavCount(){ const c = getFavs().filter(f=>f.type==='kandidaat').length; if(favCountEl) favCountEl.textContent = c; }
 
+    const inviteState = { vacancies: null };
+    const formatVacancyLabel = (vacancy = {}) => {
+      const title = vacancy.functietitel || vacancy.title || "Vacature";
+      const locatie = vacancy.locatie || "";
+      return locatie ? `${title} (${locatie})` : title;
+    };
+    async function loadEmployerVacancies(){
+      if (Array.isArray(inviteState.vacancies)) return inviteState.vacancies;
+      const res = await fetch(`${API_BASE}/api/vacatures?mine=1&limit=200`, { credentials: 'include' });
+      if (!res.ok) throw new Error("Kon vacatures niet laden");
+      const data = await res.json();
+      inviteState.vacancies = Array.isArray(data.items) ? data.items : [];
+      return inviteState.vacancies;
+    }
+
     function openInviteModal(v){
       openModal(`
         <form id="inviteForm">
           <div class="detail-grid">
             <div>
               <h3>Uitnodigen: ${fmt(v.name)}</h3>
-              <p><strong>Rol:</strong> ${fmt(v.currentTitle || v.desiredRole)}</p>
-              <label>Jouw naam<br><input required style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px"></label>
+              <p><strong>Rol:</strong> ${fmt(v.currentTitle || v.desiredRole || "-")}</p>
+              <label>Vacature<br>
+                <select id="inviteVacancy" required style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px">
+                  <option value="">Vacatures laden...</option>
+                </select>
+              </label>
             </div>
             <div>
-              <label>Jouw e-mail<br><input type="email" required style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px"></label>
-              <label style="display:block;margin-top:.5rem">Bericht<br>
-                <textarea rows="4" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px">Hi ${fmt(v.name)}, we nodigen je graag uit voor een kennismaking.</textarea>
+              <label style="display:block;margin-top:.5rem">Bericht (optioneel)<br>
+                <textarea id="inviteMessage" rows="4" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px" placeholder="Je bent uitgenodigd om te reageren op deze vacature."></textarea>
               </label>
+              <p id="inviteStatus" aria-live="polite" style="min-height:1.2rem;margin-top:.5rem;color:#6b7280"></p>
             </div>
           </div>
           <div class="modal__footer" style="padding:0;margin-top:.75rem">
             <button type="button" class="modal__close" data-close>Annuleren</button>
-            <button type="submit" class="modal__close">Verstuur</button>
+            <button type="submit" class="modal__close" id="inviteSubmit">Verstuur</button>
           </div>
         </form>
       `);
-      document.getElementById("inviteForm").addEventListener("submit",(e)=>{
+      const vacancySelect = document.getElementById("inviteVacancy");
+      const statusEl = document.getElementById("inviteStatus");
+      const submitBtn = document.getElementById("inviteSubmit");
+      const messageField = document.getElementById("inviteMessage");
+      const candidateId = Number(v?.id);
+
+      if (!candidateId) {
+        statusEl.textContent = "Kandidaat kan niet worden uitgenodigd.";
+        statusEl.style.color = "#b91c1c";
+        submitBtn.disabled = true;
+        return;
+      }
+
+      statusEl.textContent = "Vacatures laden...";
+      statusEl.style.color = "#6b7280";
+      loadEmployerVacancies()
+        .then((vacatures) => {
+          if (!Array.isArray(vacatures) || !vacatures.length) {
+            vacancySelect.innerHTML = `<option value="">Geen vacatures beschikbaar</option>`;
+            statusEl.textContent = "Geen vacatures beschikbaar.";
+            statusEl.style.color = "#b91c1c";
+            submitBtn.disabled = true;
+            return;
+          }
+          vacancySelect.innerHTML = `<option value="">Selecteer vacature</option>` +
+            vacatures.map((vac) => `<option value="${vac.id}">${fmt(formatVacancyLabel(vac))}</option>`).join("");
+          statusEl.textContent = "";
+          submitBtn.disabled = false;
+        })
+        .catch((err) => {
+          console.warn("Vacatures laden mislukt:", err);
+          vacancySelect.innerHTML = `<option value="">Kon vacatures niet laden</option>`;
+          statusEl.textContent = "Kon vacatures niet laden.";
+          statusEl.style.color = "#b91c1c";
+          submitBtn.disabled = true;
+        });
+
+      document.getElementById("inviteForm").addEventListener("submit", async (e) => {
         e.preventDefault();
-        openModal(`<h3>Uitnodiging verstuurd ✅</h3><p>Je hebt <strong>${fmt(v.name)}</strong> uitgenodigd voor een sollicitatiegesprek.</p><div class="modal__footer"><button class="modal__close" data-close>Sluiten</button></div>`);
+        const vacancyId = Number(vacancySelect.value);
+        if (!vacancyId) {
+          statusEl.textContent = "Selecteer een vacature.";
+          statusEl.style.color = "#b91c1c";
+          return;
+        }
+        statusEl.textContent = "Uitnodiging wordt verstuurd...";
+        statusEl.style.color = "#6b7280";
+        submitBtn.disabled = true;
+        try {
+          const res = await fetch(`${API_BASE}/api/sollicitaties/invite`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              candidate_id: candidateId,
+              vacancy_id: vacancyId,
+              message: messageField.value.trim(),
+            }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || "Kon uitnodiging niet versturen");
+          openModal(`<h3>Uitnodiging verzonden</h3><p>Uitnodiging succesvol verzonden, kandidaat is geinformeerd.</p><div class="modal__footer"><button class="modal__close" data-close>Sluiten</button></div>`);
+        } catch (err) {
+          statusEl.textContent = err?.message || "Er ging iets mis. Probeer het opnieuw.";
+          statusEl.style.color = "#b91c1c";
+          submitBtn.disabled = false;
+        }
       });
     }
 
