@@ -2,31 +2,48 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <title>Kandidaten Matching Demo</title>
+  <title>Kandidaten Vacatures</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="../css/global.css" />
   <link rel="stylesheet" href="../css/berichten.css" />
   <link rel="stylesheet" href="../css/candidates.css" />
 </head>
 <body>
-  <header class="mp-header">
-    <div class="mp-header__inner">
-      <a class="ghost-button ghost-button--back" href="/dashboard-werkgever">Terug naar Dashboard</a>
-
-      <div class="mp-header__title">
-        <div>
-          <h1>Kandidaten</h1>
-          <span class="mp-header__subtitle">Matching overzicht</span>
-        </div>
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a class="app-header__logo" href="../pages/candidates.html" aria-label="Ga naar dashboard">
+        <img src="../assests/starwaster.png" alt="Starwa">
+      </a>
+      <div>
+        <h1 class="app-header__title">Kandidaten</h1>
       </div>
-
-      <div class="mp-header__actions">
-        <a class="ghost-button" href="/profiel.html">Profiel</a>
-        <a href="/home" class="logout">
-          <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
-          <span class="logout-text">Log uit</span>
+      <div class="app-header__center">
+        <button class="profile-chip" id="headerProfileBtn" type="button" aria-label="Open profiel" data-avatar="">
+          <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
+            <span class="profile-chip__initials"></span>
+          </span>
+          <span class="profile-chip__name">Profiel</span>
+        </button>
+        <a class="profile-chip message-chip" href="/berichten" data-link="berichten" aria-label="Ga naar berichten">
+          <span class="message-chip__icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+              <path d="M3.25 4.75h13.5c.55 0 1 .45 1 1v8.5c0 .55-.45 1-1 1h-4.5l-3.25 2.5V15.25H3.25c-.55 0-1-.45-1-1v-8.5c0-.55.45-1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="profile-chip__name">Berichten</span>
+          <span class="message-chip__badge" id="newCounter" aria-live="polite">0</span>
+        </a>
+        <a class="profile-chip" href="/pages/vacature-aanmaken.html" aria-label="Vacature maken">
+          <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
+            <span class="profile-chip__initials">VM</span>
+          </span>
+          <span class="profile-chip__name">Vacature maken</span>
         </a>
       </div>
+      <a href="/home" class="logout app-header__logout">
+        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+        <span class="logout-text">Log uit</span>
+      </a>
     </div>
   </header>
   <main class="wrap container">
@@ -190,7 +207,90 @@
     </div>
   </div>
 
+  <!-- Bedrijfsprofiel modal -->
+  <div class="company-modal-backdrop" id="companyModalBackdrop"></div>
+  <div class="company-modal" id="companyModal" aria-hidden="true" role="dialog" aria-labelledby="companyModalTitle">
+    <div class="panel">
+      <div class="panel-header">
+        <h3 id="companyModalTitle" class="sr-only">Bedrijfsprofiel</h3>
+        <div class="profile-card card profile-card--modal" aria-label="Bedrijfsprofiel samenvatting">
+          <div class="profile-avatar" id="profileAvatarModal">WG</div>
+          <div class="profile-info">
+            <div class="profile-header">
+              <h2 id="profileNameModal">Jouw Bedrijf</h2>
+            </div>
+            <div class="profile-meta">
+              <span class="badge" id="profileIdBadge" aria-label="Employer ID" hidden></span>
+            </div>
+          </div>
+        </div>
+        <button class="btn ghost" id="closeCompanyModal" aria-label="Sluiten">Sluiten</button>
+      </div>
+      <form id="companyForm">
+        <div class="panel-body grid-2">
+          <div>
+            <label class="label" for="cp_bedrijfsnaam">Bedrijfsnaam *</label>
+            <input class="input" id="cp_bedrijfsnaam" name="bedrijfsnaam" required />
+          </div>
+          <div>
+            <label class="label" for="cp_kvk">KvK-nummer</label>
+            <input class="input" id="cp_kvk" name="kvk_nummer" />
+          </div>
+          <div>
+            <label class="label" for="cp_sector">Sector / branche</label>
+            <input class="input" id="cp_sector" name="sector" />
+          </div>
+          <div>
+            <label class="label" for="cp_grootte">Bedrijfsgrootte</label>
+            <select class="select" id="cp_grootte" name="bedrijfs_grootte">
+              <option value="">Maak een keuze</option>
+              <option>1-10</option>
+              <option>11-50</option>
+              <option>51-200</option>
+              <option>>200</option>
+            </select>
+          </div>
+          <div class="span-2">
+            <label class="label" for="cp_locatie">Locatie (adres)</label>
+            <input class="input" id="cp_locatie" name="locatie_adres" />
+          </div>
+          <div>
+            <label class="label" for="cp_website">Website</label>
+            <input class="input" id="cp_website" name="website" />
+          </div>
+          <div>
+            <label class="label" for="cp_slogan">Bedrijfsslogan</label>
+            <input class="input" id="cp_slogan" name="slogan" />
+          </div>
+          <div class="span-2">
+            <label class="label" for="cp_beschrijving">Bedrijfsbeschrijving</label>
+            <textarea class="textarea" id="cp_beschrijving" name="beschrijving" rows="4"></textarea>
+          </div>
+          <div class="span-2">
+            <label class="label" for="cp_cultuur">Bedrijfscultuur (comma gescheiden)</label>
+            <input class="input" id="cp_cultuur" name="cultuur" placeholder="informeel, innovatief, duurzaam" />
+          </div>
+          <div>
+            <label class="label" for="cp_contact_naam">Contactpersoon (naam)</label>
+            <input class="input" id="cp_contact_naam" name="contactpersoon_naam" />
+          </div>
+          <div>
+            <label class="label" for="cp_contact_email">Contact e-mail</label>
+            <input type="email" class="input" id="cp_contact_email" name="contact_email" />
+          </div>
+        </div>
+        <div class="panel-footer">
+          <button type="button" class="btn ghost" id="cancelCompany">Annuleren</button>
+          <button type="submit" class="btn" id="saveCompany">Opslaan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-container" id="companyToasts" aria-live="polite" aria-atomic="true"></div>
+
   <!-- Data & gedrag -->
+  <script src="../js/company-modal.js" defer></script>
   <script src="../data/candidates.data.js" defer></script>
   <script defer>
     // API base: same origin on :3000; else backend on :3000
@@ -204,14 +304,14 @@
     const modalBody = document.getElementById("modalBody");
     const favCountEl = document.getElementById("favCountCands");
     const fmt = s => String(s||"").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-    const displayValue = (value, fallback = "Nog niet ingevuld") => {
+    const displayValue = (value, fallback = "—") => {
       const text = String(value ?? "").trim();
       return text ? fmt(text) : fmt(fallback);
     };
     const displayHours = (value) => {
-      if (value === null || value === undefined) return fmt("Niet opgegeven");
+      if (value === null || value === undefined) return fmt("—");
       const text = String(value).trim();
-      if (!text) return fmt("Niet opgegeven");
+      if (!text) return fmt("—");
       const num = Number(text);
       if (!Number.isNaN(num) && num > 0) return fmt(`${num} uur p/w`);
       return fmt(text);
@@ -227,35 +327,53 @@
       }
       return `<span class="chip chip--muted">Nog geen vaardigheden</span>`;
     };
-    const displaySalary = (candidate = {}) => displayValue(candidate?.details?.salaryExpectation || candidate.salaryIndicatie || candidate.salaris, "Nog niet ingevuld");
+    const displaySalary = (candidate = {}) => displayValue(candidate?.details?.salaryExpectation || candidate.salaryIndicatie || candidate.salaris, "—");
     const displayContact = (candidate = {}) => displayValue(candidate?.details?.email || candidate.email || candidate?.details?.phone, "Geen contactgegevens beschikbaar");
     const renderWhyList = (list = []) => (Array.isArray(list) && list.length ? list.map(liWithIcon).join("") : "<li>Geen toelichting beschikbaar</li>");
     // Live kandidaten opslag
     let LIVE_CANDIDATES = [];
     const mapSeekerToCandidate = (u = {}) => ({
       id: u.id,
-      name: u.name || u.email || "Kandidaat",
+      name: u.name || u.naam || u.email || "Kandidaat",
       currentTitle: u.current_title || u.currentTitle || "",
       desiredRole: u.desired_role || u.desiredRole || "",
-      locatie: u.locatie || u.city || "",
-      uren: u.uren || u.uren_per_week || "",
+      locatie: u.locatie || u.city || u.stad || "",
+      uren: u.uren || u.uren_per_week || u.hours_per_week || "",
       sector: u.sector || "",
-      contractType: u.contractType || "",
+      contractType: u.contractType || u.contract_type || "",
       beschikbaarheid: u.beschikbaarheid || u.availability || "",
-      salaryIndicatie: u.salary || "",
+      salaryIndicatie: u.salary || u.salaryExpectation || "",
       skills: Array.isArray(u.skills) ? u.skills : [],
-      details: { email: u.email },
+      details: {
+        email: u.email || u.details?.email,
+        phone: u.phone || u.details?.phone,
+        salaryExpectation: u.details?.salaryExpectation || u.salaryExpectation,
+        languages: u.details?.languages,
+        experience: u.details?.experience,
+        notes: u.details?.notes,
+        portfolio: u.details?.portfolio,
+        github: u.details?.github,
+        cvUrl: u.details?.cvUrl,
+      },
       score: Number.isFinite(u.score) ? u.score : 0,
-      why: [],
+      why: Array.isArray(u.why) ? u.why : [],
     })
+    const hasRichData = (list = []) => list.some(c =>
+      c.locatie || c.uren || c.sector || c.contractType || c.beschikbaarheid ||
+      c.salaryIndicatie || c.currentTitle || c.desiredRole ||
+      (Array.isArray(c.skills) && c.skills.length > 0) ||
+      c?.details?.salaryExpectation
+    );
     async function loadLiveCandidates(){
       try {
         const res = await fetch(`${API_BASE}/api/candidates?limit=100`, { credentials: 'include' })
         if (!res.ok) throw new Error('Kon kandidaten niet laden')
         const data = await res.json()
-        LIVE_CANDIDATES = (data.items||[]).map(r => ({ id:r.id, name:r.name, email:r.email }))
-        // Initieel render zonder filters
-        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
+        LIVE_CANDIDATES = (data.items||[]).map(mapSeekerToCandidate)
+        // Render alleen als er inhoudelijke velden zijn
+        if (hasRichData(LIVE_CANDIDATES)) {
+          render(LIVE_CANDIDATES, { showScores: false })
+        }
       } catch (err) {
         console.warn('Live kandidaten laden mislukt:', err)
       }
@@ -430,7 +548,8 @@
         }
       });
     }
-    function render(matches){
+
+    function render(matches, { showScores = false } = {}){
       if(!matches.length){
         resultsEl.innerHTML = `
           <div class="card candidate-card empty-state">
@@ -444,14 +563,24 @@
       resultsEl.innerHTML = matches.map(m=>{
         const saved = isFav("kandidaat", m.id);
         const score = clampScore(m.score);
-        const location = displayValue(m.locatie, "Niet opgegeven");
-        const availability = displayValue(m.beschikbaarheid, "Nog niet bekend");
-        const contract = displayValue(m.contractType, "Niet opgegeven");
-        const sector = displayValue(m.sector, "Niet opgegeven");
+        const location = displayValue(m.locatie, "—");
+        const availability = displayValue(m.beschikbaarheid, "—");
+        const contract = displayValue(m.contractType, "—");
+        const sector = displayValue(m.sector, "—");
         const salary = displaySalary(m);
         const hours = displayHours(m.uren);
-        const roleLine = displayValue(m.currentTitle || m.desiredRole, "Rol nog niet ingevuld");
+        const roleLine = displayValue(m.currentTitle || m.desiredRole, "—");
         const contact = displayContact(m);
+        const scoreBlock = showScores ? `
+            <div class="score-cluster">
+              <div class="match-badge">
+                <span>${score}%</span>
+                <p>Matchscore</p>
+              </div>
+              <div class="progress" aria-label="Matchpercentage ${score}%">
+                <div class="bar" style="width:${score}%"></div>
+              </div>
+            </div>` : "";
         return `
         <div class="card candidate-card">
           <div class="candidate-header">
@@ -461,15 +590,7 @@
               <p class="candidate-role">${roleLine}</p>
               <p class="candidate-summary">${contact}</p>
             </div>
-            <div class="score-cluster">
-              <div class="match-badge">
-                <span>${score}%</span>
-                <p>Matchscore</p>
-              </div>
-              <div class="progress" aria-label="Matchpercentage ${score}%">
-                <div class="bar" style="width:${score}%"></div>
-              </div>
-            </div>
+            ${scoreBlock}
           </div>
           <dl class="info-grid">
             <div>
@@ -501,10 +622,10 @@
             <span class="skills-label">Vaardigheden</span>
             <div class="skills-chips">${renderSkillsChips(m.skills)}</div>
           </div>
-          <div class="why">
+          ${showScores ? `<div class="why">
             <h3>Waarom deze score</h3>
             <ul>${renderWhyList(m.why)}</ul>
-          </div>
+          </div>` : ""}
           <div class="candidate-footer">
             <div class="card-divider" role="presentation"></div>
             <div class="candidate-actions">
@@ -584,10 +705,10 @@
 
     const hasLiveCandidates = () => Array.isArray(LIVE_CANDIDATES) && LIVE_CANDIDATES.length > 0
 
-    function computeAndRenderFromForm({ allowLive = true } = {}){
-      if (allowLive && hasLiveCandidates()){
-        // Voor nu: toon live kandidaten zonder complexe scoring (komt later)
-        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
+    function computeAndRenderFromForm({ allowLive = true, showScores = false } = {}){
+      if (allowLive && hasLiveCandidates() && hasRichData(LIVE_CANDIDATES)){
+        // Toon live kandidaten zonder scoring; filteren/scoring volgt bij zoekopdracht
+        render(LIVE_CANDIDATES, { showScores })
         return
       }
       // Fallback: statische dataset met scoring
@@ -600,17 +721,20 @@
         beschikbaarheid: document.getElementById("beschikbaarheid").value,
         skill: document.getElementById("skill").value
       })
-      render(data)
+      render(data, { showScores })
     }
 
-    function init(){ updateFavCount(); loadLiveCandidates(); }
-    form.addEventListener("submit", e=>{ e.preventDefault(); computeAndRenderFromForm({ allowLive: false }); });
+    function init(){
+      updateFavCount();
+      computeAndRenderFromForm({ allowLive: true, showScores: false });
+      loadLiveCandidates();
+    }
+    form.addEventListener("submit", e=>{
+      e.preventDefault();
+      computeAndRenderFromForm({ allowLive: false, showScores: true });
+    });
     btnReset.addEventListener("click", ()=>{
-      if (hasLiveCandidates()) {
-        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
-      } else {
-        render([])
-      }
+      computeAndRenderFromForm({ allowLive: true, showScores: false });
     });
     window.addEventListener("DOMContentLoaded", init);
   </script>

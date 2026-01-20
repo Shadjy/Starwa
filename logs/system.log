@@ -155,3 +155,8 @@
 {"ts":"2026-01-13T11:08:27.039Z","level":"info","action":"message_mark","message":"Message read/unread toggled","context":{"id":39,"userId":19,"read":true}}
 {"ts":"2026-01-13T11:08:57.793Z","level":"info","action":"message_created","message":"Message 41 created","context":{"receiver_user_id":52,"sender_user_id":19,"type":"sollicitatie_antwoord","related_id":18}}
 {"ts":"2026-01-13T11:08:57.812Z","level":"info","action":"sollicitatie_reply","message":"Reactie toegevoegd aan dossier","context":{"sollicitatie_id":20,"sender":19,"receiver":52,"type":"info"}}
+{"ts":"2026-01-12T13:11:05.227Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T13:11:17.175Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-12T15:16:04.510Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-13T10:54:54.506Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
+{"ts":"2026-01-13T10:54:58.621Z","level":"info","action":"bootstrap_ok","message":"Schema bootstrap afgerond","context":null}
