@@ -2,8 +2,11 @@ import { query } from '../db.js'
 import { logSystem } from './logger.js'
 
 function parseJson(val) {
+  if (val == null) return null
+  if (typeof val === 'object') return val
+  const raw = Buffer.isBuffer(val) ? val.toString('utf8') : String(val)
   try {
-    return val ? JSON.parse(val) : null
+    return raw ? JSON.parse(raw) : null
   } catch {
     return null
   }
