@@ -54,7 +54,7 @@ router.post('/login', async (req, res, next) => {
     if (wantsJson(req)) {
       return res.json({ message: 'Succesvol ingelogd.', user: safeUser })
     }
-    const redirectTo = user.role === 'employer' ? '/dashboard-werkgever' : '/dashboard'
+    const redirectTo = '/pages/candidates.html'
     return res.redirect(303, redirectTo)
   } catch (err) {
     next(err)
@@ -114,7 +114,7 @@ router.post('/register', async (req, res, next) => {
     if (wantsJson(req)) {
       return res.status(201).json({ message: 'Geregistreerd.' })
     }
-    const redirectAfterRegister = role === 'employer' ? '/dashboard-werkgever' : '/vragenlijst'
+    const redirectAfterRegister = '/pages/candidates.html'
     return res.redirect(303, redirectAfterRegister)
   } catch (err) {
     next(err)
