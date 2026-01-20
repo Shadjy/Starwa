@@ -41,6 +41,12 @@ const TYPE_CONFIG = {
     icon: "message",
     accentClass: "type-color-message",
   },
+  invite: {
+    label: "Uitnodiging",
+    filterLabel: "Uitnodigingen",
+    icon: "calendar",
+    accentClass: "type-color-message",
+  },
   sollicitatie_bevestiging: {
     label: "Sollicitatie bevestigd",
     filterLabel: "Sollicitaties",
@@ -161,6 +167,9 @@ const state = {
     savedOnly: false,
   },
   activeModalId: null,
+  currentUserRole: "",
+  currentUserId: null,
+  currentUserName: "",
 };
 
 const elements = {
@@ -187,8 +196,16 @@ const elements = {
   modalClose: document.getElementById("modalClose"),
   modalSaveToggle: document.getElementById("modalSaveToggle"),
   modalSaveText: document.getElementById("modalSaveText"),
+  modalThread: document.getElementById("modalThread"),
+  modalThreadTitle: document.getElementById("modalThreadTitle"),
+  modalThreadCount: document.getElementById("modalThreadCount"),
+  modalThreadList: document.getElementById("modalThreadList"),
+  modalThreadStatus: document.getElementById("modalThreadStatus"),
+  modalDecision: document.getElementById("modalDecision"),
+  inviteAcceptBtn: document.getElementById("inviteAcceptBtn"),
+  inviteDeclineBtn: document.getElementById("inviteDeclineBtn"),
+  inviteDecisionStatus: document.getElementById("inviteDecisionStatus"),
   replySection: document.getElementById("modalReply"),
-  replyType: document.getElementById("replyType"),
   replyBody: document.getElementById("replyBody"),
   replyStatus: document.getElementById("replyStatus"),
   replySend: document.getElementById("replySend"),
@@ -248,7 +265,11 @@ const hydrateHeaderProfile = async () => {
     }
     if (!res.ok) return;
     const data = await res.json();
-    updateHeaderProfileChip(data.user || {}, data.profile || {});
+    const user = data?.user || {};
+    state.currentUserRole = user.role || "";
+    state.currentUserId = user.id ?? null;
+    state.currentUserName = user.naam || user.contactpersoon || user.bedrijfsnaam || user.email || "Gebruiker";
+    updateHeaderProfileChip(user, data.profile || {});
   } catch (err) {
     console.warn("Header-profiel laden mislukt:", err);
   }
@@ -280,6 +301,37 @@ const formatTimeAgo = (dateStr) => {
   return `${diffDays} dag${diffDays === 1 ? "" : "en"} geleden`;
 };
 
+const formatThreadTime = (dateStr) => {
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return "";
+  const pad = (value) => String(value).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+const isChatThreadNote = (note) => !!note?.metadata?.sollicitatie_id;
+
+const getThreadKey = (note) => {
+  if (!isChatThreadNote(note)) return null;
+  const solId = note.metadata?.sollicitatie_id;
+  return solId ? `thread:${solId}` : null;
+};
+
+const groupNotifications = (list) => {
+  const grouped = [];
+  const seen = new Set();
+  list.forEach((note) => {
+    const key = getThreadKey(note);
+    if (!key) {
+      grouped.push(note);
+      return;
+    }
+    if (seen.has(key)) return;
+    seen.add(key);
+    grouped.push(note);
+  });
+  return grouped;
+};
+
 const mapBackendMessage = (msg) => {
   const meta = msg.metadata || {};
   const postedAt = msg.created_at || msg.createdAt || new Date().toISOString();
@@ -289,10 +341,13 @@ const mapBackendMessage = (msg) => {
     meta.werknemer_naam ||
     meta.vacature_titel ||
     "Starwa";
+  const messageType = meta.message_type || meta.type;
+  const isInvite = msg.type === "invite" || messageType === "invite";
+  const resolvedType = isInvite ? "invite" : (msg.type || "message");
   return {
     id: `api-${msg.id}`,
     apiId: msg.id,
-    type: msg.type || "message",
+    type: resolvedType,
     title: msg.title || "Bericht",
     message: msg.body || "",
     detailMessage: msg.body || "",
@@ -306,6 +361,70 @@ const mapBackendMessage = (msg) => {
     status: meta.status || "",
     metadata: meta,
   };
+};
+
+const renderThreadHistory = (items = []) => {
+  if (!elements.modalThreadList || !elements.modalThreadStatus) return;
+  elements.modalThreadList.innerHTML = "";
+  if (!Array.isArray(items) || items.length === 0) {
+    elements.modalThreadStatus.textContent = "Nog geen berichten in dit dossier.";
+    if (elements.modalThreadCount) {
+      elements.modalThreadCount.classList.add("hidden");
+    }
+    return;
+  }
+  elements.modalThreadStatus.textContent = "";
+  if (elements.modalThreadCount) {
+    elements.modalThreadCount.textContent = String(items.length);
+    elements.modalThreadCount.classList.remove("hidden");
+  }
+  items.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "thread-item";
+    const meta = document.createElement("div");
+    meta.className = "thread-item__meta";
+    const isSelf = state.currentUserId != null
+      && item.sender_user_id != null
+      && String(item.sender_user_id) === String(state.currentUserId);
+    const fallbackName = isSelf ? (state.currentUserName || "Gebruiker") : "Gebruiker";
+    const senderName = item.sender_name || fallbackName;
+    const createdAt = item.created_at ? formatThreadTime(item.created_at) : "";
+    meta.textContent = createdAt ? `${senderName} - ${createdAt}` : senderName;
+    const body = document.createElement("p");
+    body.className = "thread-item__body";
+    body.textContent = item.body || "";
+    row.appendChild(meta);
+    row.appendChild(body);
+    elements.modalThreadList.appendChild(row);
+  });
+};
+
+const loadThreadHistory = async (note, { show = true } = {}) => {
+  if (!elements.modalThread) return;
+  const solId = note?.metadata?.sollicitatie_id;
+  if (!solId || !show) {
+    elements.modalThread.classList.add("hidden");
+    return;
+  }
+  elements.modalThread.classList.remove("hidden");
+  if (elements.modalThreadTitle) {
+    const label = note.role ? `${note.company} - ${note.role}` : note.company;
+    elements.modalThreadTitle.textContent = label ? `Dossier: ${label}` : "Dossier";
+  }
+  if (elements.modalThreadStatus) {
+    elements.modalThreadStatus.textContent = "Dossier laden...";
+  }
+  try {
+    const res = await fetch(`${API_BASE}/api/sollicitaties/${solId}/thread`, { credentials: "include" });
+    if (!res.ok) throw new Error("Kon dossier niet laden");
+    const data = await res.json();
+    renderThreadHistory(Array.isArray(data.items) ? data.items : []);
+  } catch (err) {
+    if (elements.modalThreadStatus) {
+      elements.modalThreadStatus.textContent = "Dossier kon niet worden geladen.";
+    }
+    console.warn("Dossier laden mislukt:", err);
+  }
 };
 
 const applyFilters = () => {
@@ -415,7 +534,7 @@ const renderEmptyState = () => {
 };
 
 const renderNotifications = () => {
-  const list = applyFilters();
+  const list = groupNotifications(applyFilters());
   elements.notificationsSection.innerHTML = "";
 
   if (list.length === 0) {
@@ -518,7 +637,28 @@ const renderNotifications = () => {
     deleteButton.dataset.action = "delete";
     deleteButton.title = "Verwijder melding";
     deleteButton.appendChild(iconElement("trash"));
+    deleteButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      removeNotification(note.id);
+    });
     card.appendChild(deleteButton);
+
+    card.addEventListener("click", () => {
+      if (!note.read) {
+        markNotificationAsRead(note.id);
+      }
+      openModal(note.id);
+    });
+
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        if (!note.read) {
+          markNotificationAsRead(note.id);
+        }
+        openModal(note.id);
+      }
+    });
 
     elements.notificationsSection.appendChild(card);
   });
@@ -577,11 +717,78 @@ const removeNotification = (id) => {
   if (index === -1) {
     return;
   }
+  const note = state.notifications[index];
   state.notifications.splice(index, 1);
   if (state.activeModalId === id) {
     closeModal();
   }
+  if (note?.apiId) {
+    fetch(`${API_BASE}/api/berichten/${note.apiId}`, {
+      method: "DELETE",
+      credentials: "include",
+    }).catch(() => {});
+  }
   renderNotifications();
+};
+
+const handleInviteDecision = async (decision) => {
+  const note = state.notifications.find((item) => item.id === state.activeModalId);
+  if (!note || !note.metadata?.sollicitatie_id) {
+    return;
+  }
+  if (!elements.inviteDecisionStatus || !elements.inviteAcceptBtn || !elements.inviteDeclineBtn) {
+    return;
+  }
+  const bodyText = elements.replyBody?.value?.trim() || "";
+  if (decision === "decline" && !bodyText) {
+    elements.inviteDecisionStatus.textContent = "Voeg een bericht toe bij weigeren.";
+    elements.inviteDecisionStatus.style.color = "#b91c1c";
+    return;
+  }
+  elements.inviteDecisionStatus.textContent = "Bezig met verwerken...";
+  elements.inviteDecisionStatus.style.color = "#6b7280";
+  elements.inviteAcceptBtn.disabled = true;
+  elements.inviteDeclineBtn.disabled = true;
+  if (elements.replyBody) {
+    elements.replyBody.disabled = true;
+  }
+  if (elements.replySend) {
+    elements.replySend.disabled = true;
+  }
+  try {
+    const res = await fetch(`${API_BASE}/api/sollicitaties/${note.metadata.sollicitatie_id}/decision`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        decision,
+        body: bodyText || undefined,
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || "Kon beslissing niet verwerken");
+    const label = decision === "accept" ? "Uitnodiging geaccepteerd" : "Uitnodiging geweigerd";
+    note.status = label;
+    note.metadata = { ...(note.metadata || {}), status: label };
+    elements.inviteDecisionStatus.textContent = `Status: ${label}`;
+    elements.inviteDecisionStatus.style.color = "#16a34a";
+    if (elements.replyBody) {
+      elements.replyBody.value = "";
+    }
+    markNotificationAsRead(note.id, true);
+    updateModal(note);
+  } catch (err) {
+    elements.inviteDecisionStatus.textContent = err?.message || "Er ging iets mis.";
+    elements.inviteDecisionStatus.style.color = "#b91c1c";
+    elements.inviteAcceptBtn.disabled = false;
+    elements.inviteDeclineBtn.disabled = false;
+    if (elements.replyBody) {
+      elements.replyBody.disabled = false;
+    }
+    if (elements.replySend) {
+      elements.replySend.disabled = false;
+    }
+  }
 };
 
 const populateTypeFilter = () => {
@@ -600,31 +807,40 @@ const populateTypeFilter = () => {
 };
 
 const updateModal = (note) => {
-  elements.modalTitle.textContent = note.title;
-  elements.modalAvatar.textContent = computeInitials(note.company);
-  elements.modalCompany.textContent = formatRoleLine(note);
-  elements.modalTime.textContent = note.timeAgo;
+  if (elements.modalTitle) elements.modalTitle.textContent = note.title;
+  if (elements.modalAvatar) elements.modalAvatar.textContent = computeInitials(note.company);
+  if (elements.modalCompany) elements.modalCompany.textContent = formatRoleLine(note);
+  if (elements.modalTime) elements.modalTime.textContent = note.timeAgo;
 
   const typeClass = TYPE_CONFIG[note.type]?.accentClass ?? "";
-  elements.modalTypeBadge.className = `badge ${typeClass}`;
-  elements.modalTypeBadge.textContent = TYPE_CONFIG[note.type]?.label ?? "Melding";
-
-  if (note.status) {
-    elements.modalStatusBadge.className = `badge ${typeClass}`;
-    elements.modalStatusBadge.textContent = note.status;
-    elements.modalStatusBadge.classList.remove("hidden");
-  } else {
-    elements.modalStatusBadge.classList.add("hidden");
+  if (elements.modalTypeBadge) {
+    elements.modalTypeBadge.className = `badge ${typeClass}`;
+    elements.modalTypeBadge.textContent = TYPE_CONFIG[note.type]?.label ?? "Melding";
   }
 
-  elements.modalMessage.textContent =
-    note.detailMessage ?? note.message ?? "";
+  const statusValue = note.status ? String(note.status).toLowerCase() : "";
+  const hideStatus = statusValue === "uitnodiging" || statusValue === "uitgenodigd";
+  if (note.status && !hideStatus) {
+    if (elements.modalStatusBadge) {
+      elements.modalStatusBadge.className = `badge ${typeClass}`;
+      elements.modalStatusBadge.textContent = note.status;
+      elements.modalStatusBadge.classList.remove("hidden");
+    }
+  } else {
+    elements.modalStatusBadge?.classList.add("hidden");
+  }
+
+  if (elements.modalMessage) {
+    elements.modalMessage.textContent =
+      note.detailMessage ?? note.message ?? "";
+  }
 
   // Optioneel link uit metadata
-  if (note.metadata?.link) {
+  if (note.metadata?.link && elements.modalMessage) {
     const link = document.createElement("a");
     link.href = note.metadata.link;
-    link.textContent = "Open dossier";
+    const linkLabel = note.metadata?.link_label || (note.type === "invite" ? "Bekijk vacature" : "Open dossier");
+    link.textContent = linkLabel;
     link.style.display = "inline-block";
     link.style.marginTop = "8px";
     link.target = "_self";
@@ -632,33 +848,71 @@ const updateModal = (note) => {
     elements.modalMessage.appendChild(link);
   }
 
-  // Reply-sectie tonen bij sollicitatie-gerelateerde threads
-  const showReply = !!note.metadata?.thread_id && !!note.metadata?.sollicitatie_id;
+  const isInvite = note.type === "invite" || note.metadata?.message_type === "invite";
+  const role = state.currentUserRole || getCookie("role") || (isInvite ? "seeker" : "");
+  const hasThread = !!note.metadata?.sollicitatie_id;
+  const decisionDone = /geaccepteerd|geweigerd/i.test(note.status || "");
+  const showDecision = isInvite && role === "seeker" && !!note.metadata?.sollicitatie_id && !decisionDone;
+  const allowChat = hasThread && (!isInvite || role !== "seeker" || decisionDone);
+  const replyMode = allowChat ? "chat" : (showDecision ? "decision" : "");
+
   if (elements.replySection) {
-    elements.replySection.hidden = !showReply;
-    elements.replyBody.value = "";
-    elements.replyStatus.textContent = "";
-    if (showReply) {
-      elements.replyType.value = "info";
-      const role = getCookie("role");
-      elements.replyBody.placeholder = role === "employer"
-        ? "Stuur meer info of uitnodiging naar de kandidaat..."
-        : "Reageer op de werkgever...";
+    elements.replySection.hidden = !replyMode;
+    elements.replySection.dataset.mode = replyMode;
+    elements.replySection.dataset.replyType = "info";
+    if (elements.replyBody) {
+      elements.replyBody.value = "";
+      elements.replyBody.disabled = false;
+      elements.replyBody.placeholder = replyMode === "decision"
+        ? "Schrijf een bericht aan de werkgever (verplicht bij weigeren)..."
+        : (role === "employer"
+          ? "Stuur meer info of uitnodiging naar de kandidaat..."
+          : (isInvite ? "Stuur tegenvoorstel of reactie naar de werkgever..." : "Reageer op de werkgever..."));
+    }
+    if (elements.replyStatus) {
+      elements.replyStatus.textContent = "";
+      elements.replyStatus.style.color = "#6b7280";
+    }
+    if (elements.replySend) {
+      elements.replySend.hidden = replyMode !== "chat";
+      elements.replySend.disabled = false;
     }
   }
 
-  elements.modalMarkRead.textContent = note.read
-    ? "Markeer als ongelezen"
-    : "Markeer als gelezen";
+  if (elements.modalDecision) {
+    elements.modalDecision.classList.toggle("hidden", !showDecision);
+    if (elements.inviteDecisionStatus) {
+      elements.inviteDecisionStatus.textContent = "";
+      elements.inviteDecisionStatus.style.color = "#6b7280";
+    }
+    if (elements.inviteAcceptBtn && elements.inviteDeclineBtn) {
+      elements.inviteAcceptBtn.disabled = !showDecision;
+      elements.inviteDeclineBtn.disabled = !showDecision;
+    }
+    if (!showDecision && decisionDone && elements.inviteDecisionStatus) {
+      elements.inviteDecisionStatus.textContent = `Status: ${note.status}`;
+      elements.inviteDecisionStatus.style.color = "#16a34a";
+    }
+  }
 
-  elements.modalSaveText.textContent = note.saved
-    ? "Verwijder uit favorieten"
-    : "Opslaan als favoriet";
+  loadThreadHistory(note, { show: allowChat });
+
+  if (elements.modalMarkRead) {
+    elements.modalMarkRead.textContent = note.read
+      ? "Markeer als ongelezen"
+      : "Markeer als gelezen";
+  }
+
+  if (elements.modalSaveText) {
+    elements.modalSaveText.textContent = note.saved
+      ? "Verwijder uit favorieten"
+      : "Opslaan als favoriet";
+  }
 };
 
 const openModal = (id) => {
   const note = state.notifications.find((item) => item.id === id);
-  if (!note) {
+  if (!note || !elements.modal) {
     return;
   }
   state.activeModalId = id;
@@ -669,14 +923,22 @@ const openModal = (id) => {
 
 const closeModal = () => {
   state.activeModalId = null;
-  elements.modal.classList.add("hidden");
-  elements.modalStatusBadge.classList.add("hidden");
+  elements.modal?.classList.add("hidden");
+  elements.modalStatusBadge?.classList.add("hidden");
   document.body.style.overflow = "";
 };
 
+const getEventTargetElement = (event) => {
+  if (event?.target instanceof Element) return event.target;
+  if (event?.target?.nodeType === 3) return event.target.parentElement;
+  return null;
+};
+
 const handleCardInteraction = (event) => {
-  const target = event.target;
-  const card = target.closest(".notification-card");
+  const target = getEventTargetElement(event);
+  const card = event?.currentTarget?.classList?.contains("notification-card")
+    ? event.currentTarget
+    : target?.closest?.(".notification-card");
   if (!card) {
     return;
   }
@@ -685,10 +947,8 @@ const handleCardInteraction = (event) => {
     return;
   }
 
-  if (
-    target.closest("button") &&
-    target.closest("button").dataset.action === "delete"
-  ) {
+  const deleteBtn = target?.closest?.("button");
+  if (deleteBtn && deleteBtn.dataset.action === "delete") {
     event.stopPropagation();
     removeNotification(id);
     return;
@@ -772,11 +1032,19 @@ const initEventListeners = () => {
     removeNotification(state.activeModalId);
   });
 
+  if (elements.inviteAcceptBtn) {
+    elements.inviteAcceptBtn.addEventListener("click", () => handleInviteDecision("accept"));
+  }
+  if (elements.inviteDeclineBtn) {
+    elements.inviteDeclineBtn.addEventListener("click", () => handleInviteDecision("decline"));
+  }
+
   if (elements.replySend) {
     elements.replySend.addEventListener("click", async () => {
+      if (elements.replySection?.dataset.mode !== "chat") return;
       if (!state.activeModalId) return;
       const note = state.notifications.find((item) => item.id === state.activeModalId);
-      if (!note || !note.metadata?.sollicitatie_id || !note.metadata?.thread_id) return;
+      if (!note || !note.metadata?.sollicitatie_id) return;
       const body = elements.replyBody.value.trim();
       if (!body) {
         elements.replyStatus.textContent = "Bericht is leeg.";
@@ -786,16 +1054,18 @@ const initEventListeners = () => {
       elements.replyStatus.textContent = "Versturen...";
       elements.replyStatus.style.color = "#6b7280";
       try {
+        const type = elements.replySection?.dataset.replyType || "info";
         const res = await fetch(`${API_BASE}/api/sollicitaties/${note.metadata.sollicitatie_id}/react`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ body, type: elements.replyType.value || "info" }),
+          body: JSON.stringify({ body, type }),
         });
         if (!res.ok) throw new Error("Kon niet versturen");
         elements.replyStatus.textContent = "Verzonden.";
         elements.replyStatus.style.color = "#16a34a";
         elements.replyBody.value = "";
+        loadThreadHistory(note);
       } catch (err) {
         elements.replyStatus.textContent = err?.message || "Fout bij versturen.";
         elements.replyStatus.style.color = "#b91c1c";
@@ -828,11 +1098,6 @@ const initEventListeners = () => {
     if (event.key === "Escape" && !elements.modal.classList.contains("hidden")) {
       closeModal();
     }
-  });
-
-  const headerProfileBtn = document.getElementById("headerProfileBtn");
-  headerProfileBtn?.addEventListener("click", () => {
-    window.location.assign("/profiel");
   });
 
   const backButton = document.getElementById("backButton");

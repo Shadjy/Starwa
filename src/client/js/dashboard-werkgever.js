@@ -310,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (u?.bedrijfsnaam && document.getElementById('profileName')) {
         document.getElementById('profileName').textContent = u.bedrijfsnaam
       }
+      if (u?.bedrijfsnaam) setProfilePreview(u.bedrijfsnaam, u?.id)
       if (userIdBadge && u?.id) {
         userIdBadge.textContent = `Employer ID: ${u.id}`
         userIdBadge.hidden = false
@@ -352,6 +353,26 @@ document.addEventListener('DOMContentLoaded', () => {
   cancelCompanyBtn?.addEventListener('click', (e) => { e.preventDefault(); closeCompany() })
   companyBackdrop?.addEventListener('click', closeCompany)
 
+  const setProfilePreview = (name = '', employerId) => {
+    const display = name || 'Jouw Bedrijf'
+    const initials = (display || 'WG').split(/\s+/).filter(Boolean).map(w => w[0]).join('').slice(0,2).toUpperCase() || 'WG'
+    const nameEl = document.getElementById('profileNameModal')
+    const avatarEl = document.getElementById('profileAvatarModal')
+    const mainNameEl = document.getElementById('profileName')
+    const modalIdBadge = document.getElementById('profileIdBadge')
+    if (modalIdBadge) {
+      if (employerId) {
+        modalIdBadge.textContent = `Employer ID: ${employerId}`
+        modalIdBadge.hidden = false
+      } else {
+        modalIdBadge.hidden = true
+      }
+    }
+    if (nameEl) nameEl.textContent = display
+    if (avatarEl) avatarEl.textContent = initials
+    if (mainNameEl && !mainNameEl.textContent.trim()) mainNameEl.textContent = display
+  }
+
   const fillCompanyForm = (p = {}) => {
     const set = (id, val='') => { const el = document.getElementById(id); if (el) el.value = val || '' }
     set('cp_bedrijfsnaam', p.bedrijfsnaam)
@@ -365,6 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
     set('cp_cultuur', p.cultuur)
     set('cp_contact_naam', p.contactpersoon_naam)
     set('cp_contact_email', p.contact_email)
+    if (p?.bedrijfsnaam) setProfilePreview(p.bedrijfsnaam, p?.id)
   }
 
   const loadCompany = async () => {
@@ -414,9 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(err?.error || `Fout (${res.status})`)
       }
       showToast('Profiel opgeslagen', 'success')
-      if (payload.bedrijfsnaam && document.getElementById('profileName')) {
-        document.getElementById('profileName').textContent = payload.bedrijfsnaam
-      }
+      if (payload.bedrijfsnaam) setProfilePreview(payload.bedrijfsnaam)
       closeCompany()
     } catch (err) {
       showToast(err.message || 'Kon profiel niet opslaan', 'error')
@@ -609,4 +629,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 })
-
