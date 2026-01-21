@@ -8,14 +8,14 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch(`${API_BASE}/api/auth/me`, { credentials: 'include' })
       if (res.status === 401) {
-        window.location.href = '/inlog-aanmeld'
+        window.location.href = '/login'
         return null
       }
       if (!res.ok) throw new Error('not_ok')
       const data = await res.json()
       return data?.user || null
     } catch {
-      window.location.href = '/inlog-aanmeld'
+      window.location.href = '/login'
       return null
     }
   }
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch(`${API_BASE}/api/profile/me`, { credentials: 'include' })
       if (res.status === 401) {
-        window.location.href = '/inlog-aanmeld'
+        window.location.href = '/login'
         return
       }
       if (!res.ok) return

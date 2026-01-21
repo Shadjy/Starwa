@@ -209,6 +209,9 @@ const elements = {
   replyBody: document.getElementById("replyBody"),
   replyStatus: document.getElementById("replyStatus"),
   replySend: document.getElementById("replySend"),
+  seekerHeader: document.getElementById("seekerHeader"),
+  employerHeader: document.getElementById("employerHeader"),
+  employerProfileBtn: document.getElementById("employerProfileBtn"),
 };
 
 const iconElement = (name) => {
@@ -234,6 +237,13 @@ const initialsFromName = (name = "") => {
   return parts.map((p) => p[0]).join("").slice(0, 2).toUpperCase();
 };
 
+const normalizeRole = (role = "") => {
+  const value = String(role || "").toLowerCase();
+  if (value === "werkgever") return "employer";
+  if (value === "werkzoeker" || value === "worker") return "seeker";
+  return value;
+};
+
 const updateHeaderProfileChip = (user = {}, profile = {}) => {
   const headerProfileBtn = document.getElementById("headerProfileBtn");
   if (!headerProfileBtn) return;
@@ -254,22 +264,35 @@ const updateHeaderProfileChip = (user = {}, profile = {}) => {
   if (avatarEl) avatarEl.dataset.hasPhoto = avatarUrl ? "true" : "false";
 };
 
+const updateHeaderForRole = (role) => {
+  const normalizedRole = normalizeRole(role);
+  const isEmployer = normalizedRole === "employer";
+  if (elements.seekerHeader) {
+    elements.seekerHeader.classList.toggle("hidden", isEmployer);
+  }
+  if (elements.employerHeader) {
+    elements.employerHeader.classList.toggle("hidden", !isEmployer);
+  }
+};
+
 const hydrateHeaderProfile = async () => {
   try {
     const res = await fetch(`${API_BASE}/api/profile/me`, {
       credentials: "include",
     });
     if (res.status === 401) {
-      window.location.assign("/inlog-aanmeld");
+      window.location.assign("/login");
       return;
     }
     if (!res.ok) return;
     const data = await res.json();
     const user = data?.user || {};
-    state.currentUserRole = user.role || "";
+    state.currentUserRole = normalizeRole(user.role || "");
     state.currentUserId = user.id ?? null;
     state.currentUserName = user.naam || user.contactpersoon || user.bedrijfsnaam || user.email || "Gebruiker";
+    document.body.dataset.role = state.currentUserRole || "";
     updateHeaderProfileChip(user, data.profile || {});
+    updateHeaderForRole(state.currentUserRole);
   } catch (err) {
     console.warn("Header-profiel laden mislukt:", err);
   }
@@ -1104,6 +1127,7 @@ const initEventListeners = () => {
   headerProfileBtn?.addEventListener("click", () => {
     window.location.assign("/profiel");
   });
+
 
   const backButton = document.getElementById("backButton");
   if (backButton) {

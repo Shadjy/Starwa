@@ -69,8 +69,16 @@ app.get('/home', (_req, res) => {
   sendHtml(res, path.join(PAGES_DIR, 'home.html'))
 })
 
+app.get('/login', (_req, res) => {
+  sendHtml(res, path.join(PAGES_DIR, 'login.html'))
+})
+
+app.get('/register', (_req, res) => {
+  sendHtml(res, path.join(PAGES_DIR, 'register.html'))
+})
+
 app.get('/inlog-aanmeld', (_req, res) => {
-  sendHtml(res, path.join(PAGES_DIR, 'inlog-aanmeld.html'))
+  res.redirect(302, '/login')
 })
 
 

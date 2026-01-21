@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch(`${API_BASE}/api/profile/me`, { credentials: 'include' })
       if (res.status === 401) {
-        window.location.href = '/inlog-aanmeld'
+        window.location.href = '/login'
         return
       }
       if (!res.ok) throw new Error('not_ok')

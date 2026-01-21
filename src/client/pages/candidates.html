@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="../css/global.css" />
   <link rel="stylesheet" href="../css/berichten.css" />
+  <link rel="stylesheet" href="../css/employer-modal.css" />
   <link rel="stylesheet" href="../css/candidates.css" />
 </head>
-<body>
+<body data-role="employer">
   <header class="mp-header">
     <div class="mp-header__inner">
       <a class="ghost-button ghost-button--back" href="/dashboard-werkgever">Terug naar Dashboard</a>
@@ -21,7 +22,7 @@
       </div>
 
       <div class="mp-header__actions">
-        <a class="ghost-button" href="/profiel.html">Profiel</a>
+        <a class="ghost-button" href="/dashboard-werkgever?openCompany=1" data-open-company>Profiel</a>
         <a href="/home" class="logout">
           <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
           <span class="logout-text">Log uit</span>
@@ -190,8 +191,80 @@
     </div>
   </div>
 
+  <div class="company-modal__backdrop" id="companyModalBackdrop" aria-hidden="true"></div>
+  <div class="company-modal" id="companyModal" aria-hidden="true" role="dialog" aria-labelledby="companyModalTitle">
+    <div class="company-modal__panel">
+      <div class="company-modal__header">
+        <h3 id="companyModalTitle">Bedrijfsprofiel</h3>
+        <button class="company-modal__btn company-modal__btn--ghost" id="closeCompanyModal" type="button">Sluiten</button>
+      </div>
+      <form id="companyForm">
+        <div class="company-modal__body company-modal__grid">
+          <div>
+            <label class="company-modal__label" for="cp_bedrijfsnaam">Bedrijfsnaam *</label>
+            <input class="company-modal__input" id="cp_bedrijfsnaam" name="bedrijfsnaam" required />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_kvk">KvK-nummer</label>
+            <input class="company-modal__input" id="cp_kvk" name="kvk_nummer" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_sector">Sector / branche</label>
+            <input class="company-modal__input" id="cp_sector" name="sector" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_grootte">Bedrijfsgrootte</label>
+            <select class="company-modal__select" id="cp_grootte" name="bedrijfs_grootte">
+              <option value="">Maak een keuze</option>
+              <option>1-10</option>
+              <option>11-50</option>
+              <option>51-200</option>
+              <option>>200</option>
+            </select>
+          </div>
+          <div class="company-modal__span-2">
+            <label class="company-modal__label" for="cp_locatie">Locatie (adres)</label>
+            <input class="company-modal__input" id="cp_locatie" name="locatie_adres" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_website">Website</label>
+            <input class="company-modal__input" id="cp_website" name="website" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_slogan">Bedrijfsslogan</label>
+            <input class="company-modal__input" id="cp_slogan" name="slogan" />
+          </div>
+          <div class="company-modal__span-2">
+            <label class="company-modal__label" for="cp_beschrijving">Bedrijfsbeschrijving</label>
+            <textarea class="company-modal__textarea" id="cp_beschrijving" name="beschrijving" rows="4"></textarea>
+          </div>
+          <div class="company-modal__span-2">
+            <label class="company-modal__label" for="cp_cultuur">Bedrijfscultuur (comma gescheiden)</label>
+            <input class="company-modal__input" id="cp_cultuur" name="cultuur" placeholder="informeel, innovatief, duurzaam" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_contact_naam">Contactpersoon (naam)</label>
+            <input class="company-modal__input" id="cp_contact_naam" name="contactpersoon_naam" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_contact_email">Contact e-mail</label>
+            <input type="email" class="company-modal__input" id="cp_contact_email" name="contact_email" />
+          </div>
+        </div>
+        <div class="company-modal__footer">
+          <p class="company-modal__status" id="companyStatus" aria-live="polite"></p>
+          <div class="company-modal__actions">
+            <button class="company-modal__btn company-modal__btn--ghost" id="cancelCompany" type="button">Annuleren</button>
+            <button class="company-modal__btn" id="saveCompany" type="submit">Opslaan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Data & gedrag -->
   <script src="../data/candidates.data.js" defer></script>
+  <script src="../js/employer-company-modal.js" defer></script>
   <script defer>
     // API base: same origin on :3000; else backend on :3000
     const API_BASE = (typeof window !== 'undefined' && window.STARWA_API_BASE)

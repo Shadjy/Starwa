@@ -10,10 +10,32 @@
     <link rel="stylesheet" href="../css/global.css" />
     <!-- Berichten-specifieke styling (bevat .hidden/.sr-only + theme-bridge) -->
     <link rel="stylesheet" href="../css/berichten.css" />
+    <link rel="stylesheet" href="../css/employer-modal.css" />
   </head>
   <body>
     <div class="messages-page">
-      <header class="app-header">
+      <header class="mp-header hidden" id="employerHeader">
+        <div class="mp-header__inner">
+          <a class="ghost-button ghost-button--back" href="/dashboard-werkgever">Terug naar Dashboard</a>
+
+          <div class="mp-header__title">
+            <div>
+              <h1>Berichten</h1>
+              <span class="mp-header__subtitle">Werkgevers inbox</span>
+            </div>
+          </div>
+
+          <div class="mp-header__actions">
+            <a class="ghost-button" id="employerProfileBtn" href="/dashboard-werkgever?openCompany=1" data-open-company>Profiel</a>
+            <a href="/home" class="logout">
+              <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+              <span class="logout-text">Log uit</span>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <header class="app-header" id="seekerHeader">
         <div class="app-header__inner">
           <a class="app-header__logo" href="/dashboard" aria-label="Ga naar dashboard">
             <img src="../assests/starwaster.png" alt="Starwa">
@@ -272,7 +294,7 @@
           <div class="modal-thread__list" id="modalThreadList"></div>
           <p class="reply-status" id="modalThreadStatus" aria-live="polite"></p>
         </div>
-
+@
         <div class="modal-reply" id="modalReply" hidden>
           <label class="sr-only" for="replyBody">Bericht</label>
           <textarea id="replyBody" rows="3" class="textarea" placeholder="Reageer op deze sollicitatie..." aria-label="Bericht"></textarea>
@@ -293,7 +315,79 @@
       </div>
     </div>
 
+    <div class="company-modal__backdrop" id="companyModalBackdrop" aria-hidden="true"></div>
+    <div class="company-modal" id="companyModal" aria-hidden="true" role="dialog" aria-labelledby="companyModalTitle">
+      <div class="company-modal__panel">
+        <div class="company-modal__header">
+          <h3 id="companyModalTitle">Bedrijfsprofiel</h3>
+          <button class="company-modal__btn company-modal__btn--ghost" id="closeCompanyModal" type="button">Sluiten</button>
+        </div>
+        <form id="companyForm">
+          <div class="company-modal__body company-modal__grid">
+            <div>
+              <label class="company-modal__label" for="cp_bedrijfsnaam">Bedrijfsnaam *</label>
+              <input class="company-modal__input" id="cp_bedrijfsnaam" name="bedrijfsnaam" required />
+            </div>
+            <div>
+              <label class="company-modal__label" for="cp_kvk">KvK-nummer</label>
+              <input class="company-modal__input" id="cp_kvk" name="kvk_nummer" />
+            </div>
+            <div>
+              <label class="company-modal__label" for="cp_sector">Sector / branche</label>
+              <input class="company-modal__input" id="cp_sector" name="sector" />
+            </div>
+            <div>
+              <label class="company-modal__label" for="cp_grootte">Bedrijfsgrootte</label>
+              <select class="company-modal__select" id="cp_grootte" name="bedrijfs_grootte">
+                <option value="">Maak een keuze</option>
+                <option>1-10</option>
+                <option>11-50</option>
+                <option>51-200</option>
+                <option>>200</option>
+              </select>
+            </div>
+            <div class="company-modal__span-2">
+              <label class="company-modal__label" for="cp_locatie">Locatie (adres)</label>
+              <input class="company-modal__input" id="cp_locatie" name="locatie_adres" />
+            </div>
+            <div>
+              <label class="company-modal__label" for="cp_website">Website</label>
+              <input class="company-modal__input" id="cp_website" name="website" />
+            </div>
+            <div>
+              <label class="company-modal__label" for="cp_slogan">Bedrijfsslogan</label>
+              <input class="company-modal__input" id="cp_slogan" name="slogan" />
+            </div>
+            <div class="company-modal__span-2">
+              <label class="company-modal__label" for="cp_beschrijving">Bedrijfsbeschrijving</label>
+              <textarea class="company-modal__textarea" id="cp_beschrijving" name="beschrijving" rows="4"></textarea>
+            </div>
+            <div class="company-modal__span-2">
+              <label class="company-modal__label" for="cp_cultuur">Bedrijfscultuur (comma gescheiden)</label>
+              <input class="company-modal__input" id="cp_cultuur" name="cultuur" placeholder="informeel, innovatief, duurzaam" />
+            </div>
+            <div>
+              <label class="company-modal__label" for="cp_contact_naam">Contactpersoon (naam)</label>
+              <input class="company-modal__input" id="cp_contact_naam" name="contactpersoon_naam" />
+            </div>
+            <div>
+              <label class="company-modal__label" for="cp_contact_email">Contact e-mail</label>
+              <input type="email" class="company-modal__input" id="cp_contact_email" name="contact_email" />
+            </div>
+          </div>
+          <div class="company-modal__footer">
+            <p class="company-modal__status" id="companyStatus" aria-live="polite"></p>
+            <div class="company-modal__actions">
+              <button class="company-modal__btn company-modal__btn--ghost" id="cancelCompany" type="button">Annuleren</button>
+              <button class="company-modal__btn" id="saveCompany" type="submit">Opslaan</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script type="module" src="../js/berichten.js?v=20260113"></script>
+    <script src="../js/employer-company-modal.js"></script>
   </body>
 </html>
   
