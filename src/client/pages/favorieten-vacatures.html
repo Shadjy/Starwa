@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Favorieten — Vacatures</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/berichten.css" />
+  <link rel="stylesheet" href="../css/favorieten-vacatures.css" />
+</head>
+<body>
+  <header class="mp-header">
+    <div class="mp-header__inner">
+      <a class="ghost-button ghost-button--back" href="/dashboard">Terug naar Dashboard</a>
+
+      <div class="mp-header__title">
+        <div>
+          <h1>Favorieten – Vacatures</h1>
+          <span class="mp-header__subtitle">Vergelijk vacatures</span>
+        </div>
+      </div>
+
+      <div class="mp-header__actions">
+        <a class="ghost-button" href="/profiel.html">Profiel</a>
+        <a href="/home" class="logout">
+          <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+          <span class="logout-text">Log uit</span>
+        </a>
+      </div>
+    </div>
+  </header>
+  <main class="wrap">
+    <h1>Favorieten — vergelijken</h1>
+
+    <div class="toolbar">
+      <button id="backBtn" class="secondary" onclick="history.back()">Terug</button>
+      <div class="spacer"></div>
+      <button id="clearAll" class="danger">Leeg vacatures</button>
+    </div>
+
+    <section class="compare sticky" id="compare">
+      <h2>Vergelijking</h2>
+      <div id="compareGrid" class="compare-grid"></div>
+    </section>
+
+    <section class="grid-list" id="list"></section>
+  </main>
+
+  <script src="../data/favorieten-vacatures.data.js"></script>
+</body>
+</html>

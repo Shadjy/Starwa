@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Account aanmaken - TalentMatch</title>
+  <link rel="stylesheet" href="../css/global1.css" />
+  <link rel="stylesheet" href="../css/theme1.css" />
+  <link rel="stylesheet" href="../css/auth1.css" />
+  <!-- Added inline styles for improved employer registration design -->
+  <style>
+
+    .role-buttons-large {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .role-button-large {
+      padding: 1rem 2rem;
+      border: 2px solid var(--border);
+      transition: all 0.3s ease;
+      position: relative;
+      background-color: var(--background);
+      color: var(--foreground);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .role-button-large.active {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--sidebar-primary) 100%);
+      color: var(--primary-foreground);
+      border-color: var(--primary);
+    }
+
+    .auth-form {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: var(--foreground);
+      font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 0.875rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      background: var(--background);
+      color: var(--foreground);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(var(--primary), 0.1);
+    }
+
+    .form-group input::placeholder {
+      color: var(--muted-foreground);
+    }
+
+    .auth-button {
+      padding: 1rem;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+
+    .auth-button-secondary {
+      padding: 0.875rem;
+      margin-top: 0.5rem;
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+
+    .error-message {
+      padding: 1rem;
+      background: var(--destructive);
+      color: var(--destructive-foreground);
+      border-radius: var(--radius);
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .error-message.show {
+      display: block;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <main class="auth-container">
+    <!-- CHANGE: Step 1 - Role selection screen -->
+    <div class="auth-card" id="role-selection-screen">
+      <div class="auth-header">
+        <div class="auth-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+          </svg>
+        </div>
+        <h1 class="auth-title">Account aanmaken</h1>
+        <p class="auth-subtitle">Start vandaag nog met slimme AI-matching</p>
+      </div>
+
+      <div class="role-selection-container">
+        <p class="role-label">Ik ben een...</p>
+        <div class="role-buttons-large">
+          <!-- CHANGE: Werkzoeker button with icon -->
+          <button 
+            type="button" 
+            class="role-button-large" 
+            data-role="seeker"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span class="role-title">Werkzoeker</span>
+            <span class="role-subtitle">Vind je droombaan</span>
+          </button>
+          
+          <!-- CHANGE: Werkgever button with icon -->
+          <button 
+            type="button" 
+            class="role-button-large active" 
+            data-role="employer"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="9" x2="15" y2="9"></line>
+              <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+            <span class="role-title">Werkgever</span>
+            <span class="role-subtitle">Vind top talent</span>
+          </button>
+        </div>
+      </div>
+
+      <button type="button" id="continue-btn" class="auth-button">Doorgaan</button>
+
+      <p class="auth-link">
+        Al een account? <a href="/login" class="auth-link-text">Log hier in</a>
+      </p>
+    </div>
+
+    <!-- CHANGE: Step 2 - Registration form screen (hidden initially) -->
+    <div class="auth-card" id="form-screen" style="display: none;">
+      <div class="auth-header">
+        <div class="auth-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+          </svg>
+        </div>
+        <h1 class="auth-title">Maak je profiel af</h1>
+        <p class="auth-subtitle" id="role-subtitle">Vul je bedrijfsgegevens in</p>
+      </div>
+
+      <form id="register-form" class="auth-form">
+        <!-- Seeker fields -->
+        <div id="seeker-fields" style="display: none;">
+          <div class="form-group">
+            <label for="naam">Volledige naam</label>
+            <input 
+              type="text" 
+              id="naam" 
+              name="naam" 
+              placeholder="Jouw naam"
+            />
+          </div>
+        </div>
+
+        <!-- Employer fields -->
+        <div id="employer-fields">
+          <div class="form-group">
+            <label for="bedrijfsnaam">Bedrijfsnaam</label>
+            <input 
+              type="text" 
+              id="bedrijfsnaam" 
+              name="bedrijfsnaam" 
+              placeholder="Naam van je bedrijf"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="kvk">KVK-nummer</label>
+            <input 
+              type="text" 
+              id="kvk" 
+              name="kvk" 
+              placeholder="12345678"
+              pattern="[0-9]{8}"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="bedrijfsGrootte">Aantal werknemers</label>
+            <select id="bedrijfsGrootte" name="bedrijfsGrootte">
+              <option value="">Selecteer een optie</option>
+              <option value="1-10">1-10 werknemers</option>
+              <option value="11-50">11-50 werknemers</option>
+              <option value="51-200">51-200 werknemers</option>
+              <option value="201-500">201-500 werknemers</option>
+              <option value="500+">500+ werknemers</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contactpersoon">Contactpersoon</label>
+            <input 
+              type="text" 
+              id="contactpersoon" 
+              name="contactpersoon" 
+              placeholder="Naam contactpersoon"
+            />
+          </div>
+        </div>
+
+        <!-- Common fields -->
+        <div class="form-group">
+          <label for="email">E-mailadres</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="jouw@email.nl" 
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Wachtwoord</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="Minimaal 6 karakters" 
+            required
+            minlength="6"
+            autocomplete="new-password"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password">Bevestig wachtwoord</label>
+          <input 
+            type="password" 
+            id="confirm-password" 
+            name="confirm_password" 
+            placeholder="Herhaal je wachtwoord" 
+            required
+            autocomplete="new-password"
+          />
+        </div>
+
+        <input type="hidden" id="role" name="role" value="employer" />
+
+        <button type="submit" class="auth-button">Registreren</button>
+        <button type="button" id="back-btn" class="auth-button-secondary">Terug</button>
+
+        <p class="auth-link">
+          Al een account? <a href="/login" class="auth-link-text">Log hier in</a>
+        </p>
+      </form>
+
+      <div id="error-message" class="error-message" role="alert" aria-live="assertive"></div>
+    </div>
+  </main>
+
+  <script src="../js/register.js"></script>
+</body>
+</html>

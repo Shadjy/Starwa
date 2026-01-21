@@ -1,0 +1,130 @@
+@import "./theme.css";
+
+.main-header {
+  border-bottom: none;
+  border-radius: 0 0 32px 32px;
+  padding: 28px 40px;
+  background: transparent;
+}
+
+.main-header .logo {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--textColor);
+  letter-spacing: 0.04em;
+}
+
+.profile-page {
+  max-width: 960px;
+  margin: 32px auto 64px;
+  padding: 40px 48px 56px;
+  background: #fff;
+  border-radius: 28px;
+  border: 1px solid var(--borderColor);
+  box-shadow: 0 28px 62px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.profile-section {
+  display: grid;
+  gap: 18px;
+}
+
+.profile-section h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--textColor);
+}
+
+.profile-card {
+  background: var(--secondaryColor);
+  border-radius: 20px;
+  border: 1px solid var(--borderColor);
+  padding: 24px 28px;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.08);
+}
+
+.profile-info {
+  display: grid;
+  gap: 18px;
+}
+
+.profile-info label {
+  font-weight: 600;
+  color: var(--mutedColor);
+  margin-bottom: 6px;
+}
+
+.profile-info input,
+.profile-info textarea {
+  padding: 12px 14px;
+  font-size: 1rem;
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--textColor);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-info textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.profile-info input:focus,
+.profile-info textarea:focus {
+  border-color: var(--primaryColor);
+  box-shadow: 0 0 0 3px rgba(179, 124, 63, 0.18);
+  outline: none;
+}
+
+.profile-info input:disabled,
+.profile-info textarea:disabled {
+  background: #fff9ee;
+  color: var(--mutedColor);
+}
+
+.profile-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.edit-button,
+.save-button {
+  min-width: 140px;
+  font-weight: 600;
+}
+
+.save-button {
+  display: none;
+}
+
+.editing .save-button {
+  display: inline-flex;
+}
+
+@media (max-width: 720px) {
+  .main-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+  }
+
+  .profile-page {
+    margin-top: 24px;
+    padding: 28px 20px 40px;
+  }
+
+  .profile-card {
+    padding: 20px;
+  }
+
+  .profile-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

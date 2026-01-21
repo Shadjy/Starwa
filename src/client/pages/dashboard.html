@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vacature Matching</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/match.css" />
+</head>
+
+<body class="jobseeker-match">
+
+
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a class="app-header__logo" href="/dashboard" aria-label="Ga naar dashboard">
+        <img src="../assests/starwaster.png" alt="Starwa">
+      </a>
+
+      <div class="app-header__title">
+        <h1>Vacature Matches</h1>
+      </div>
+
+      <div class="app-header__center">
+        <button class="profile-chip" id="headerProfileBtn" type="button" aria-label="Open profiel">
+          <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
+            <img src="" alt="" />
+            <span class="profile-chip__initials">AB</span>
+          </span>
+          <span class="profile-chip__name">Profiel</span>
+        </button>
+
+        <a class="profile-chip message-chip" href="/berichten" aria-label="Open berichten">
+          <span class="message-chip__icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+              <path d="M3.25 4.75h13.5c.55 0 1 .45 1 1v8.5c0 .55-.45 1-1 1h-4.5l-3.25 2.5V15.25H3.25c-.55 0-1-.45-1-1v-8.5c0-.55.45-1 1-1Z"
+                fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="profile-chip__name">Berichten</span>
+          <span class="message-chip__badge" data-unread="3" aria-live="polite">3</span>
+        </a>
+      </div>
+
+      <a href="/home" class="logout app-header__logout">
+        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+        <span class="logout-text">Log uit</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="match-shell">
+    <h1 class="page-title">Matching algoritme – vacatures</h1>
+
+    <div class="match-layout">
+      
+      <aside class="panel sidebar">
+        <form id="matchForm" class="filters">
+          <div class="field">
+            <label class="label-row" for="functie">
+              <span>Functie</span>
+              <button type="button" class="info-btn" aria-label="Info functie"
+                data-tooltip="Functie bepaalt of de match aansluit.">i</button>
+            </label>
+            <select id="functie">
+              <option>Data Analist</option>
+              <option>Developer</option>
+              <option>Project Manager</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="label-row" for="locatie">
+              <span>Locatie</span>
+              <button type="button" class="info-btn" aria-label="Info locatie"
+                data-tooltip="Locatie speelt mee in reistijd/beschikbaarheid.">i</button>
+            </label>
+            <select id="locatie">
+              <option>Utrecht</option>
+              <option>Amsterdam</option>
+              <option>Rotterdam</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="label-row" for="uren">
+              <span>Uren per week</span>
+              <button type="button" class="info-btn" aria-label="Info uren"
+                data-tooltip="Contractomvang (uren) beïnvloedt de match.">i</button>
+            </label>
+            <select id="uren">
+              <option>16</option><option>24</option><option>32</option><option>36</option><option selected>40</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="label-row" for="sector">
+              <span>Sector</span>
+              <button type="button" class="info-btn" aria-label="Info sector"
+                data-tooltip="Sector geeft context/domeinkennis.">i</button>
+            </label>
+            <select id="sector">
+              <option>Alle</option>
+              <option>Finance</option>
+              <option>HealthTech</option>
+              <option>Duurzaamheid</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="label-row" for="contract">
+              <span>Contracttype</span>
+              <button type="button" class="info-btn" aria-label="Info contract"
+                data-tooltip="Fulltime/Parttime voorkeur.">i</button>
+            </label>
+            <select id="contract">
+              <option>Alle</option>
+              <option>Fulltime</option>
+              <option>Parttime</option>
+            </select>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn" type="submit">Bereken</button>
+            <button class="btn secondary" type="button" id="btnReset">Reset</button>
+          </div>
+        </form>
+
+        <div class="fav-panel">
+          <a href="../pages/favorieten-vacatures.html">
+            <span>Favorieten</span>
+            <span class="fav-chip"><span id="favCountJobs">0</span></span>
+          </a>
+        </div>
+      </aside>
+  
+      <section class="results" aria-label="Resultaten">
+        <div id="results" class="list"></div>
+      </section>
+    </div>
+
+  
+    
+    <div class="modal" id="modal" hidden>
+      <div class="modal__backdrop" data-close></div>
+      <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal__header">
+          <h3 id="modalTitle" style="margin:.25rem 0">Meer info</h3>
+          <button class="modal__close" data-close aria-label="Sluiten">╟-</button>
+        </div>
+        <div id="modalBody" class="modal__body"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../data/match.data.js" defer></script>
+
+  <script defer>
+    const API_BASE = (typeof window !== "undefined" && window.STARWA_API_BASE)
+      ? window.STARWA_API_BASE
+      : (location.port === "3000" ? "" : `${location.protocol}//${location.hostname}:3000`);
+
+    const resultsEl = document.getElementById("results");
+    const form = document.getElementById("matchForm");
+    const btnReset = document.getElementById("btnReset");
+    const modal = document.getElementById("modal");
+    const modalBody = document.getElementById("modalBody");
+    const favCountEl = document.getElementById("favCountJobs");
+
+    const fmt = (s) => String(s || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+
+    const updateHeaderProfileChip = (user = {}) => {
+      const btn = document.getElementById("headerProfileBtn");
+      if (!btn) return;
+      const name =
+        user?.naam ||
+        user?.contactpersoon ||
+        user?.displayName ||
+        user?.email ||
+        "Profiel";
+
+      const nameEl = btn.querySelector(".profile-chip__name");
+      if (nameEl) nameEl.textContent = name;
+    };
+
+    const hydrateHeaderProfile = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/profile/me`, { credentials: "include" });
+        if (res.status === 401) {
+          window.location.assign("/inlog-aanmeld");
+          return;
+        }
+        if (!res.ok) return;
+        const data = await res.json();
+        updateHeaderProfileChip(data.user || {});
+      } catch {}
+    };
+
+    document.getElementById("headerProfileBtn")?.addEventListener("click", () => {
+      window.location.assign("/profiel");
+    });
+
+    // Modal
+    function openModal(html) {
+      modalBody.innerHTML = html;
+      modal.hidden = false;
+      modal.classList.add("active");
+      document.body.classList.add("no-scroll");
+    }
+    function closeModal() {
+      modal.classList.remove("active");
+      modal.hidden = true;
+      modalBody.innerHTML = "";
+      document.body.classList.remove("no-scroll");
+    }
+    modal.addEventListener("click", (e) => {
+      if (e.target.dataset.close !== undefined || e.target.classList.contains("modal__backdrop")) closeModal();
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !modal.hidden) closeModal();
+    });
+
+
+
+    const getFavs = () => { try { return JSON.parse(localStorage.getItem("favorites") || "[]"); } catch { return []; } };
+    const setFavs = (a) => localStorage.setItem("favorites", JSON.stringify(a));
+    const favKey = (type, srcId) => `${type}:${srcId}`;
+    const isFav = (type, srcId) => getFavs().some((f) => f.type === type && f.srcId === srcId);
+    const toggleFav = (type, srcId, payload) => {
+      let favs = getFavs();
+      const key = favKey(type, srcId);
+      if (isFav(type, srcId)) {
+        favs = favs.filter((f) => favKey(f.type, f.srcId) !== key);
+      } else {
+        favs.push({ type, id: key, srcId, data: payload });
+      }
+      setFavs(favs);
+      updateFavCount();
+    };
+    function updateFavCount() {
+      const c = getFavs().filter((f) => f.type === "vacature").length;
+      if (favCountEl) favCountEl.textContent = c;
+    }
+
+    const getApplied = () => { try { return JSON.parse(localStorage.getItem("appliedVacatures") || "[]"); } catch { return []; } };
+    const setAppliedList = (items = []) => localStorage.setItem("appliedVacatures", JSON.stringify(items));
+    const isApplied = (id) => getApplied().includes(String(id));
+    const addApplied = (id) => {
+      const list = getApplied();
+      const key = String(id);
+      if (!list.includes(key)) {
+        list.push(key);
+        setAppliedList(list);
+      }
+    };
+
+    async function submitApplication(v, motivatie) {
+      const payload = { vacancy_id: v.id, motivatie };
+      const res = await fetch(`${API_BASE}/api/sollicitaties`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Kon sollicitatie niet versturen");
+      return data;
+    }
+
+    function openApplyModal(v) {
+      openModal(`
+        <form id="applyForm">
+          <div class="detail-grid">
+            <div>
+              <h3>Solliciteren op: ${fmt(v.title)}</h3>
+              <p><strong>Bedrijf:</strong> ${fmt(v.company)}</p>
+              <p class="text-muted" style="margin:.25rem 0 1rem">We gebruiken je ingelogde account.</p>
+            </div>
+            <div>
+              <label style="display:block;margin-top:.5rem">Motivatie (optioneel)<br>
+                <textarea id="motivationField" rows="4" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px"></textarea>
+              </label>
+            </div>
+          </div>
+          <p id="applyStatus" aria-live="polite" style="min-height:1.2rem;margin-top:.5rem;color:#6b7280"></p>
+          <div class="modal__footer" style="padding:0;margin-top:.75rem">
+            <button type="button" class="modal__close" data-close>Annuleren</button>
+            <button type="submit" id="submitApplicationBtn" class="modal__close">Verstuur</button>
+          </div>
+        </form>
+      `);
+
+      document.getElementById("applyForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const statusEl = document.getElementById("applyStatus");
+        const btn = document.getElementById("submitApplicationBtn");
+        statusEl.textContent = "Sollicitatie wordt verstuurd...";
+        btn.disabled = true;
+
+        submitApplication(v, document.getElementById("motivationField").value)
+          .then(() => {
+            addApplied(v.id);
+            computeAndRenderFromForm();
+            openModal(`<h3>Sollicitatie verzonden &#9203;</h3><p>Je sollicitatie op <strong>${fmt(v.title)}</strong> is geregistreerd.</p><div class="modal__footer"><button class="modal__close" data-close>Sluiten</button></div>`);
+          })
+          .catch((err) => {
+            statusEl.textContent = err?.message || "Er ging iets mis. Probeer opnieuw.";
+            statusEl.style.color = "#b91c1c";
+            btn.disabled = false;
+          });
+      });
+    }
+
+    function liWithIcon(text) {
+      const cleaned = String(text || "").trim();
+      const isOk = /matcht|exact|overeen/i.test(cleaned) && !/anders|wijkt/i.test(cleaned);
+      return `<li class="${isOk ? "why-ok" : ""}">${fmt(cleaned)}</li>`;
+    }
+
+    function render(matches) {
+      if (!matches || !matches.length) {
+        resultsEl.innerHTML = `
+          <div class="card vacancy-card empty-state">
+            <div>
+              <div class="empty-title">Geen resultaten</div>
+              <div class="empty-text">Pas filters aan en klik op “Bereken”.</div>
+            </div>
+          </div>`;
+        return;
+      }
+
+      resultsEl.innerHTML = matches.map((m) => {
+        const saved = isFav("vacature", m.id);
+        const appliedBackend = (m.applied_by_me == 1 || m.applied === true || m.sollicitatie_status === "ingediend");
+        const applied = appliedBackend || isApplied(m.id);
+        const score = Math.max(0, Math.min(100, Math.round(Number(m.score ?? 0) || 0)));
+
+        return `
+        <div class="card vacancy-card">
+          <div class="vacancy-header">
+            <div>
+              <p class="eyebrow">Vacature</p>
+              <h2>${fmt(m.title || "Vacature")}</h2>
+              <p class="vacancy-summary">${fmt(m.company || "-")}</p>
+            </div>
+
+            <div class="score-cluster">
+              <div class="match-badge">
+                <span>${score}%</span>
+                <p>Matchscore</p>
+              </div>
+              <div class="progress" aria-label="Matchpercentage ${score}%">
+                <div class="bar" style="width:${score}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <dl class="info-grid">
+            <div><dt>Locatie</dt><dd>${fmt(m.locatie || "-")}</dd></div>
+            <div><dt>Uren</dt><dd>${fmt(m.uren || "-")}u</dd></div>
+            <div><dt>Functie</dt><dd>${fmt(m.functie || "-")}</dd></div>
+            <div><dt>Sector</dt><dd>${fmt(m.sector || "-")}</dd></div>
+          </dl>
+
+          <div class="why">
+            <h3>Waarom</h3>
+            <ul>${(m.why || []).slice(0, 4).map(liWithIcon).join("")}</ul>
+          </div>
+
+          <div class="detail-panel" data-detail hidden></div>
+
+          <div class="vacancy-footer">
+            <div class="card-divider" role="presentation"></div>
+            <div class="vacancy-actions">
+              <button class="btn secondary" data-id="${m.id}" data-action="info" type="button">Meer info</button>
+              <div class="btn-group">
+                <button class="btn" data-id="${m.id}" data-action="apply" type="button" ${applied ? "disabled" : ""}>
+                  ${applied ? "Gesolliciteerd" : "Solliciteren"}
+                </button>
+                <button class="btn ghost fav ${saved ? "saved" : ""}" data-id="${m.id}" data-action="fav" type="button">
+                  ${saved ? "Opgeslagen" : "Favoriet"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }).join("");
+
+      resultsEl.querySelectorAll('[data-action="info"]').forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.dataset.id);
+          const v = matches.find((x) => x.id === id);
+          const d = v.details || {};
+          const card = btn.closest(".card");
+          const panel = card.querySelector("[data-detail]");
+          const isHidden = panel.hasAttribute("hidden");
+
+          if (isHidden) {
+            panel.innerHTML = `
+              <div class="detail-grid">
+                <div>
+                  <h3>Vacature</h3>
+                  <p><strong>${fmt(v.title)}</strong> bij <strong>${fmt(v.company)}</strong></p>
+                  <p>${fmt(v.functie)} • ${fmt(v.locatie)} • ${fmt(v.uren)} uur</p>
+                  <p><strong>Contract:</strong> ${fmt(d.contractType || "-")}</p>
+                  <p><strong>Salaris:</strong> ${fmt(d.salary || "-")}</p>
+                </div>
+              </div>`;
+            panel.removeAttribute("hidden");
+            card.classList.add("detail-open");
+            btn.textContent = "Minder info";
+          } else {
+            panel.setAttribute("hidden", "");
+            panel.innerHTML = "";
+            card.classList.remove("detail-open");
+            btn.textContent = "Meer info";
+          }
+        });
+      });
+
+      resultsEl.querySelectorAll('[data-action="apply"]').forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.dataset.id);
+          if (isApplied(id)) return;
+          openApplyModal(matches.find((x) => x.id === id));
+        });
+      });
+
+      resultsEl.querySelectorAll('[data-action="fav"]').forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.dataset.id);
+          const v = matches.find((x) => x.id === id);
+
+          toggleFav("vacature", v.id, {
+            id: v.id,
+            title: v.title,
+            company: v.company,
+            locatie: v.locatie,
+            uren: v.uren,
+            functie: v.functie,
+            sector: v.sector,
+            contractType: v.contractType,
+            score: v.score,
+            why: v.why,
+          });
+
+          const saved = isFav("vacature", v.id);
+          btn.classList.toggle("saved", saved);
+          btn.textContent = saved ? "Opgeslagen" : "Favoriet";
+        });
+      });
+    }
+
+  
+    let LIVE_VACATURES = [];
+
+    function mapVacancyToMatch(v, filters) {
+      const f = filters || {};
+      let score = 0;
+      const why = [];
+
+      const role = ((v.functietitel || v.title || v.categorie || v.sector || "").trim());
+      const loc = (v.locatie || v.location || "").trim();
+      const urenVal = v.uren_per_week ?? v.hours_per_week ?? v.uren ?? "";
+      const uren = urenVal === "" ? "" : String(urenVal);
+      const sector = (v.categorie || v.sector || "").trim();
+
+      if (f.functie && role && f.functie === role) { score += 25; why.push(`Functie matcht`); } else if (f.functie) { why.push(`Functie wijkt af`); }
+      if (f.locatie && loc && f.locatie === loc) { score += 25; why.push(`Locatie matcht`); } else if (f.locatie) { why.push(`Locatie wijkt af`); }
+      if (f.uren && uren && f.uren === uren) { score += 25; why.push(`Uren matcht`); } else if (f.uren) { why.push(`Uren wijkt af`); }
+      if (f.sector && f.sector !== "Alle" && sector) {
+        if (f.sector === sector) { score += 15; why.push(`Sector matcht`); }
+        else why.push(`Sector wijkt af`);
+      }
+
+      score = Math.max(0, Math.min(100, score));
+
+      return {
+        id: v.id ?? v.vacature_id ?? Math.floor(Math.random() * 1e9),
+        title: v.functietitel || v.title || "Vacature",
+        company: v.company_name || v.company || "-",
+        functie: role || "-",
+        locatie: loc || "-",
+        uren: uren || "-",
+        sector: sector || "-",
+        contractType: (v.dienstverband || v.contractType || "-"),
+        score,
+        why,
+        details: {
+          salary: (v.salaris_min || v.salaris_max) ? `${v.salaris_min || ""} - ${v.salaris_max || ""}` : "-",
+          contractType: (v.dienstverband || v.contractType || "-"),
+        },
+      };
+    }
+
+    async function loadLiveVacancies() {
+      try {
+        const res = await fetch(`${API_BASE}/api/vacatures?active=1&limit=100`, { credentials: "include" });
+        if (!res.ok) throw new Error("Kon vacatures niet laden");
+        const data = await res.json();
+        LIVE_VACATURES = Array.isArray(data.items) ? data.items : [];
+        render(LIVE_VACATURES.map((v) => mapVacancyToMatch(v, {})));
+      } catch {
+        render(computeMatchesForJobs(getFilters()));
+      }
+    }
+
+    function getFilters() {
+      return {
+        functie: document.getElementById("functie").value,
+        locatie: document.getElementById("locatie").value,
+        uren: document.getElementById("uren").value,
+        sector: document.getElementById("sector").value,
+        contract: document.getElementById("contract").value,
+      };
+    }
+
+    function computeAndRenderFromForm() {
+      if (Array.isArray(LIVE_VACATURES) && LIVE_VACATURES.length) {
+        const f = getFilters();
+        render(LIVE_VACATURES.map((v) => mapVacancyToMatch(v, f)).sort((a, b) => b.score - a.score));
+        return;
+      }
+      render(computeMatchesForJobs(getFilters()));
+    }
+
+    async function init() {
+      hydrateHeaderProfile();
+      updateFavCount();
+      loadLiveVacancies();
+    }
+
+    form.addEventListener("submit", (e) => { e.preventDefault(); computeAndRenderFromForm(); });
+
+    btnReset.addEventListener("click", () => {
+      form.reset();
+      computeAndRenderFromForm();
+    });
+
+    window.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>

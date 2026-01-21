@@ -1,0 +1,83 @@
+@import "./theme.css";
+
+:root {
+  /* Bridge old token names to the dashboard theme variables */
+  --main-color: var(--backgroundColor);
+  --second-color: var(--primaryColor);
+  --third-color: var(--accentColor);
+  --text-color: var(--textColor);
+  --background-color: var(--backgroundColor);
+  --font-base: var(--fontFamily);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--fontFamily);
+  color: var(--textColor);
+  background: linear-gradient(180deg, var(--gradientStart) 0%, var(--gradientEnd) 100%) no-repeat fixed;
+  background-color: var(--gradientEnd);
+  line-height: 1.6;
+}
+
+button {
+  font-family: inherit;
+}
+
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: none;
+  border-radius: 0 0 32px 32px;
+  padding: 28px 40px;
+  background: transparent;
+}
+
+.main-header .logo {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--textColor);
+  letter-spacing: 0.04em;
+  /* Add hover effect to indicate it's clickable */
+  transition: opacity 0.2s ease;
+}
+
+.main-header .logo:hover {
+  opacity: 0.8;
+}
+
+.logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--textColor);
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.24);
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.logout:hover {
+  background: rgba(255, 255, 255, 0.38);
+  transform: translateY(-1px);
+}
+
+.logout-logo {
+  width: 26px;
+  height: 26px;
+}
+
+.logout-text {
+  font-size: 14px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

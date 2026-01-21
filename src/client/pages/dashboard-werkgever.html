@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Werkgever</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/berichten.css">
+  <link rel="stylesheet" href="../css/dashboard-werkgever.css">
+</head>
+<body class="employer-dashboard">
+
+  <header class="mp-header">
+    <div class="mp-header__inner">
+      <a class="ghost-button ghost-button--back" href="/dashboard-werkgever.html">Terug naar Dashboard</a>
+
+      <div class="mp-header__title">
+        <div>
+          <h1>Dashboard Werkgever</h1>
+          <span class="mp-header__subtitle">Overzicht</span>
+        </div>
+      </div>
+
+      <div class="mp-header__actions">
+        <button type="button" class="ghost-button" id="headerProfileBtn">Profiel</button>
+        <a href="inlog-aanmeld.html" class="logout" id="logoutBtn">
+          <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+          <span class="logout-text">Log uit</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard container">
+    <section class="page-actions">
+      <button class="btn" id="openVacatureModal">Vacature maken</button>
+      <button class="btn secondary" id="openCompanyModal">Bedrijfsprofiel</button>
+    </section>
+    <section class="profile-section">
+      <div class="profile-card card" id="profileCard">
+        <div class="profile-avatar" id="profileAvatar">WG</div>
+        <div class="profile-info">
+          <h2 id="profileName">Jouw Bedrijf</h2>
+          <p>Beheer je bedrijfsprofiel en vacatures</p>
+          <div class="profile-meta"><span class="badge" id="userIdBadge" aria-label="Employer ID" hidden></span></div>
+          <!-- Quick action: create new vacancy -->
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="cards-container">
+      <!-- Kandidaten -->
+      <div class="card candidates">
+        <div class="card-header">
+          <h2>Kandidaten</h2>
+          <button class="btn view-all" data-link="candidates">Bekijk alle kandidaten</button>
+        </div>
+        <div class="card-body card-content">
+          <div class="candidate" data-id="c1">
+            <h3>Alex Janssen</h3>
+            <p>Rol: Frontend Developer • Locatie: Amsterdam</p>
+            <span class="badge success">87% match</span>
+          </div>
+          <div class="candidate" data-id="c2">
+            <h3>Samira El Amrani</h3>
+            <p>Rol: UX Designer • Locatie: Utrecht</p>
+            <span class="badge">75% match</span>
+          </div>
+          <div class="candidate" data-id="c3">
+            <h3>Kevin de Vries</h3>
+            <p>Rol: Backend Developer • Locatie: Rotterdam</p>
+            <span class="badge success">92% match</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Berichten -->
+      <div class="card messages">
+        <div class="card-header">
+          <h2>Berichten</h2>
+          <button class="btn view-all" data-link="berichten">Bekijk alle berichten</button>
+        </div>
+        <div class="card-body card-content">
+          <div class="message">
+            <h3>Nieuwe sollicitatie</h3>
+            <p>Alex heeft gesolliciteerd op "Frontend Developer".</p>
+            <span class="time">3 uur geleden</span>
+          </div>
+          <div class="message">
+            <h3>Reactie op bericht</h3>
+            <p>Samira: Bedankt voor de uitnodiging! Past dinsdag 10:00?</p>
+            <span class="time">gisteren</span>
+          </div>
+          <div class="message">
+            <h3>Onderhoud gesprek</h3>
+            <p>Teamleider: Kunnen we een kennismakingsgesprek plannen?</p>
+            <span class="time">2 dagen geleden</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vacatures -->
+      <div class="card vacancies">
+        <div class="card-header">
+          <h2>Vacatures</h2>
+          <span class="badge" id="vacanciesCount" aria-live="polite">0</span>
+          <button class="btn view-all" id="refreshVacatures">Vernieuwen</button>
+        </div>
+        <div class="card-body card-content">
+          <div id="vacanciesList" class="vacancies-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Vacature maken Modal -->
+  <div class="modal-backdrop" id="vacModalBackdrop"></div>
+  <div class="modal" id="vacModal" aria-hidden="true" role="dialog" aria-labelledby="vacModalTitle">
+    <div class="panel">
+      <div class="panel-header">
+        <h3 id="vacModalTitle">Vacature maken</h3>
+        <button class="btn ghost" id="closeVacatureModal" aria-label="Sluiten">Sluiten</button>
+      </div>
+      <form id="vacatureForm">
+        <input type="hidden" id="vacatureId" />
+        <div class="panel-body grid-2">
+          <div>
+            <label class="label" for="functietitel">Functietitel *</label>
+            <input class="input" id="functietitel" name="functietitel" required />
+          </div>
+          <div>
+            <label class="label" for="categorie">Afdeling / categorie *</label>
+            <select class="select" id="categorie" name="categorie" required>
+              <option value="">Maak een keuze</option>
+              <option>Frontend</option>
+              <option>Backend</option>
+              <option>Design</option>
+              <option>HR</option>
+              <option>Sales</option>
+              <option>Marketing</option>
+              <option>Operations</option>
+            </select>
+          </div>
+          <div>
+            <label class="label" for="locatie">Locatie *</label>
+            <input class="input" id="locatie" name="locatie" required />
+          </div>
+          <div>
+            <label class="label" for="dienstverband">Type dienstverband *</label>
+            <select class="select" id="dienstverband" name="dienstverband" required>
+              <option value="">Maak een keuze</option>
+              <option>Fulltime</option>
+              <option>Parttime</option>
+              <option>Tijdelijk</option>
+              <option>Vast</option>
+              <option>ZZP</option>
+              <option>Stage</option>
+              <option>Oproep</option>
+            </select>
+          </div>
+          <div>
+            <label class="label" for="uren">Aantal uren per week *</label>
+            <input type="number" min="1" class="input" id="uren" name="uren" required />
+          </div>
+          <div class="grid-2 gap-8">
+            <div>
+              <label class="label" for="salarisMin">Salaris min</label>
+              <input type="number" min="0" class="input" id="salarisMin" name="salarisMin" />
+            </div>
+            <div>
+              <label class="label" for="salarisMax">Salaris max</label>
+              <input type="number" min="0" class="input" id="salarisMax" name="salarisMax" />
+            </div>
+          </div>
+          <div>
+            <label class="label" for="opleiding">Opleidingsniveau *</label>
+            <select class="select" id="opleiding" name="opleiding" required>
+              <option value="">Maak een keuze</option>
+              <option>VMBO</option>
+              <option>MBO</option>
+              <option>HBO</option>
+              <option>WO</option>
+            </select>
+          </div>
+          <div>
+            <label class="label" for="ervaring">Ervaring gewenst (jaren) *</label>
+            <input type="number" min="0" max="30" class="input" id="ervaring" name="ervaring" required />
+          </div>
+          <div class="grid-2 span-2">
+            <div>
+              <label class="label">Vaardigheden (tags) *</label>
+              <div class="tag-input" id="skillsBox">
+                <div class="tag-list" id="skillsList"></div>
+                <input class="tag-input-field" id="skillsInput" placeholder="Typ een skill en druk op Enter" />
+              </div>
+            </div>
+          </div>
+          <div class="span-2">
+            <label class="label" for="omschrijving">Functieomschrijving</label>
+            <textarea class="textarea" id="omschrijving" name="omschrijving" rows="5"></textarea>
+          </div>
+          <div>
+            <label class="label" for="startdatum">Startdatum</label>
+            <input type="date" class="input" id="startdatum" name="startdatum" />
+          </div>
+          <div>
+            <label class="label" for="posities">Aantal posities</label>
+            <input type="number" min="1" class="input" id="posities" name="posities" />
+          </div>
+          <div>
+            <label class="label" for="contractduur">Contractduur</label>
+            <select class="select" id="contractduur" name="contractduur">
+              <option value="">Maak een keuze</option>
+              <option>Tijdelijk</option>
+              <option>Vast</option>
+              <option>Project</option>
+              <option>Onbepaald</option>
+            </select>
+          </div>
+          <div>
+            <label class="label" for="contactpersoon">Contactpersoon vacature</label>
+            <input class="input" id="contactpersoon" name="contactpersoon" />
+          </div>
+          <div class="span-2">
+            <label class="label" for="isActive">Status</label>
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" id="isActive" checked />
+              <span>Vacature actief (zichtbaar voor werkzoekenden)</span>
+            </label>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <button type="button" class="btn ghost" id="cancelVacature">Annuleren</button>
+          <button type="button" class="btn danger" id="deleteVacature" hidden>Verwijderen</button>
+          <button type="submit" class="btn" id="saveVacature">Opslaan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bedrijfsprofiel Modal -->
+  <div class="modal-backdrop" id="companyModalBackdrop"></div>
+  <div class="modal" id="companyModal" aria-hidden="true" role="dialog" aria-labelledby="companyModalTitle">
+    <div class="panel">
+      <div class="panel-header">
+        <h3 id="companyModalTitle">Bedrijfsprofiel</h3>
+        <button class="btn ghost" id="closeCompanyModal" aria-label="Sluiten">Sluiten</button>
+      </div>
+      <form id="companyForm">
+        <div class="panel-body grid-2">
+          <div>
+            <label class="label" for="cp_bedrijfsnaam">Bedrijfsnaam *</label>
+            <input class="input" id="cp_bedrijfsnaam" name="bedrijfsnaam" required />
+          </div>
+          <div>
+            <label class="label" for="cp_kvk">KvK-nummer</label>
+            <input class="input" id="cp_kvk" name="kvk_nummer" />
+          </div>
+          <div>
+            <label class="label" for="cp_sector">Sector / branche</label>
+            <input class="input" id="cp_sector" name="sector" />
+          </div>
+          <div>
+            <label class="label" for="cp_grootte">Bedrijfsgrootte</label>
+            <select class="select" id="cp_grootte" name="bedrijfs_grootte">
+              <option value="">Maak een keuze</option>
+              <option>1-10</option>
+              <option>11-50</option>
+              <option>51-200</option>
+              <option>>200</option>
+            </select>
+          </div>
+          <div class="span-2">
+            <label class="label" for="cp_locatie">Locatie (adres)</label>
+            <input class="input" id="cp_locatie" name="locatie_adres" />
+          </div>
+          <div>
+            <label class="label" for="cp_website">Website</label>
+            <input class="input" id="cp_website" name="website" />
+          </div>
+          <div>
+            <label class="label" for="cp_slogan">Bedrijfsslogan</label>
+            <input class="input" id="cp_slogan" name="slogan" />
+          </div>
+          <div class="span-2">
+            <label class="label" for="cp_beschrijving">Bedrijfsbeschrijving</label>
+            <textarea class="textarea" id="cp_beschrijving" name="beschrijving" rows="4"></textarea>
+          </div>
+          <div class="span-2">
+            <label class="label" for="cp_cultuur">Bedrijfscultuur (comma gescheiden)</label>
+            <input class="input" id="cp_cultuur" name="cultuur" placeholder="informeel, innovatief, duurzaam" />
+          </div>
+          <div>
+            <label class="label" for="cp_contact_naam">Contactpersoon (naam)</label>
+            <input class="input" id="cp_contact_naam" name="contactpersoon_naam" />
+          </div>
+          <div>
+            <label class="label" for="cp_contact_email">Contact e-mail</label>
+            <input type="email" class="input" id="cp_contact_email" name="contact_email" />
+          </div>
+        </div>
+        <div class="panel-footer">
+          <button type="button" class="btn ghost" id="cancelCompany">Annuleren</button>
+          <button type="submit" class="btn" id="saveCompany">Opslaan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="../js/dashboard-werkgever.js"></script>
+</body>
+</html>

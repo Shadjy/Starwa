@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kandidaten Matching Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/berichten.css" />
+  <link rel="stylesheet" href="../css/candidates.css" />
+</head>
+<body>
+  <header class="mp-header">
+    <div class="mp-header__inner">
+      <a class="ghost-button ghost-button--back" href="/dashboard-werkgever">Terug naar Dashboard</a>
+
+      <div class="mp-header__title">
+        <div>
+          <h1>Kandidaten</h1>
+          <span class="mp-header__subtitle">Matching overzicht</span>
+        </div>
+      </div>
+
+      <div class="mp-header__actions">
+        <a class="ghost-button" href="/profiel.html">Profiel</a>
+        <a href="/home" class="logout">
+          <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+          <span class="logout-text">Log uit</span>
+        </a>
+      </div>
+    </div>
+  </header>
+  <main class="wrap container">
+
+    <div class="grid layout">
+      <!-- Filters (sticky) -->
+      <aside class="panel sidebar">
+        <form id="matchForm" class="filters">
+          <!-- Gezochte functie -->
+          <label class="label-row">
+            <span>Gezochte functie</span>
+            <button type="button" class="info-btn" data-info="functie" aria-label="Info gezochte functie">
+              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
+                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
+                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+          </label>
+          <select id="functie">
+            <option>Data Analist</option>
+            <option>Developer</option>
+            <option>Project Manager</option>
+          </select>
+
+          <!-- Locatie -->
+          <label class="label-row">
+            <span>Locatie</span>
+            <button type="button" class="info-btn" data-info="locatie" aria-label="Info locatie">
+              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
+                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
+                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+          </label>
+          <select id="locatie">
+            <option>Utrecht</option>
+            <option>Amsterdam</option>
+            <option>Rotterdam</option>
+          </select>
+
+          <!-- Uren per week -->
+          <label class="label-row">
+            <span>Uren per week</span>
+            <button type="button" class="info-btn" data-info="uren" aria-label="Info uren per week">
+              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
+                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
+                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+          </label>
+          <select id="uren">
+            <option>16</option><option>24</option><option>32</option><option>36</option><option selected>40</option>
+          </select>
+
+          <!-- Sector -->
+          <label class="label-row">
+            <span>Sector</span>
+            <button type="button" class="info-btn" data-info="sector" aria-label="Info sector">
+              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
+                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
+                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+          </label>
+          <select id="sector">
+            <option>Alle</option>
+            <option>Finance</option>
+            <option>HealthTech</option>
+            <option>Duurzaamheid</option>
+          </select>
+
+          <!-- Contracttype -->
+          <label class="label-row">
+            <span>Contracttype</span>
+            <button type="button" class="info-btn" data-info="contract" aria-label="Info contracttype">
+              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
+                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
+                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+          </label>
+          <select id="contract">
+            <option>Alle</option>
+            <option>Fulltime</option>
+            <option>Parttime</option>
+          </select>
+
+          <!-- Beschikbaarheid -->
+          <label class="label-row">
+            <span>Beschikbaarheid</span>
+            <button type="button" class="info-btn" data-info="beschikbaarheid" aria-label="Info beschikbaarheid">
+              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
+                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
+                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+          </label>
+          <select id="beschikbaarheid">
+            <option>Alle</option>
+            <option>Per direct</option>
+            <option>1 maand opzegtermijn</option>
+            <option>Binnen 2 weken</option>
+          </select>
+
+          <!-- Belangrijkste vaardigheid -->
+          <label class="label-row">
+            <span>Belangrijkste vaardigheid</span>
+            <button type="button" class="info-btn" data-info="skill" aria-label="Info belangrijkste vaardigheid">
+              <svg viewBox="0 0 24 24" class="info-icon" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/>
+                <circle cx="12" cy="7.5" r="1.2" fill="currentColor"/>
+                <rect x="11" y="10" width="2" height="7" rx="1" fill="currentColor"/>
+              </svg>
+            </button>
+          </label>
+          <select id="skill">
+            <option>Geen voorkeur</option>
+            <option>Python</option>
+            <option>SQL</option>
+            <option>Tableau</option>
+            <option>React</option>
+          </select>
+
+          <div class="btn-row">
+            <button type="submit" class="btn btn--primary">Zoek kandidaten</button>
+            <button type="button" id="btnReset" class="btn btn--secondary">Reset</button>
+          </div>
+        </form>
+
+        <!-- Favorieten link + teller -->
+        <div class="fav-panel">
+          <a href="../pages/favorieten-candidates.html">
+            <span>Favorieten</span>
+            <span class="fav-chip"><span id="favCountCands">0</span></span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- Resultaten -->
+      <section class="panel results">
+        <div id="results" class="list"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal__header">
+        <h3 id="modalTitle" style="margin:.25rem 0">Meer info</h3>
+        <button class="modal__close" data-close aria-label="Sluiten">×</button>
+      </div>
+      <div id="modalBody" class="modal__body"></div>
+    </div>
+  </div>
+
+  <!-- Data & gedrag -->
+  <script src="../data/candidates.data.js" defer></script>
+  <script defer>
+    // API base: same origin on :3000; else backend on :3000
+    const API_BASE = (typeof window !== 'undefined' && window.STARWA_API_BASE)
+      ? window.STARWA_API_BASE
+      : (location.port === '3000' ? '' : `${location.protocol}//${location.hostname}:3000`)
+    const resultsEl = document.getElementById("results");
+    const form = document.getElementById("matchForm");
+    const btnReset = document.getElementById("btnReset");
+    const modal = document.getElementById("modal");
+    const modalBody = document.getElementById("modalBody");
+    const favCountEl = document.getElementById("favCountCands");
+    const fmt = s => String(s||"").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    const displayValue = (value, fallback = "Nog niet ingevuld") => {
+      const text = String(value ?? "").trim();
+      return text ? fmt(text) : fmt(fallback);
+    };
+    const displayHours = (value) => {
+      if (value === null || value === undefined) return fmt("Niet opgegeven");
+      const text = String(value).trim();
+      if (!text) return fmt("Niet opgegeven");
+      const num = Number(text);
+      if (!Number.isNaN(num) && num > 0) return fmt(`${num} uur p/w`);
+      return fmt(text);
+    };
+    const clampScore = (value) => {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return 0;
+      return Math.max(0, Math.min(100, Math.round(num)));
+    };
+    const renderSkillsChips = (skills = []) => {
+      if (Array.isArray(skills) && skills.length) {
+        return skills.slice(0, 8).map(s => `<span class="chip">${fmt(s)}</span>`).join("");
+      }
+      return `<span class="chip chip--muted">Nog geen vaardigheden</span>`;
+    };
+    const displaySalary = (candidate = {}) => displayValue(candidate?.details?.salaryExpectation || candidate.salaryIndicatie || candidate.salaris, "Nog niet ingevuld");
+    const displayContact = (candidate = {}) => displayValue(candidate?.details?.email || candidate.email || candidate?.details?.phone, "Geen contactgegevens beschikbaar");
+    const renderWhyList = (list = []) => (Array.isArray(list) && list.length ? list.map(liWithIcon).join("") : "<li>Geen toelichting beschikbaar</li>");
+    // Live kandidaten opslag
+    let LIVE_CANDIDATES = [];
+    const mapSeekerToCandidate = (u = {}) => ({
+      id: u.id,
+      name: u.name || u.email || "Kandidaat",
+      currentTitle: u.current_title || u.currentTitle || "",
+      desiredRole: u.desired_role || u.desiredRole || "",
+      locatie: u.locatie || u.city || "",
+      uren: u.uren || u.uren_per_week || "",
+      sector: u.sector || "",
+      contractType: u.contractType || "",
+      beschikbaarheid: u.beschikbaarheid || u.availability || "",
+      salaryIndicatie: u.salary || "",
+      skills: Array.isArray(u.skills) ? u.skills : [],
+      details: { email: u.email },
+      score: Number.isFinite(u.score) ? u.score : 0,
+      why: [],
+    })
+    async function loadLiveCandidates(){
+      try {
+        const res = await fetch(`${API_BASE}/api/candidates?limit=100`, { credentials: 'include' })
+        if (!res.ok) throw new Error('Kon kandidaten niet laden')
+        const data = await res.json()
+        LIVE_CANDIDATES = (data.items||[]).map(r => ({ id:r.id, name:r.name, email:r.email }))
+        // Initieel render zonder filters
+        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
+      } catch (err) {
+        console.warn('Live kandidaten laden mislukt:', err)
+      }
+    }
+
+    function openModal(html){
+      modalBody.innerHTML = html;
+      modal.hidden = false;
+      modal.classList.add("active");
+      document.body.classList.add("no-scroll");
+    }
+    function closeModal(){
+      modal.classList.remove("active");
+      modal.hidden = true;
+      modalBody.innerHTML = "";
+      document.body.classList.remove("no-scroll");
+    }
+    modal.addEventListener("click",(e)=>{ if (e.target.dataset.close !== undefined || e.target.classList.contains("modal__backdrop")) closeModal(); });
+    window.addEventListener("keydown",(e)=>{ if(e.key === "Escape" && !modal.hidden) closeModal(); });
+
+    const filterInfo = {
+      functie:{weight:28,reason:"Match tussen gezochte rol en kandidaatprofiel."},
+      locatie:{weight:18,reason:"Nabijheid/woonplaats voor reistijd & aanwezigheid."},
+      uren:{weight:16,reason:"Beschikbare uren t.o.v. gewenste contractomvang."},
+      sector:{weight:10,reason:"Domeinkennis kan inwerken versnellen."},
+      contract:{weight:8,reason:"Voorkeur kandidaat vs. aangeboden vorm."},
+      beschikbaarheid:{weight:8,reason:"Hoe snel kan iemand starten."},
+      skill:{weight:12,reason:"Belangrijkste vaardigheid of stack fit."}
+    };
+    document.querySelectorAll(".info-btn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const key = btn.dataset.info || "filter";
+        const info = filterInfo[key] || {weight:"—",reason:"—"};
+        openModal(`<h3 style="margin:.25rem 0 .5rem">Informatie over filter: ${key}</h3>
+          <p><strong>Weging:</strong> ${info.weight}</p>
+          <p>${info.reason}</p>`);
+      });
+    });
+
+    /* Waarom: alleen ✔ of ☐ */
+    function liWithIcon(text){
+      const cleaned = String(text||"").replace(/^(?:[\s•●○◦▪▫◻☐✅✔✖✗–—\-]+)+/,'').trim();
+      const isOk = /matcht|exact|overeen/i.test(cleaned) && !/anders|wijkt/i.test(cleaned);
+      return `<li class="${isOk?'why-ok':''}">${fmt(cleaned)}</li>`;
+    }
+
+    /* Favorieten */
+    const getFavs = () => { try { return JSON.parse(localStorage.getItem("favorites")||"[]"); } catch { return []; } };
+    const setFavs = (a) => localStorage.setItem("favorites", JSON.stringify(a));
+    const favKey = (type, srcId) => `${type}:${srcId}`;
+    function isFav(type, srcId){ return getFavs().some(f => (f.type===type) && (f.srcId===srcId)); }
+    function toggleFav(type, srcId, payload){
+      let favs = getFavs();
+      const key = favKey(type, srcId);
+      if (isFav(type, srcId)){
+        favs = favs.filter(f => favKey(f.type,f.srcId)!==key);
+      } else {
+        favs.push({ type, id:key, srcId, data:payload });
+      }
+      setFavs(favs);
+      updateFavCount();
+    }
+    function updateFavCount(){ const c = getFavs().filter(f=>f.type==='kandidaat').length; if(favCountEl) favCountEl.textContent = c; }
+
+    const inviteState = { vacancies: null };
+    const formatVacancyLabel = (vacancy = {}) => {
+      const title = vacancy.functietitel || vacancy.title || "Vacature";
+      const locatie = vacancy.locatie || "";
+      return locatie ? `${title} (${locatie})` : title;
+    };
+    async function loadEmployerVacancies(){
+      if (Array.isArray(inviteState.vacancies)) return inviteState.vacancies;
+      const res = await fetch(`${API_BASE}/api/vacatures?mine=1&limit=200`, { credentials: 'include' });
+      if (!res.ok) throw new Error("Kon vacatures niet laden");
+      const data = await res.json();
+      inviteState.vacancies = Array.isArray(data.items) ? data.items : [];
+      return inviteState.vacancies;
+    }
+
+    function openInviteModal(v){
+      openModal(`
+        <form id="inviteForm">
+          <div class="detail-grid">
+            <div>
+              <h3>Uitnodigen: ${fmt(v.name)}</h3>
+              <p><strong>Rol:</strong> ${fmt(v.currentTitle || v.desiredRole || "-")}</p>
+              <label>Vacature<br>
+                <select id="inviteVacancy" required style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px">
+                  <option value="">Vacatures laden...</option>
+                </select>
+              </label>
+            </div>
+            <div>
+              <label style="display:block;margin-top:.5rem">Bericht (optioneel)<br>
+                <textarea id="inviteMessage" rows="4" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px" placeholder="Je bent uitgenodigd om te reageren op deze vacature."></textarea>
+              </label>
+              <p id="inviteStatus" aria-live="polite" style="min-height:1.2rem;margin-top:.5rem;color:#6b7280"></p>
+            </div>
+          </div>
+          <div class="modal__footer" style="padding:0;margin-top:.75rem">
+            <button type="button" class="modal__close" data-close>Annuleren</button>
+            <button type="submit" class="modal__close" id="inviteSubmit">Verstuur</button>
+          </div>
+        </form>
+      `);
+      const vacancySelect = document.getElementById("inviteVacancy");
+      const statusEl = document.getElementById("inviteStatus");
+      const submitBtn = document.getElementById("inviteSubmit");
+      const messageField = document.getElementById("inviteMessage");
+      const candidateId = Number(v?.id);
+
+      if (!candidateId) {
+        statusEl.textContent = "Kandidaat kan niet worden uitgenodigd.";
+        statusEl.style.color = "#b91c1c";
+        submitBtn.disabled = true;
+        return;
+      }
+
+      statusEl.textContent = "Vacatures laden...";
+      statusEl.style.color = "#6b7280";
+      loadEmployerVacancies()
+        .then((vacatures) => {
+          if (!Array.isArray(vacatures) || !vacatures.length) {
+            vacancySelect.innerHTML = `<option value="">Geen vacatures beschikbaar</option>`;
+            statusEl.textContent = "Geen vacatures beschikbaar.";
+            statusEl.style.color = "#b91c1c";
+            submitBtn.disabled = true;
+            return;
+          }
+          vacancySelect.innerHTML = `<option value="">Selecteer vacature</option>` +
+            vacatures.map((vac) => `<option value="${vac.id}">${fmt(formatVacancyLabel(vac))}</option>`).join("");
+          statusEl.textContent = "";
+          submitBtn.disabled = false;
+        })
+        .catch((err) => {
+          console.warn("Vacatures laden mislukt:", err);
+          vacancySelect.innerHTML = `<option value="">Kon vacatures niet laden</option>`;
+          statusEl.textContent = "Kon vacatures niet laden.";
+          statusEl.style.color = "#b91c1c";
+          submitBtn.disabled = true;
+        });
+
+      document.getElementById("inviteForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const vacancyId = Number(vacancySelect.value);
+        if (!vacancyId) {
+          statusEl.textContent = "Selecteer een vacature.";
+          statusEl.style.color = "#b91c1c";
+          return;
+        }
+        statusEl.textContent = "Uitnodiging wordt verstuurd...";
+        statusEl.style.color = "#6b7280";
+        submitBtn.disabled = true;
+        try {
+          const res = await fetch(`${API_BASE}/api/sollicitaties/invite`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              candidate_id: candidateId,
+              vacancy_id: vacancyId,
+              message: messageField.value.trim(),
+            }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || "Kon uitnodiging niet versturen");
+          openModal(`<h3>Uitnodiging verzonden</h3><p>Uitnodiging succesvol verzonden, kandidaat is geinformeerd.</p><div class="modal__footer"><button class="modal__close" data-close>Sluiten</button></div>`);
+        } catch (err) {
+          statusEl.textContent = err?.message || "Er ging iets mis. Probeer het opnieuw.";
+          statusEl.style.color = "#b91c1c";
+          submitBtn.disabled = false;
+        }
+      });
+    }
+    function render(matches){
+      if(!matches.length){
+        resultsEl.innerHTML = `
+          <div class="card candidate-card empty-state">
+            <div>
+              <div class="empty-title">Geen kandidaten gevonden</div>
+              <div class="empty-text">Pas de filters links aan en klik op “Zoek kandidaten”.</div>
+            </div>
+          </div>`;
+        return;
+      }
+      resultsEl.innerHTML = matches.map(m=>{
+        const saved = isFav("kandidaat", m.id);
+        const score = clampScore(m.score);
+        const location = displayValue(m.locatie, "Niet opgegeven");
+        const availability = displayValue(m.beschikbaarheid, "Nog niet bekend");
+        const contract = displayValue(m.contractType, "Niet opgegeven");
+        const sector = displayValue(m.sector, "Niet opgegeven");
+        const salary = displaySalary(m);
+        const hours = displayHours(m.uren);
+        const roleLine = displayValue(m.currentTitle || m.desiredRole, "Rol nog niet ingevuld");
+        const contact = displayContact(m);
+        return `
+        <div class="card candidate-card">
+          <div class="candidate-header">
+            <div>
+              <p class="eyebrow">Kandidaat</p>
+              <h2>${displayValue(m.name, "Naam onbekend")}</h2>
+              <p class="candidate-role">${roleLine}</p>
+              <p class="candidate-summary">${contact}</p>
+            </div>
+            <div class="score-cluster">
+              <div class="match-badge">
+                <span>${score}%</span>
+                <p>Matchscore</p>
+              </div>
+              <div class="progress" aria-label="Matchpercentage ${score}%">
+                <div class="bar" style="width:${score}%"></div>
+              </div>
+            </div>
+          </div>
+          <dl class="info-grid">
+            <div>
+              <dt>Locatie</dt>
+              <dd>${location}</dd>
+            </div>
+            <div>
+              <dt>Beschikbaarheid</dt>
+              <dd>${availability}</dd>
+            </div>
+            <div>
+              <dt>Contract</dt>
+              <dd>${contract}</dd>
+            </div>
+            <div>
+              <dt>Sector</dt>
+              <dd>${sector}</dd>
+            </div>
+            <div>
+              <dt>Uren per week</dt>
+              <dd>${hours}</dd>
+            </div>
+            <div>
+              <dt>Salarisindicatie</dt>
+              <dd>${salary}</dd>
+            </div>
+          </dl>
+          <div class="skills-row">
+            <span class="skills-label">Vaardigheden</span>
+            <div class="skills-chips">${renderSkillsChips(m.skills)}</div>
+          </div>
+          <div class="why">
+            <h3>Waarom deze score</h3>
+            <ul>${renderWhyList(m.why)}</ul>
+          </div>
+          <div class="candidate-footer">
+            <div class="card-divider" role="presentation"></div>
+            <div class="candidate-actions">
+              <button class="btn secondary" data-id="${m.id}" data-action="info" type="button">Meer info</button>
+              <div class="btn-group">
+                <button class="btn" data-id="${m.id}" data-action="invite" type="button">Uitnodigen</button>
+                <button class="btn ghost fav ${saved?'saved':''}" data-id="${m.id}" data-action="fav" type="button">${saved?'Opgeslagen':'Favoriet'}</button>
+              </div>
+            </div>
+          </div>
+        </div>`}).join("");
+
+      /* binds */
+      resultsEl.querySelectorAll('[data-action="info"]').forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = Number(btn.dataset.id);
+          const v = matches.find(x => x.id === id);
+          const d = v.details || {};
+          const links = [];
+          if (d.cvUrl) links.push(`<li>CV: <a href="${fmt(d.cvUrl)}" target="_blank" rel="noopener">Open</a></li>`);
+          if (d.portfolio) links.push(`<li>Portfolio: <a href="${fmt(d.portfolio)}" target="_blank" rel="noopener">${fmt(d.portfolio)}</a></li>`);
+          if (d.github) links.push(`<li>GitHub: <a href="${fmt(d.github)}" target="_blank" rel="noopener">${fmt(d.github)}</a></li>`);
+          openModal(`
+            <div class="detail-grid">
+              <div>
+                <h3>Kandidaat</h3>
+                <p><strong>${fmt(v.name)}</strong> — ${fmt(v.currentTitle || v.desiredRole)}</p>
+                <p>${fmt(v.locatie)} • ${fmt(v.uren)} uur • ${fmt(v.sector)}</p>
+                <p><strong>Beschikbaarheid:</strong> ${fmt(v.beschikbaarheid)}</p>
+                <p><strong>Salarisindicatie:</strong> ${fmt(d.salaryExpectation || "—")}</p>
+                <p><strong>Talen:</strong> ${(d.languages||[]).join(", ") || "—"}</p>
+              </div>
+              <div>
+                <h3>Skills</h3>
+                <ul>${(v.skills||[]).map(s=>`<li>${fmt(s)}</li>`).join("") || "<li>—</li>"}</ul>
+                <h3 style="margin-top:.75rem">Ervaring</h3>
+                <ul>${(d.experience||[]).map(e=>`<li>${fmt(e)}</li>`).join("") || "<li>—</li>"}</ul>
+              </div>
+              <div>
+                <h3>Links & contact</h3>
+                <ul>
+                  ${links.join("") || "<li>—</li>"}
+                  <li>Email: <a href="mailto:${fmt(d.email)}">${fmt(d.email || "—")}</a></li>
+                  <li>Tel: ${fmt(d.phone || "—")}</li>
+                </ul>
+              </div>
+              <div>
+                <h3>Motivatie/notes</h3>
+                <p>${fmt(d.notes || "—")}</p>
+              </div>
+            </div>`);
+        });
+      });
+
+      resultsEl.querySelectorAll('[data-action="invite"]').forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = Number(btn.dataset.id);
+          openInviteModal(matches.find(x=>x.id===id));
+        });
+      });
+
+      resultsEl.querySelectorAll('[data-action="fav"]').forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = Number(btn.dataset.id);
+          const v = matches.find(x=>x.id===id);
+          toggleFav("kandidaat", v.id, {
+            id:v.id, name:v.name, currentTitle:v.currentTitle, desiredRole:v.desiredRole,
+            locatie:v.locatie, beschikbaarheid:v.beschikbaarheid, uren:v.uren, sector:v.sector,
+            contractType:v.contractType, skills:v.skills, score:v.score, why:v.why
+          });
+          const saved = isFav("kandidaat", v.id);
+          btn.classList.toggle('saved', saved);
+          btn.textContent = saved ? 'Opgeslagen' : 'Favoriet';
+        });
+      });
+    }
+
+    const hasLiveCandidates = () => Array.isArray(LIVE_CANDIDATES) && LIVE_CANDIDATES.length > 0
+
+    function computeAndRenderFromForm({ allowLive = true } = {}){
+      if (allowLive && hasLiveCandidates()){
+        // Voor nu: toon live kandidaten zonder complexe scoring (komt later)
+        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
+        return
+      }
+      // Fallback: statische dataset met scoring
+      const data = computeMatchesForCandidates({
+        functie: document.getElementById("functie").value,
+        locatie: document.getElementById("locatie").value,
+        uren: document.getElementById("uren").value,
+        sector: document.getElementById("sector").value,
+        contract: document.getElementById("contract").value,
+        beschikbaarheid: document.getElementById("beschikbaarheid").value,
+        skill: document.getElementById("skill").value
+      })
+      render(data)
+    }
+
+    function init(){ updateFavCount(); loadLiveCandidates(); }
+    form.addEventListener("submit", e=>{ e.preventDefault(); computeAndRenderFromForm({ allowLive: false }); });
+    btnReset.addEventListener("click", ()=>{
+      if (hasLiveCandidates()) {
+        render(LIVE_CANDIDATES.map(mapSeekerToCandidate))
+      } else {
+        render([])
+      }
+    });
+    window.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>

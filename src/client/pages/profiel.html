@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profiel - Starwa</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/profiel.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a class="app-header__logo" href="/dashboard" aria-label="Ga naar dashboard">
+        <img src="../assests/starwaster.png" alt="Starwa">
+      </a>
+      <div class="app-header__title">
+        <h1>Profiel</h1>
+      </div>
+      <div class="app-header__center">
+        <button class="profile-chip" id="headerProfileBtn" type="button" aria-label="Open profiel" data-avatar="">
+          <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
+            <img src="" alt="" />
+            <span class="profile-chip__initials">LJ</span>
+          </span>
+          <span class="profile-chip__name">Leo de Jong</span>
+        </button>
+        <a class="profile-chip message-chip" href="/berichten1" aria-label="Open berichten">
+          <span class="message-chip__icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+              <path d="M3.25 4.75h13.5c.55 0 1 .45 1 1v8.5c0 .55-.45 1-1 1h-4.5l-3.25 2.5V15.25H3.25c-.55 0-1-.45-1-1v-8.5c0-.55.45-1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="profile-chip__name">Berichten</span>
+          <span class="message-chip__badge" data-unread="1" aria-live="polite">1</span>
+        </a>
+      </div>
+      <a href="/home" class="logout app-header__logout">
+        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+        <span class="logout-text">Log uit</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="profile-page">
+    <!-- Personal info -->
+    <section class="profile-section">
+      <h2>Persoonlijke Informatie</h2>
+      <div class="profile-card">
+        <div class="profile-info">
+          <label for="fullName">Volledige naam:</label>
+          <input type="text" id="fullName" value="Leo" disabled>
+
+          <label for="email">E-mailadres:</label>
+          <input type="email" id="email" value="leo@outlook.com" disabled>
+
+          <label for="phone">Telefoonnummer:</label>
+          <input type="text" id="phone" value="123-4567890" disabled>
+
+          <label for="address">Adres:</label>
+          <input type="text" id="address" value="Niet ingevuld" disabled>
+
+          <label for="city">Woonplaats:</label>
+          <input type="text" id="city" value="Niet ingevuld" disabled>
+        </div>
+      </div>
+    </section>
+
+<!-- opleiding -->
+    <section class="profile-section">
+      <h2>Ervaring & Opleiding</h2>
+      <div class="profile-card">
+        <div class="profile-info">
+          <label for="degree">Hoogste opleidingsniveau:</label>
+          <input type="text" id="degree" value="Niet ingevuld" disabled>
+
+          <label for="workExperience">Jaren werkervaring:</label>
+          <input type="text" id="workExperience" value="Niet ingevuld" disabled>
+
+          <label for="workWishes">Werkwensen:</label>
+          <textarea id="workWishes" disabled>Niet ingevuld</textarea>
+
+          <label for="workLocation">Gewenste werkplek:</label>
+          <input type="text" id="workLocation" value="Niet ingevuld" disabled>
+
+          <label for="workHours">Gewenste werkuren:</label>
+          <input type="text" id="workHours" value="Niet ingevuld" disabled>
+        </div>
+      </div>
+    </section>
+
+    <section class="profile-footer">
+      <button class="edit-button" id="editButton">Bewerken</button>
+      <button class="save-button" id="saveButton" disabled>Sla op</button>
+    </section>
+  </main>
+
+  <script src="../js/profiel.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll(".message-chip__badge").forEach((badge) => {
+        const count = Number(badge.dataset.unread || badge.textContent || 0);
+        const displayValue = count > 9 ? "9+" : String(count);
+        badge.textContent = displayValue;
+        badge.classList.toggle("is-max", count > 9);
+        badge.classList.toggle("is-empty", count === 0);
+        badge.setAttribute("aria-label", `${count} ongelezen berichten`);
+      });
+    })();
+  </script>
+</body>
+</html>

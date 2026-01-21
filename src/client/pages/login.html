@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inloggen - TalentMatch</title>
+  <link rel="stylesheet" href="../css/global1.css" />
+  <link rel="stylesheet" href="../css/theme1.css" />
+  <link rel="stylesheet" href="../css/auth1.css" />
+</head>
+<body class="auth-page">
+  <main class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+          </svg>
+        </div>
+        <h1 class="auth-title">Welkom terug</h1>
+        <p class="auth-subtitle">Log in op je TalentMatch account</p>
+      </div>
+
+      <form id="login-form" class="auth-form">
+        <div class="form-group">
+          <label for="email">E-mailadres</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="jouw@email.nl" 
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Wachtwoord</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="••••••••" 
+            required
+            autocomplete="current-password"
+          />
+        </div>
+
+        <button type="submit" class="auth-button">Inloggen</button>
+
+        <p class="auth-link">
+          Nog geen account? <a href="/register" class="auth-link-text">Registreer hier</a>
+        </p>
+      </form>
+
+      <div id="error-message" class="error-message" role="alert" aria-live="assertive"></div>
+    </div>
+  </main>
+
+  <script src="../js/login.js"></script>
+</body>
+</html>

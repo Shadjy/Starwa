@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vragenlijst</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/vragenlijst.css">
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo">Starwa</div>
+    <div class="header-actions">
+      <a href="/dashboard" class="back-button">Terug naar Dashboard</a>
+      <a href="/home" class="logout">
+        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+        <span class="logout-text">Log uit</span>
+      </a>
+    </div>
+  </header>
+  <div class="container">
+    <div class="progress-container" aria-hidden="true">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="page active" id="page1">
+      <h2>Vraag 1</h2>
+      <p>Wat is je gewenste functie?</p>
+      <input type="text" id="functie" name="functie" placeholder="Bijv. Verpleegkundige" autocomplete="off">
+    </div>
+
+    <div class="page" id="page2">
+      <h2>Vraag 2</h2>
+      <p>Wat is je leeftijd?</p>
+      <input type="number" id="leeftijd" name="leeftijd" placeholder="Bijv. 25" min="15" max="100">
+    </div>
+
+    <div class="page" id="page3">
+      <h2>Vraag 3</h2>
+      <p>Wat is je hoogst behaalde opleidingsniveau?</p>
+      <label><input type="radio" name="opleiding" value="MBO"><span>MBO</span></label>
+      <label><input type="radio" name="opleiding" value="HBO"><span>HBO</span></label>
+      <label><input type="radio" name="opleiding" value="WO"><span>WO</span></label>
+    </div>
+
+    <div class="page" id="page4">
+      <h2>Vraag 4</h2>
+      <p>Hoeveel jaar werkervaring heb je?</p>
+      <label><input type="radio" name="ervaring" value="0-2"><span>0-2 jaar</span></label>
+      <label><input type="radio" name="ervaring" value="3-5"><span>3-5 jaar</span></label>
+      <label><input type="radio" name="ervaring" value="6+"><span>6+ jaar</span></label>
+    </div>
+
+    <div class="page" id="page5">
+      <h2>Vraag 5</h2>
+      <p>In welke stad woon je?</p>
+      <input type="text" id="stad" name="stad" placeholder="Bijv. Utrecht" autocomplete="address-level2">
+    </div>
+
+    <div class="page" id="page6">
+      <h2>Vraag 6</h2>
+      <p>In welke sector wil je het liefst werken?</p>
+      <label><input type="radio" name="sector" value="ICT"><span>ICT</span></label>
+      <label><input type="radio" name="sector" value="Zorg"><span>Zorg</span></label>
+      <label><input type="radio" name="sector" value="Onderwijs"><span>Onderwijs</span></label>
+      <label><input type="radio" name="sector" value="Techniek"><span>Techniek</span></label>
+    </div>
+
+    <div class="page" id="page7">
+      <h2>Vraag 7</h2>
+      <p>Wat zijn je sterke punten?</p>
+      <input type="text" id="sterkePunten" name="sterkePunten" placeholder="Bijv. Probleemoplossend, Communicatief" autocomplete="off">
+    </div>
+
+    <div class="page" id="page8">
+      <h2>Vraag 8</h2>
+      <p>Wat motiveert jou het meest in je werk?</p>
+      <label><input type="radio" name="motivatie" value="Geld"><span>Goed salaris</span></label>
+      <label><input type="radio" name="motivatie" value="Zinvol werk"><span>Zinvol werk</span></label>
+      <label><input type="radio" name="motivatie" value="Team"><span>Leuk team</span></label>
+      <label><input type="radio" name="motivatie" value="Ontwikkeling"><span>Persoonlijke groei</span></label>
+    </div>
+
+    <div class="page" id="page9">
+      <h2>Vraag 9</h2>
+      <p>In welke taal wil je het liefst werken?</p>
+      <label><input type="radio" name="taal" value="Nederlands"><span>Nederlands</span></label>
+      <label><input type="radio" name="taal" value="Engels"><span>Engels</span></label>
+      <label><input type="radio" name="taal" value="Anders"><span>Anders</span></label>
+    </div>
+
+    <div class="page" id="page10">
+      <h2>Vraag 10</h2>
+      <p>Wat voor type bedrijf spreekt je aan?</p>
+      <label><input type="radio" name="bedrijf" value="Startup"><span>Startup</span></label>
+      <label><input type="radio" name="bedrijf" value="Middelgroot"><span>Middelgroot bedrijf</span></label>
+      <label><input type="radio" name="bedrijf" value="Corporate"><span>Groot bedrijf</span></label>
+    </div>
+
+    <div class="buttons">
+      <button id="prevBtn" type="button" disabled>Vorige</button>
+      <button id="nextBtn" type="button">Volgende</button>
+    </div>
+  </div>
+
+  <script src="../js/vragenlijst.js"></script>
+</body>
+</html>
