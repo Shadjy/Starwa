@@ -12,49 +12,64 @@ function wantsJson(req) {
   return accept.includes('application/json') || xhr.includes('xmlhttprequest') || ct.includes('application/json')
 }
 
+function normalizeRole(role) {
+  const value = String(role || '').toLowerCase()
+  if (value === 'employer' || value === 'werkgever') return 'employer'
+  if (value === 'seeker' || value === 'werkzoeker' || value === 'worker') return 'seeker'
+  return ''
+}
+
 //login to dashbaord
 router.post('/login', async (req, res, next) => {
   try {
-    const { email, password, role: requestedRole } = req.body || {}
+    const { email, password } = req.body || {}
     if (!email || !password) {
-      return wantsJson(req)
-        ? res.status(400).json({ error: 'Ontbrekende velden.' })
-        : res.status(400).send('Ontbrekende velden.')
+      if (wantsJson(req)) {
+        return res.status(400).json({ error: 'Ontbrekende velden.' })
+      }
+      const qs = new URLSearchParams({ error: 'missing' }).toString()
+      return res.redirect(303, `/login?${qs}`)
     }
 
     const rows = await query('SELECT * FROM users WHERE email = ?', [email])
     const user = rows[0]
     if (!user) {
-      return wantsJson(req)
-        ? res.status(401).json({ error: 'Onjuiste inloggegevens.' })
-        : res.status(401).send('Onjuiste inloggegevens.')
+      if (wantsJson(req)) {
+        return res.status(401).json({ error: 'Onjuiste inloggegevens.' })
+      }
+      const qs = new URLSearchParams({ error: 'invalid' }).toString()
+      return res.redirect(303, `/login?${qs}`)
     }
 
     const ok = await bcrypt.compare(password, user.password_hash)
     if (!ok) {
-      return wantsJson(req)
-        ? res.status(401).json({ error: 'Onjuiste inloggegevens.' })
-        : res.status(401).send('Onjuiste inloggegevens.')
+      if (wantsJson(req)) {
+        return res.status(401).json({ error: 'Onjuiste inloggegevens.' })
+      }
+      const qs = new URLSearchParams({ error: 'invalid' }).toString()
+      return res.redirect(303, `/login?${qs}`)
     }
 
-    // Als via UI een rol is gekozen, moet die overeenkomen met het account
-    if (requestedRole && user.role && requestedRole !== user.role) {
+    const normalizedRole = normalizeRole(user.role)
+    if (!normalizedRole) {
+      const error = user.role ? 'role_unknown' : 'role_missing'
+      console.error('[auth] Login zonder geldige rol:', { userId: user.id, role: user.role })
       if (wantsJson(req)) {
-        return res.status(403).json({ error: 'Rol komt niet overeen met dit account.' })
+        return res.status(403).json({ error: 'Account rol ontbreekt of is ongeldig.' })
       }
-      const qs = new URLSearchParams({ error: 'role_mismatch', role: requestedRole }).toString()
-      return res.redirect(303, `/inlog-aanmeld.html?${qs}`)
+      const qs = new URLSearchParams({ error }).toString()
+      return res.redirect(303, `/login?${qs}`)
     }
 
     // Succes
-    const safeUser = { id: user.id, email: user.email, role: user.role, naam: user.naam }
+    const safeUser = { id: user.id, email: user.email, role: normalizedRole, naam: user.naam }
     // Zet eenvoudige cookies voor backend-koppeling (geen sessie nodig)
     res.cookie('uid', String(user.id), { httpOnly: true, sameSite: 'lax', signed: true })
-    res.cookie('role', String(user.role), { httpOnly: true, sameSite: 'lax', signed: true })
+    res.cookie('role', normalizedRole, { httpOnly: true, sameSite: 'lax', signed: true })
     if (wantsJson(req)) {
       return res.json({ message: 'Succesvol ingelogd.', user: safeUser })
     }
-    const redirectTo = user.role === 'employer' ? '/dashboard-werkgever' : '/dashboard'
+    const redirectTo = normalizedRole === 'employer' ? '/dashboard-werkgever' : '/dashboard'
     return res.redirect(303, redirectTo)
   } catch (err) {
     next(err)
@@ -68,7 +83,14 @@ router.get('/login', (_req, res) => {
 //register
 router.post('/register', async (req, res, next) => {
   try {
-    const role = req.body.role || 'seeker' 
+    const rawRole = req.body?.role
+    const role = normalizeRole(rawRole || 'seeker')
+    if (!role) {
+      const qs = new URLSearchParams({ error: 'role_invalid' }).toString()
+      return wantsJson(req)
+        ? res.status(400).json({ error: 'Ongeldige rol.' })
+        : res.redirect(303, `/register?${qs}`)
+    }
     const body = { ...req.body, role }
 
   
@@ -78,15 +100,21 @@ router.post('/register', async (req, res, next) => {
     const missing = required.filter(f => !body[f])
     if (missing.length) {
       const msg = `Ontbrekende velden: ${missing.join(', ')}`
-      return wantsJson(req) ? res.status(400).json({ error: msg }) : res.status(400).send(msg)
+      if (wantsJson(req)) {
+        return res.status(400).json({ error: msg })
+      }
+      const qs = new URLSearchParams({ error: 'missing', role }).toString()
+      return res.redirect(303, `/register?${qs}`)
     }
 
    
     const exists = await query('SELECT id FROM users WHERE email = ?', [body.email])
     if (exists.length) {
-      return wantsJson(req)
-        ? res.status(409).json({ error: 'E-mailadres bestaat al.' })
-        : res.status(409).send('E-mailadres bestaat al.')
+      if (wantsJson(req)) {
+        return res.status(409).json({ error: 'E-mailadres bestaat al.' })
+      }
+      const qs = new URLSearchParams({ error: 'exists', role }).toString()
+      return res.redirect(303, `/register?${qs}`)
     }
 
     const hash = await bcrypt.hash(body.password, SALT_ROUNDS)
@@ -105,17 +133,10 @@ router.post('/register', async (req, res, next) => {
       )
     }
 
-    // Haal nieuw aangemaakte gebruiker op om cookie te zetten
-    const [newUser] = await query('SELECT id, role, email, naam FROM users WHERE email = ? LIMIT 1', [body.email])
-    if (newUser) {
-      res.cookie('uid', String(newUser.id), { httpOnly: true, sameSite: 'lax', signed: true })
-      res.cookie('role', String(newUser.role), { httpOnly: true, sameSite: 'lax', signed: true })
-    }
     if (wantsJson(req)) {
       return res.status(201).json({ message: 'Geregistreerd.' })
     }
-    const redirectAfterRegister = role === 'employer' ? '/dashboard-werkgever' : '/vragenlijst'
-    return res.redirect(303, redirectAfterRegister)
+    return res.redirect(303, '/login?registered=1')
   } catch (err) {
     next(err)
   }

@@ -347,6 +347,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.removeEventListener('keydown', handleEscCompany)
     lastFocusCompany?.focus?.()
   }
+  const shouldOpenCompany = new URLSearchParams(window.location.search).get('openCompany') === '1'
+  if (shouldOpenCompany) {
+    loadCompany().finally(() => openCompany())
+  }
   openCompanyBtn?.addEventListener('click', openCompany)
   closeCompanyBtn?.addEventListener('click', closeCompany)
   cancelCompanyBtn?.addEventListener('click', (e) => { e.preventDefault(); closeCompany() })
@@ -428,7 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       await fetch(`${API_BASE}/api/auth/logout`, { method: 'POST', credentials: 'include' })
     } catch {}
-    const target = (location.port === '3000') ? '/' : '/pages/inlog-aanmeld.html'
+    const target = (location.port === '3000') ? '/' : '/pages/login.html'
     window.location.href = target
   }
   logoutBtn?.addEventListener('click', doLogout)

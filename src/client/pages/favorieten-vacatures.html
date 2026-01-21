@@ -9,24 +9,40 @@
   <link rel="stylesheet" href="../css/favorieten-vacatures.css" />
 </head>
 <body>
-  <header class="mp-header">
-    <div class="mp-header__inner">
-      <a class="ghost-button ghost-button--back" href="/dashboard">Terug naar Dashboard</a>
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a class="app-header__logo" href="/dashboard" aria-label="Ga naar dashboard">
+        <img src="../assests/starwaster.png" alt="Starwa">
+      </a>
 
-      <div class="mp-header__title">
-        <div>
-          <h1>Favorieten – Vacatures</h1>
-          <span class="mp-header__subtitle">Vergelijk vacatures</span>
-        </div>
+      <div class="app-header__title">
+        <h1>Favorieten - Vacatures</h1>
       </div>
 
-      <div class="mp-header__actions">
-        <a class="ghost-button" href="/profiel.html">Profiel</a>
-        <a href="/home" class="logout">
-          <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
-          <span class="logout-text">Log uit</span>
+      <div class="app-header__center">
+        <button class="profile-chip" id="headerProfileBtn" type="button" aria-label="Open profiel" data-avatar="">
+          <span class="profile-chip__avatar" aria-hidden="true" data-has-photo="false">
+            <img src="" alt="" />
+            <span class="profile-chip__initials">LJ</span>
+          </span>
+          <span class="profile-chip__name">Leo de Jong</span>
+        </button>
+
+        <a class="profile-chip message-chip" href="/berichten" aria-label="Ga naar berichten">
+          <span class="message-chip__icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+              <path d="M3.25 4.75h13.5c.55 0 1 .45 1 1v8.5c0 .55-.45 1-1 1h-4.5l-3.25 2.5V15.25H3.25c-.55 0-1-.45-1-1v-8.5c0-.55.45-1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+          <span class="profile-chip__name">Berichten</span>
+          <span class="message-chip__badge" data-unread="0" aria-live="polite">0</span>
         </a>
       </div>
+
+      <a href="/home" class="logout app-header__logout">
+        <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
+        <span class="logout-text">Log uit</span>
+      </a>
     </div>
   </header>
   <main class="wrap">
@@ -47,5 +63,66 @@
   </main>
 
   <script src="../data/favorieten-vacatures.data.js"></script>
+  <script>
+    (() => {
+      const API_BASE = (typeof window !== "undefined" && window.STARWA_API_BASE)
+        ? window.STARWA_API_BASE
+        : (location.port === "3000" ? "" : `${location.protocol}//${location.hostname}:3000`);
+
+      const initialsFromName = (name = "") => {
+        const parts = name.split(/\s+/).filter(Boolean);
+        if (!parts.length) return "NA";
+        return parts.map((p) => p[0]).join("").slice(0, 2).toUpperCase();
+      };
+
+      const updateHeaderProfileChip = (user = {}, profile = {}) => {
+        const btn = document.getElementById("headerProfileBtn");
+        if (!btn) return;
+        const nameEl = btn.querySelector(".profile-chip__name");
+        const initialsEl = btn.querySelector(".profile-chip__initials");
+        const imgEl = btn.querySelector("img");
+        const avatarEl = btn.querySelector(".profile-chip__avatar");
+        const displayName =
+          user?.naam ||
+          user?.contactpersoon ||
+          user?.displayName ||
+          user?.email ||
+          "Profiel";
+        if (nameEl) nameEl.textContent = displayName;
+        if (initialsEl) initialsEl.textContent = initialsFromName(displayName);
+        const avatarUrl = profile?.avatar_url || "";
+        if (imgEl) imgEl.src = avatarUrl;
+        if (avatarEl) avatarEl.dataset.hasPhoto = avatarUrl ? "true" : "false";
+      };
+
+      const hydrateHeaderProfile = async () => {
+        try {
+          const res = await fetch(`${API_BASE}/api/profile/me`, { credentials: "include" });
+          if (res.status === 401) {
+            window.location.assign("/login");
+            return;
+          }
+          if (!res.ok) return;
+          const data = await res.json();
+          updateHeaderProfileChip(data.user || {}, data.profile || {});
+        } catch {}
+      };
+
+      document.getElementById("headerProfileBtn")?.addEventListener("click", () => {
+        window.location.assign("/profiel");
+      });
+
+      document.querySelectorAll(".message-chip__badge").forEach((badge) => {
+        const count = Number(badge.dataset.unread || badge.textContent || 0);
+        const displayValue = count > 9 ? "9+" : String(count);
+        badge.textContent = displayValue;
+        badge.classList.toggle("is-max", count > 9);
+        badge.classList.toggle("is-empty", count === 0);
+        badge.setAttribute("aria-label", `${count} ongelezen berichten`);
+      });
+
+      hydrateHeaderProfile();
+    })();
+  </script>
 </body>
 </html>

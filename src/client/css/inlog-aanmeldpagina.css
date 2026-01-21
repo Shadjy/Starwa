@@ -222,6 +222,30 @@ main.container {
   padding-top: 4px;
 }
 
+.status-message[data-type="error"] {
+  color: var(--errorColor);
+}
+
+.status-message[data-type="success"] {
+  color: var(--successColor);
+}
+
+.auth-switch {
+  margin: 0;
+  text-align: center;
+  color: var(--mutedColor);
+  font-weight: 500;
+}
+
+.auth-switch a {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
+
 #submit-btn {
   width: 100%;
   font-size: 1rem;

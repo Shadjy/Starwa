@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="../css/global.css" />
   <link rel="stylesheet" href="../css/berichten.css" />
+  <link rel="stylesheet" href="../css/employer-modal.css" />
   <link rel="stylesheet" href="../css/candidates.css" />
 </head>
-<body>
+<body data-role="employer">
   <header class="mp-header">
     <div class="mp-header__inner">
       <a class="ghost-button ghost-button--back" href="/dashboard-werkgever">Terug naar Dashboard</a>
@@ -21,7 +22,7 @@
       </div>
 
       <div class="mp-header__actions">
-        <a class="ghost-button" href="/profiel.html">Profiel</a>
+        <a class="ghost-button" href="/dashboard-werkgever?openCompany=1" data-open-company>Profiel</a>
         <a href="/home" class="logout">
           <img src="../assests/icons/logout.png" alt="Logout" class="logout-logo">
           <span class="logout-text">Log uit</span>
@@ -190,8 +191,80 @@
     </div>
   </div>
 
+  <div class="company-modal__backdrop" id="companyModalBackdrop" aria-hidden="true"></div>
+  <div class="company-modal" id="companyModal" aria-hidden="true" role="dialog" aria-labelledby="companyModalTitle">
+    <div class="company-modal__panel">
+      <div class="company-modal__header">
+        <h3 id="companyModalTitle">Bedrijfsprofiel</h3>
+        <button class="company-modal__btn company-modal__btn--ghost" id="closeCompanyModal" type="button">Sluiten</button>
+      </div>
+      <form id="companyForm">
+        <div class="company-modal__body company-modal__grid">
+          <div>
+            <label class="company-modal__label" for="cp_bedrijfsnaam">Bedrijfsnaam *</label>
+            <input class="company-modal__input" id="cp_bedrijfsnaam" name="bedrijfsnaam" required />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_kvk">KvK-nummer</label>
+            <input class="company-modal__input" id="cp_kvk" name="kvk_nummer" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_sector">Sector / branche</label>
+            <input class="company-modal__input" id="cp_sector" name="sector" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_grootte">Bedrijfsgrootte</label>
+            <select class="company-modal__select" id="cp_grootte" name="bedrijfs_grootte">
+              <option value="">Maak een keuze</option>
+              <option>1-10</option>
+              <option>11-50</option>
+              <option>51-200</option>
+              <option>>200</option>
+            </select>
+          </div>
+          <div class="company-modal__span-2">
+            <label class="company-modal__label" for="cp_locatie">Locatie (adres)</label>
+            <input class="company-modal__input" id="cp_locatie" name="locatie_adres" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_website">Website</label>
+            <input class="company-modal__input" id="cp_website" name="website" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_slogan">Bedrijfsslogan</label>
+            <input class="company-modal__input" id="cp_slogan" name="slogan" />
+          </div>
+          <div class="company-modal__span-2">
+            <label class="company-modal__label" for="cp_beschrijving">Bedrijfsbeschrijving</label>
+            <textarea class="company-modal__textarea" id="cp_beschrijving" name="beschrijving" rows="4"></textarea>
+          </div>
+          <div class="company-modal__span-2">
+            <label class="company-modal__label" for="cp_cultuur">Bedrijfscultuur (comma gescheiden)</label>
+            <input class="company-modal__input" id="cp_cultuur" name="cultuur" placeholder="informeel, innovatief, duurzaam" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_contact_naam">Contactpersoon (naam)</label>
+            <input class="company-modal__input" id="cp_contact_naam" name="contactpersoon_naam" />
+          </div>
+          <div>
+            <label class="company-modal__label" for="cp_contact_email">Contact e-mail</label>
+            <input type="email" class="company-modal__input" id="cp_contact_email" name="contact_email" />
+          </div>
+        </div>
+        <div class="company-modal__footer">
+          <p class="company-modal__status" id="companyStatus" aria-live="polite"></p>
+          <div class="company-modal__actions">
+            <button class="company-modal__btn company-modal__btn--ghost" id="cancelCompany" type="button">Annuleren</button>
+            <button class="company-modal__btn" id="saveCompany" type="submit">Opslaan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Data & gedrag -->
   <script src="../data/candidates.data.js" defer></script>
+  <script src="../js/employer-company-modal.js" defer></script>
   <script defer>
     // API base: same origin on :3000; else backend on :3000
     const API_BASE = (typeof window !== 'undefined' && window.STARWA_API_BASE)
@@ -320,34 +393,116 @@
     }
     function updateFavCount(){ const c = getFavs().filter(f=>f.type==='kandidaat').length; if(favCountEl) favCountEl.textContent = c; }
 
+    const inviteState = { vacancies: null };
+    const formatVacancyLabel = (vacancy = {}) => {
+      const title = vacancy.functietitel || vacancy.title || "Vacature";
+      const locatie = vacancy.locatie || "";
+      return locatie ? `${title} (${locatie})` : title;
+    };
+    async function loadEmployerVacancies(){
+      if (Array.isArray(inviteState.vacancies)) return inviteState.vacancies;
+      const res = await fetch(`${API_BASE}/api/vacatures?mine=1&limit=200`, { credentials: 'include' });
+      if (!res.ok) throw new Error("Kon vacatures niet laden");
+      const data = await res.json();
+      inviteState.vacancies = Array.isArray(data.items) ? data.items : [];
+      return inviteState.vacancies;
+    }
+
     function openInviteModal(v){
       openModal(`
         <form id="inviteForm">
           <div class="detail-grid">
             <div>
               <h3>Uitnodigen: ${fmt(v.name)}</h3>
-              <p><strong>Rol:</strong> ${fmt(v.currentTitle || v.desiredRole)}</p>
-              <label>Jouw naam<br><input required style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px"></label>
+              <p><strong>Rol:</strong> ${fmt(v.currentTitle || v.desiredRole || "-")}</p>
+              <label>Vacature<br>
+                <select id="inviteVacancy" required style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px">
+                  <option value="">Vacatures laden...</option>
+                </select>
+              </label>
             </div>
             <div>
-              <label>Jouw e-mail<br><input type="email" required style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px"></label>
-              <label style="display:block;margin-top:.5rem">Bericht<br>
-                <textarea rows="4" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px">Hi ${fmt(v.name)}, we nodigen je graag uit voor een kennismaking.</textarea>
+              <label style="display:block;margin-top:.5rem">Bericht (optioneel)<br>
+                <textarea id="inviteMessage" rows="4" style="width:100%;padding:.6rem;border:1px solid #e5e7eb;border-radius:8px" placeholder="Je bent uitgenodigd om te reageren op deze vacature."></textarea>
               </label>
+              <p id="inviteStatus" aria-live="polite" style="min-height:1.2rem;margin-top:.5rem;color:#6b7280"></p>
             </div>
           </div>
           <div class="modal__footer" style="padding:0;margin-top:.75rem">
             <button type="button" class="modal__close" data-close>Annuleren</button>
-            <button type="submit" class="modal__close">Verstuur</button>
+            <button type="submit" class="modal__close" id="inviteSubmit">Verstuur</button>
           </div>
         </form>
       `);
-      document.getElementById("inviteForm").addEventListener("submit",(e)=>{
+      const vacancySelect = document.getElementById("inviteVacancy");
+      const statusEl = document.getElementById("inviteStatus");
+      const submitBtn = document.getElementById("inviteSubmit");
+      const messageField = document.getElementById("inviteMessage");
+      const candidateId = Number(v?.id);
+
+      if (!candidateId) {
+        statusEl.textContent = "Kandidaat kan niet worden uitgenodigd.";
+        statusEl.style.color = "#b91c1c";
+        submitBtn.disabled = true;
+        return;
+      }
+
+      statusEl.textContent = "Vacatures laden...";
+      statusEl.style.color = "#6b7280";
+      loadEmployerVacancies()
+        .then((vacatures) => {
+          if (!Array.isArray(vacatures) || !vacatures.length) {
+            vacancySelect.innerHTML = `<option value="">Geen vacatures beschikbaar</option>`;
+            statusEl.textContent = "Geen vacatures beschikbaar.";
+            statusEl.style.color = "#b91c1c";
+            submitBtn.disabled = true;
+            return;
+          }
+          vacancySelect.innerHTML = `<option value="">Selecteer vacature</option>` +
+            vacatures.map((vac) => `<option value="${vac.id}">${fmt(formatVacancyLabel(vac))}</option>`).join("");
+          statusEl.textContent = "";
+          submitBtn.disabled = false;
+        })
+        .catch((err) => {
+          console.warn("Vacatures laden mislukt:", err);
+          vacancySelect.innerHTML = `<option value="">Kon vacatures niet laden</option>`;
+          statusEl.textContent = "Kon vacatures niet laden.";
+          statusEl.style.color = "#b91c1c";
+          submitBtn.disabled = true;
+        });
+
+      document.getElementById("inviteForm").addEventListener("submit", async (e) => {
         e.preventDefault();
-        openModal(`<h3>Uitnodiging verstuurd ✅</h3><p>Je hebt <strong>${fmt(v.name)}</strong> uitgenodigd voor een sollicitatiegesprek.</p><div class="modal__footer"><button class="modal__close" data-close>Sluiten</button></div>`);
+        const vacancyId = Number(vacancySelect.value);
+        if (!vacancyId) {
+          statusEl.textContent = "Selecteer een vacature.";
+          statusEl.style.color = "#b91c1c";
+          return;
+        }
+        statusEl.textContent = "Uitnodiging wordt verstuurd...";
+        statusEl.style.color = "#6b7280";
+        submitBtn.disabled = true;
+        try {
+          const res = await fetch(`${API_BASE}/api/sollicitaties/invite`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              candidate_id: candidateId,
+              vacancy_id: vacancyId,
+              message: messageField.value.trim(),
+            }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || "Kon uitnodiging niet versturen");
+          openModal(`<h3>Uitnodiging verzonden</h3><p>Uitnodiging succesvol verzonden, kandidaat is geinformeerd.</p><div class="modal__footer"><button class="modal__close" data-close>Sluiten</button></div>`);
+        } catch (err) {
+          statusEl.textContent = err?.message || "Er ging iets mis. Probeer het opnieuw.";
+          statusEl.style.color = "#b91c1c";
+          submitBtn.disabled = false;
+        }
       });
     }
-
     function render(matches){
       if(!matches.length){
         resultsEl.innerHTML = `

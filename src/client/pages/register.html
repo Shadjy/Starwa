@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Account aanmaken</title>
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/inlog-aanmeldpagina.css" />
+</head>
+<body>
+  <header class="auth-minimal">
+    <a href="/home" class="mini-home-link">Terug naar home</a>
+  </header>
+
+  <main class="container">
+    <header class="page-head" aria-label="Starwa intro">
+      <h1 class="page-title">Starwa</h1>
+      <p class="page-sub">Verbind werkzoeker met werkgever</p>
+    </header>
+
+    <section class="card role-card" aria-label="Kies rol">
+      <h2 class="role-title">Ik ben een...</h2>
+      <div id="role-toggle" class="role-grid" role="tablist" aria-label="Rolselectie">
+        <button class="role-btn" type="button" role="tab" data-role="seeker" aria-selected="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Werkzoeker
+        </button>
+        <button class="role-btn" type="button" role="tab" data-role="employer" aria-selected="false">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M3 21V8a2 2 0 0 1 2-2h3V3h6v3h3a2 2 0 0 1 2 2v13" />
+            <path d="M9 21v-6h6v6" />
+          </svg>
+          Werkgever
+        </button>
+      </div>
+    </section>
+
+    <section class="card auth-card" aria-label="Registreren">
+      <header class="auth-head">
+        <h2 class="auth-title">Account aanmaken</h2>
+        <p class="auth-sub">Maak een account aan om je perfecte match te vinden.</p>
+      </header>
+
+      <form id="auth-form" novalidate>
+        <input type="hidden" id="roleField" name="role" value="seeker" />
+        <div id="form-container"></div>
+        <p class="error-message" data-error-for="confirm" role="alert" aria-live="assertive"></p>
+        <p class="status-message" data-feedback role="status" aria-live="polite"></p>
+        <button id="submit-btn" class="cta" type="submit">Account aanmaken</button>
+      </form>
+
+      <p class="auth-switch">Heb je al een account? <a href="/login">Log in</a></p>
+    </section>
+  </main>
+
+  <script src="../js/register.js"></script>
+</body>
+</html>
